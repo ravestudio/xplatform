@@ -7,7 +7,7 @@ RUN dotnet restore
 
 # Copy everything else and build
 COPY ./xplatform ./
-RUN dotnet publish "./xplatform/xplatform.csproj" -c Release -o out
+RUN dotnet publish -c Release -o out
 
 # Build runtime image
 FROM microsoft/dotnet:2.1-aspnetcore-runtime
