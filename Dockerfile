@@ -16,7 +16,7 @@ COPY ./xplatform ./
 RUN dotnet publish -c Release -o out
 
 # Build runtime image
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-stretch-slim-arm32v7
+FROM microsoft/dotnet:2.1-aspnetcore-runtime
 WORKDIR /app
 COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "xplatform.dll"]
