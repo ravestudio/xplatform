@@ -1,8 +1,8 @@
 ﻿FROM microsoft/dotnet:2.1-sdk AS build-env
 
 # BEGIN MODIFICATION - Node is needed for development (but not production)
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install --assume-yes nodejs
+curl -sL https://deb.nodesource.com/setup_10.x | bash -
+apt-get install -y nodejs
 # END MODIFICATION
 
 WORKDIR /app
