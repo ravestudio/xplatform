@@ -12,13 +12,13 @@ COPY *.sln ./
 
 
 # Copy csproj and restore as distinct layers
-COPY ./cliet/*.csproj ./cliet/
+COPY ./client/*.csproj ./client/
 COPY ./CommonLib/*.csproj ./CommonLib/
 COPY ./xplatform/*.csproj ./xplatform/
 RUN dotnet restore
 
 # Copy everything else and build
-COPY ./client ./clien
+COPY ./client ./client
 COPY ./CommonLib ./CommonLib
 COPY ./xplatform ./xplatform
 
