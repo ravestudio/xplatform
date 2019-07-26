@@ -20,6 +20,12 @@ namespace xplatform.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public IEnumerable<Financial> Get()
+        {
+            return _context.FinancialSet.OrderBy(f => f.Year).ToList();
+        }
+
         [HttpGet("{id}")]
         public Financial Get(int id)
         {

@@ -111,7 +111,7 @@ export class FinancialEditComponent implements OnInit {
 
     combineLatest(ebitdaObs, incomeTaxObs, capexObs, nwcObs)
       .subscribe(([ebitda, incomeTax, capex, nwc]) => {
-        this.flowForm.controls['fcf'].setValue(ebitda - incomeTax - capex - nwc);
+        this.flowForm.controls['fcf'].setValue(ebitda - incomeTax - capex + nwc);
     })
 
 

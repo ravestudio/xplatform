@@ -18,6 +18,11 @@ export class FinancialService {
 
   constructor(private http: HttpClient) { }
 
+  getAll(): Observable<financial[]> {
+
+    return this.http.get<financial[]>(this.financialUrl);
+  }
+
   get(id: number): Observable<financial> {
 
     const url = `${this.financialUrl}/${id}`;
