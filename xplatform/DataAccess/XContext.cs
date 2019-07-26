@@ -10,7 +10,7 @@ namespace xplatform.DataAccess
     public class XContext: DbContext
     {
         public DbSet<Emitent> EmitentSet { get; set; }
-        public DbSet<Financial> Financials { get; set; }
+        public DbSet<Financial> FinancialSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 

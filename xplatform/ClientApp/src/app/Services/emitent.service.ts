@@ -14,8 +14,8 @@ export class EmitentService {
 
   constructor(private http: HttpClient) { }
 
-  get(): Observable<emitent> {
+  get(): Observable<emitent[]> {
 
-    return this.http.get<emitent>(this.emitentUrl);
+    return this.http.get<emitent[]>(this.emitentUrl);
   }
 }

@@ -32,6 +32,7 @@
   
   <ItemGroup>
     <None Remove="ClientApp\src\app\Entity\Emitent.ts" />
+    <None Remove="ClientApp\src\app\Entity\financial.ts" />
   </ItemGroup>
   
   <ItemGroup>
@@ -40,6 +41,7 @@
   
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\Entity\Emitent.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Entity\Financial.ts" />
   </ItemGroup>
   
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">

@@ -1,0 +1,14 @@
+.nav-container {
+  margin: 10px;
+  /*border: 1px solid #d6d6d6;*/
+  /*min-height: 1200px;*/
+}
+
+.nav-sidenav {
+  padding: 20px;
+  width: 300px;
+}
+
+.nav-content {
+  padding: 20px;
+}

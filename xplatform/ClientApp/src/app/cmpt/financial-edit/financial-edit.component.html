@@ -1,0 +1,208 @@
+
+  <mat-horizontal-stepper [linear]="true">
+
+    <mat-step [stepControl]="commonForm">
+      <form [formGroup]="commonForm">
+        <ng-template matStepLabel>Common</ng-template>
+
+        <mat-form-field>
+          <mat-label>Emitent</mat-label>
+          <mat-select [formControl]="commonForm.controls['emitentId']">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let emitent of emitents" [value]="emitent.id">
+              {{emitent.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Year" type="number" [formControl]="commonForm.controls['year']">
+        </mat-form-field>
+
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="incomesForm">
+      <form [formGroup]="incomesForm">
+        <ng-template matStepLabel>Incomes</ng-template>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Revenue" type="number" [formControl]="incomesForm.controls['revenue']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Operating Income" type="number" [formControl]="incomesForm.controls['operatingIncome']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Operating Expenses" type="number" [formControl]="incomesForm.controls['operatingExpenses']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Net Income" type="number" [formControl]="incomesForm.controls['netIncome']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Earnings Per Share" type="number" [formControl]="incomesForm.controls['earningsPerShare']">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Price" type="number" [formControl]="incomesForm.controls['price']">
+          </mat-form-field>
+
+        </div>
+
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="assetsForm">
+      <form [formGroup]="assetsForm">
+        <ng-template matStepLabel>Assets</ng-template>
+
+        <div>
+
+          <mat-form-field>
+            <input matInput placeholder="Current Assets" type="number" [formControl]="assetsForm.controls['currentAssets']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Fixed Assets" type="number" [formControl]="assetsForm.controls['fixedAssets']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Total Assets" type="number" [formControl]="assetsForm.controls['totalAssets']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+        </div>
+
+        <div>
+
+          <mat-form-field>
+            <input matInput placeholder="Current Liabilities" type="number" [formControl]="assetsForm.controls['currentLiabilities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Long Term Liabilities" type="number" [formControl]="assetsForm.controls['longTermLiabilities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Total Liabilities" type="number" [formControl]="assetsForm.controls['totalLiabilities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Equity" type="number" [formControl]="assetsForm.controls['equity']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="flowForm">
+      <form [formGroup]="flowForm">
+        <ng-template matStepLabel>Cash Flow</ng-template>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Flow Operating Activities" type="number" [formControl]="flowForm.controls['flowOperatingActivities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Amortization" type="number" [formControl]="flowForm.controls['amortization']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="NWC" type="number" [formControl]="flowForm.controls['nwc']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Flow Investing Activities" type="number" [formControl]="flowForm.controls['flowInvestingActivities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="CAPEX" type="number" [formControl]="flowForm.controls['capex']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+        </div>
+
+        <div>
+
+          <mat-form-field>
+            <input matInput placeholder="Income Tax Paid" type="number" [formControl]="flowForm.controls['incomeTaxPaid']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Flow Financing Activities" type="number" [formControl]="flowForm.controls['flowFinancingActivities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="StockIssuance" type="number" [formControl]="flowForm.controls['stockIssuance']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="DividendsPaid" type="number" [formControl]="flowForm.controls['dividendsPaid']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="EBITDA" type="number" [formControl]="flowForm.controls['ebitda']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="FCF" type="number" [formControl]="flowForm.controls['fcf']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <button mat-button (click)="Save()">Save</button>
+        </div>
+
+      </form>
+    </mat-step>
+
+  </mat-horizontal-stepper>

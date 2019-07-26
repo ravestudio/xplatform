@@ -11,11 +11,14 @@ import { EmitentService } from '../../Services/emitent.service';
 })
 export class EmitentListComponent implements OnInit {
 
+  displayedColumns: string[] = ['name'];
+  emitents: emitent[] = [];
+
   constructor(private emitentService: EmitentService) { }
 
   ngOnInit() {
 
-    this.emitentService.get().subscribe(data => console.log(data));
+    this.emitentService.get().subscribe(data => this.emitents = data);
 
   }
 
