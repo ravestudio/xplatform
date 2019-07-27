@@ -31,35 +31,35 @@
 
         <div>
           <mat-form-field>
-            <input matInput placeholder="Revenue" mask="comma_separator.2" [formControl]="incomesForm.controls['revenue']">
+            <input matInput placeholder="Revenue" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="incomesForm.controls['revenue']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="Operating Income" mask="comma_separator.2" [formControl]="incomesForm.controls['operatingIncome']">
+            <input matInput placeholder="Operating Income" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="incomesForm.controls['operatingIncome']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="Operating Expenses" mask="comma_separator.2" [formControl]="incomesForm.controls['operatingExpenses']">
-            <span matSuffix>млн.</span>
-          </mat-form-field>
-        </div>
-
-        <div>
-          <mat-form-field>
-            <input matInput placeholder="Net Income" mask="comma_separator.2" [formControl]="incomesForm.controls['netIncome']">
+            <input matInput placeholder="Operating Expenses" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="incomesForm.controls['operatingExpenses']">
             <span matSuffix>млн.</span>
           </mat-form-field>
         </div>
 
         <div>
           <mat-form-field>
-            <input matInput placeholder="Earnings Per Share" mask="comma_separator.2" [formControl]="incomesForm.controls['earningsPerShare']">
+            <input matInput placeholder="Net Income" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="incomesForm.controls['netIncome']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Earnings Per Share" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="incomesForm.controls['earningsPerShare']">
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="Price" mask="comma_separator.2" [formControl]="incomesForm.controls['price']">
+            <input matInput placeholder="Price" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="incomesForm.controls['price']">
           </mat-form-field>
 
         </div>
