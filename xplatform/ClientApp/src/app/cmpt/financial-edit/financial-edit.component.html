@@ -77,44 +77,44 @@
         <div>
 
           <mat-form-field>
-            <input matInput placeholder="Current Assets" mask="comma_separator.2" [formControl]="assetsForm.controls['currentAssets']">
+            <input matInput placeholder="Current Assets" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="assetsForm.controls['currentAssets']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="Fixed Assets" mask="comma_separator.2" [formControl]="assetsForm.controls['fixedAssets']">
+            <input matInput placeholder="Fixed Assets" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="assetsForm.controls['fixedAssets']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="Total Assets" mask="comma_separator.2" [formControl]="assetsForm.controls['totalAssets']">
-            <span matSuffix>млн.</span>
-          </mat-form-field>
-
-        </div>
-
-        <div>
-
-          <mat-form-field>
-            <input matInput placeholder="Current Liabilities" mask="comma_separator.2" [formControl]="assetsForm.controls['currentLiabilities']">
-            <span matSuffix>млн.</span>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input matInput placeholder="Long Term Liabilities" mask="comma_separator.2" [formControl]="assetsForm.controls['longTermLiabilities']">
-            <span matSuffix>млн.</span>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input matInput placeholder="Total Liabilities" mask="comma_separator.2" [formControl]="assetsForm.controls['totalLiabilities']">
+            <input matInput placeholder="Total Assets" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="assetsForm.controls['totalAssets']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
         </div>
 
         <div>
+
           <mat-form-field>
-            <input matInput placeholder="Equity" mask="comma_separator.2" [formControl]="assetsForm.controls['equity']">
+            <input matInput placeholder="Current Liabilities" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="assetsForm.controls['currentLiabilities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Long Term Liabilities" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="assetsForm.controls['longTermLiabilities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Total Liabilities" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="assetsForm.controls['totalLiabilities']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Equity" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="assetsForm.controls['equity']">
             <span matSuffix>млн.</span>
           </mat-form-field>
         </div>
@@ -132,12 +132,12 @@
 
         <div>
           <mat-form-field>
-            <input matInput placeholder="Flow Operating Activities" mask="comma_separator.2" [formControl]="flowForm.controls['flowOperatingActivities']">
+            <input matInput placeholder="Flow Operating Activities" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['flowOperatingActivities']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="Amortization" mask="comma_separator.2" [formControl]="flowForm.controls['amortization']">
+            <input matInput placeholder="Amortization" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['amortization']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
@@ -149,51 +149,51 @@
 
         <div>
           <mat-form-field>
-            <input matInput placeholder="Flow Investing Activities" mask="comma_separator.2" [formControl]="flowForm.controls['flowInvestingActivities']">
+            <input matInput placeholder="Flow Investing Activities" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['flowInvestingActivities']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="CAPEX" mask="comma_separator.2" [formControl]="flowForm.controls['capex']">
-            <span matSuffix>млн.</span>
-          </mat-form-field>
-
-        </div>
-
-        <div>
-
-          <mat-form-field>
-            <input matInput placeholder="Income Tax Paid" mask="comma_separator.2" [formControl]="flowForm.controls['incomeTaxPaid']">
+            <input matInput placeholder="CAPEX" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['capex']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
         </div>
 
         <div>
+
           <mat-form-field>
-            <input matInput placeholder="Flow Financing Activities" mask="comma_separator.2" [formControl]="flowForm.controls['flowFinancingActivities']">
+            <input matInput placeholder="Income Tax Paid" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['incomeTaxPaid']">
+            <span matSuffix>млн.</span>
+          </mat-form-field>
+
+        </div>
+
+        <div>
+          <mat-form-field>
+            <input matInput placeholder="Flow Financing Activities" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['flowFinancingActivities']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="StockIssuance" mask="comma_separator.2" [formControl]="flowForm.controls['stockIssuance']">
+            <input matInput placeholder="StockIssuance" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['stockIssuance']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="DividendsPaid" mask="comma_separator.2" [formControl]="flowForm.controls['dividendsPaid']">
+            <input matInput placeholder="DividendsPaid" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['dividendsPaid']">
             <span matSuffix>млн.</span>
           </mat-form-field>
         </div>
 
         <div>
           <mat-form-field>
-            <input matInput placeholder="EBITDA" mask="comma_separator.2" [formControl]="flowForm.controls['ebitda']">
+            <input matInput placeholder="EBITDA" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['ebitda']">
             <span matSuffix>млн.</span>
           </mat-form-field>
 
           <mat-form-field>
-            <input matInput placeholder="FCF" mask="comma_separator.2" [formControl]="flowForm.controls['fcf']">
+            <input matInput placeholder="FCF" currencyMask [options]="{ align:'left', prefix: ' ', thousands: ',', decimal: '.' }" [formControl]="flowForm.controls['fcf']">
             <span matSuffix>млн.</span>
           </mat-form-field>
         </div>
