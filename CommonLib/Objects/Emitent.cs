@@ -12,5 +12,6 @@ namespace CommonLib.Objects
         public string WebSite { get; set; }
 
         public ICollection<Financial> Financials { get; set; }
+        public ICollection<Security> Securities { get; set; }
     }
 }

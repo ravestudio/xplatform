@@ -18,12 +18,45 @@ namespace xplatform.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Account>().HasKey(a => a.Id);
+            modelBuilder.Entity<Account>().Property(a => a.Id).HasColumnName("Id");
+            modelBuilder.Entity<Account>().Property(a => a.Name).HasColumnName("Name");
+            modelBuilder.Entity<Account>().ToTable("AccountSet");
+
             modelBuilder.Entity<Emitent>().HasKey(e => e.Id);
             modelBuilder.Entity<Emitent>().Property(e => e.Id).HasColumnName("Id");
             modelBuilder.Entity<Emitent>().Property(e => e.Name).HasColumnName("Name");
             modelBuilder.Entity<Emitent>().Property(e => e.Description).HasColumnName("Description");
             modelBuilder.Entity<Emitent>().Property(e => e.WebSite).HasColumnName("WebSite");
             modelBuilder.Entity<Emitent>().ToTable("EmitentSet");
+
+            modelBuilder.Entity<Security>().HasKey(s => s.Id);
+            modelBuilder.Entity<Security>().Property(s => s.Id).HasColumnName("Id");
+            modelBuilder.Entity<Security>().Property(s => s.Name).HasColumnName("Name");
+            modelBuilder.Entity<Security>().Property(s => s.Code).HasColumnName("Code");
+            modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
+            modelBuilder.Entity<Security>().ToTable("SecuritySet");
+
+            modelBuilder.Entity<Deal>().HasKey(d => d.Id);
+            modelBuilder.Entity<Deal>().Property(d => d.Id).HasColumnName("Id");
+            modelBuilder.Entity<Deal>().HasOne(d => d.Account).WithMany(a => a.Deals).HasForeignKey(a => a.accountId);
+            modelBuilder.Entity<Deal>().Property(d => d.Number).HasColumnName("Number");
+            modelBuilder.Entity<Deal>().Property(d => d.Operation).HasColumnName("Operation");
+            modelBuilder.Entity<Deal>().Property(d => d.Date).HasColumnName("Date");
+            modelBuilder.Entity<Deal>().Property(d => d.DeliveryDate).HasColumnName("DeliveryDate");
+            modelBuilder.Entity<Deal>().Property(d => d.Price).HasColumnName("Price");
+            modelBuilder.Entity<Deal>().Property(d => d.Count).HasColumnName("Count");
+            modelBuilder.Entity<Deal>().Property(d => d.Volume).HasColumnName("Volume");
+            modelBuilder.Entity<Deal>().HasOne(d => d.security).WithMany(s => s.Deals).HasForeignKey(d => d.securityId);
+            modelBuilder.Entity<Deal>().ToTable("DealSet");
+
+            modelBuilder.Entity<Position>().HasKey(p => p.Id);
+            modelBuilder.Entity<Position>().Property(p => p.Id).HasColumnName("Id");
+            modelBuilder.Entity<Position>().Property(p => p.OpenDate).HasColumnName("OpenDate");
+            modelBuilder.Entity<Position>().HasOne(p => p.Security).WithMany(s => s.Positions).HasForeignKey(p => p.securityId);
+            modelBuilder.Entity<Position>().HasOne(p => p.Account).WithMany(a => a.Positions).HasForeignKey(p => p.accountId);
+            modelBuilder.Entity<Position>().Property(p => p.Limit).HasColumnName("Limit");
+            modelBuilder.Entity<Position>().ToTable("PositionSet");
 
             modelBuilder.Entity<Financial>().HasKey(f => f.Id);
             modelBuilder.Entity<Financial>().Property(f => f.Id).HasColumnName("Id");
