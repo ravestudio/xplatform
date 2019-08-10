@@ -10,8 +10,6 @@ namespace CommonLib.Objects
         public string Name { get; set; }
 
         public ICollection<Deal> Deals { get; set; }
-        public ICollection<Account> Accounts { get; set; }
-
         public ICollection<Position> Positions { get; set; }
     }
 }

@@ -11,6 +11,8 @@ namespace xplatform.DataAccess
     {
         public DbSet<Emitent> EmitentSet { get; set; }
         public DbSet<Financial> FinancialSet { get; set; }
+
+        public DbSet<Security> SecuritySet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -39,7 +41,7 @@ namespace xplatform.DataAccess
 
             modelBuilder.Entity<Deal>().HasKey(d => d.Id);
             modelBuilder.Entity<Deal>().Property(d => d.Id).HasColumnName("Id");
-            modelBuilder.Entity<Deal>().HasOne(d => d.Account).WithMany(a => a.Deals).HasForeignKey(a => a.accountId);
+            modelBuilder.Entity<Deal>().HasOne(d => d.Account).WithMany(a => a.Deals).HasForeignKey(d => d.accountId);
             modelBuilder.Entity<Deal>().Property(d => d.Number).HasColumnName("Number");
             modelBuilder.Entity<Deal>().Property(d => d.Operation).HasColumnName("Operation");
             modelBuilder.Entity<Deal>().Property(d => d.Date).HasColumnName("Date");

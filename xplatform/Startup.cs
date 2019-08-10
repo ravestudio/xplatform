@@ -29,7 +29,7 @@ namespace xplatform
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<XContext>(options => {
-                options.UseSqlite(Configuration.GetConnectionString("xpl_db"));
+                options.UseNpgsql(Configuration.GetConnectionString("xpl_db"));
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
