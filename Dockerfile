@@ -1,4 +1,4 @@
-﻿FROM microsoft/dotnet:2.1-sdk AS build-env
+﻿FROM microsoft/dotnet:2.2-sdk AS build-env
 
 # BEGIN MODIFICATION - Node is needed for development (but not production)
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
@@ -27,7 +27,7 @@ RUN dotnet publish "./xplatform/xplatform.csproj" -c Release -o /out
 COPY ./xplatform/xplatform.dev.db /out
 
 # Build runtime image
-FROM microsoft/dotnet:2.1-aspnetcore-runtime
+FROM microsoft/dotnet:2.2-aspnetcore-runtime
 WORKDIR /app
 COPY --from=build-env /out .
 ENTRYPOINT ["dotnet", "xplatform.dll"]
