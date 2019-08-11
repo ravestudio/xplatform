@@ -23,7 +23,14 @@ namespace xplatform.Controllers
         [HttpGet]
         public string Get()
         {
-            _context.Database.Migrate();
+            try
+            {
+                _context.Database.Migrate();
+            }catch(Exception ex)
+            {
+                return ex.Message;
+            }
+
             return "ok";
         }
     }
