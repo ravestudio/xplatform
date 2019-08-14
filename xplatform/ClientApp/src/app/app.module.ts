@@ -14,13 +14,15 @@ import { AppComponent } from './app.component';
 import { EmitentListComponent } from './cmpt/emitent-list/emitent-list.component';
 import { FinancialEditComponent } from './cmpt/financial-edit/financial-edit.component';
 import { EmitentDetailsComponent } from './cmpt/emitent-details/emitent-details.component';
+import { DealAddComponent } from './cmpt/deal-add/deal-add.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmitentListComponent,
     FinancialEditComponent,
-    EmitentDetailsComponent
+    EmitentDetailsComponent,
+    DealAddComponent
   ],
   imports: [
     BrowserModule,

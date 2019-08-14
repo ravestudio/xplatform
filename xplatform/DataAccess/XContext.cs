@@ -11,8 +11,9 @@ namespace xplatform.DataAccess
     {
         public DbSet<Emitent> EmitentSet { get; set; }
         public DbSet<Financial> FinancialSet { get; set; }
-
         public DbSet<Security> SecuritySet { get; set; }
+        public DbSet<Deal> DealSet { get; set; }
+        public DbSet<Account> AccountSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
