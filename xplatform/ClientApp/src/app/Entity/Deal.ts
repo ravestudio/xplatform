@@ -1,3 +1,5 @@
+import { OperationEnum } from './OperationEnum';
+
 export class deal {
   id: number;
   accountId: number;
