@@ -28,6 +28,11 @@
               "src/styles.css",
               "src/theme.scss"
             ],
+			      "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
