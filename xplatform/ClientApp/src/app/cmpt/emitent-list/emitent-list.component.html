@@ -10,6 +10,9 @@
   <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
 </table>
 
+<mdc-text-field label="Standard" class="foo-input" required [helperText]="standardHelper"></mdc-text-field>
+<mdc-helper-text #standardHelper validation persistent>Helper Text</mdc-helper-text>
+
 <button mdc-button class="foo-button">
   Button
 </button>

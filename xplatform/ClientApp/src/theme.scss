@@ -1,4 +1,9 @@
 @import "@material/button/mdc-button";
+@import "@material/textfield/mdc-text-field";
+
+.foo-input {
+  @include mdc-text-field-fill-color(teal)
+}
 
 .foo-button {
   @include mdc-button-ink-color(teal);

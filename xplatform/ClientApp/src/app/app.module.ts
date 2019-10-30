@@ -9,7 +9,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxCurrencyModule } from "ngx-currency";
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatDatepickerModule, MatToolbarModule, MatTableModule, MatSidenavModule, MatStepperModule } from '@angular/material';
-import { MDCModule } from "./mdc/mdc.module";
+
+
+import { MdcButtonModule } from "./mdc/button/button-module";
+import { MdcFormFieldModule } from "./mdc/form-field/form-field-module";
+import { MdcTextFieldModule } from "./mdc/textfield/text-field-module";
+
 import { AppComponent } from './app.component';
 import { EmitentListComponent } from './cmpt/emitent-list/emitent-list.component';
 import { FinancialEditComponent } from './cmpt/financial-edit/financial-edit.component';
@@ -33,8 +38,11 @@ import { DealAddComponent } from './cmpt/deal-add/deal-add.component';
     AppRoutingModule,
     NgxMaskModule.forRoot(),
     NgxCurrencyModule,
-    MDCModule,
-    MatFormFieldModule,
+
+    MdcButtonModule,
+    MdcFormFieldModule,
+    MdcTextFieldModule,
+
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
