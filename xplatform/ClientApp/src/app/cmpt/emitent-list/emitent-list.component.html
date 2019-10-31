@@ -10,8 +10,25 @@
   <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
 </table>
 
-<mdc-text-field label="Standard" class="foo-input" required [helperText]="standardHelper"></mdc-text-field>
+<mdc-text-field label="Standard" required [helperText]="standardHelper"></mdc-text-field>
 <mdc-helper-text #standardHelper validation persistent>Helper Text</mdc-helper-text>
+
+<mdc-select #enhanced placeholder="Fruit" [helperText]="enhancedHelper"
+  required class="demo-enhanced-width">
+  <mdc-menu>
+    <mdc-list>
+      <mdc-list-item selected></mdc-list-item>
+      <mdc-list-item value="apple">Apple</mdc-list-item>
+      <mdc-list-item value="orange">Orange</mdc-list-item>
+      <mdc-list-item value="banana">Banana</mdc-list-item>
+      <mdc-list-item disabled value="mango">Mango</mdc-list-item>
+      </mdc-list>
+  </mdc-menu>
+</mdc-select>
+<mdc-select-helper-text #enhancedHelper validation>Field is required</mdc-select-helper-text>
+
+<p> Value: {{ enhanced.value }}</p>
+<p> Index: {{ enhanced.getSelectedIndex() }}</p>
 
 <button mdc-button class="foo-button">
   Button

@@ -1,6 +1,11 @@
 @import "@material/button/mdc-button";
 @import "@material/textfield/mdc-text-field";
 
+@import "@material/list/mdc-list";
+@import "@material/menu-surface/mdc-menu-surface";
+@import "@material/menu/mdc-menu";
+@import "@material/select/mdc-select";
+
 .foo-input {
   @include mdc-text-field-fill-color(teal)
 }

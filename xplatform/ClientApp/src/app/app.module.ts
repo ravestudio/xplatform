@@ -11,9 +11,7 @@ import { NgxCurrencyModule } from "ngx-currency";
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatDatepickerModule, MatToolbarModule, MatTableModule, MatSidenavModule, MatStepperModule } from '@angular/material';
 
 
-import { MdcButtonModule } from "./mdc/button/button-module";
-import { MdcFormFieldModule } from "./mdc/form-field/form-field-module";
-import { MdcTextFieldModule } from "./mdc/textfield/text-field-module";
+import { MdcButtonModule, MdcFormFieldModule, MdcTextFieldModule, MdcListModule, MdcMenuModule, MdcSelectModule  } from "./mdc";
 
 import { AppComponent } from './app.component';
 import { EmitentListComponent } from './cmpt/emitent-list/emitent-list.component';
@@ -42,6 +40,9 @@ import { DealAddComponent } from './cmpt/deal-add/deal-add.component';
     MdcButtonModule,
     MdcFormFieldModule,
     MdcTextFieldModule,
+    MdcListModule,
+    MdcMenuModule,
+    MdcSelectModule,
 
     MatInputModule,
     MatButtonModule,
