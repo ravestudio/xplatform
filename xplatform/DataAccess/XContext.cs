@@ -29,6 +29,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Emitent>().HasKey(e => e.Id);
             modelBuilder.Entity<Emitent>().Property(e => e.Id).HasColumnName("Id");
             modelBuilder.Entity<Emitent>().Property(e => e.Name).HasColumnName("Name");
+            modelBuilder.Entity<Emitent>().Property(e => e.Code).HasColumnName("Code");
             modelBuilder.Entity<Emitent>().Property(e => e.Description).HasColumnName("Description");
             modelBuilder.Entity<Emitent>().Property(e => e.WebSite).HasColumnName("WebSite");
             modelBuilder.Entity<Emitent>().ToTable("EmitentSet");
@@ -90,6 +91,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Financial>().Property(f => f.Price).HasColumnName("Price").IsRequired();
 
             modelBuilder.Entity<Financial>().HasOne(f => f.Emitent).WithMany(e => e.Financials).HasForeignKey(f => f.EmitentId);
+            modelBuilder.Entity<Financial>().Ignore(f => f.EmitentCode);
             modelBuilder.Entity<Financial>().ToTable("FinancialSet");
 
             base.OnModelCreating(modelBuilder);

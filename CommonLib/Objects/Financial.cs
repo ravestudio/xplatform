@@ -178,6 +178,7 @@ namespace CommonLib.Objects
         }
 
         public int EmitentId { get; set; }
+        public string EmitentCode { get; set; }
         public Emitent Emitent { get; set; }
     }
 }

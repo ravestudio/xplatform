@@ -32,7 +32,7 @@ export class FinancialEditComponent implements OnInit {
     private financialService: FinancialService) {
 
     this.commonForm = fb.group({
-      'emitentId': ['', Validators.required],
+      'emitentCode': ['', Validators.required],
       'year': ['', Validators.required]
     });
 

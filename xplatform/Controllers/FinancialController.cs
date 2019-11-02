@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommonLib.Objects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using xplatform.DataAccess;
 
 namespace xplatform.Controllers
@@ -29,7 +30,13 @@ namespace xplatform.Controllers
         [HttpGet("{id}")]
         public Financial Get(int id)
         {
-            return _context.FinancialSet.SingleOrDefault(f => f.Id == id);
+            var financial = _context.FinancialSet.Include(f => f.Emitent).SingleOrDefault(f => f.Id == id);
+
+            financial.EmitentCode = financial.Emitent.Code;
+
+            financial.Emitent = null;
+
+            return financial;
         }
 
         [HttpPost]

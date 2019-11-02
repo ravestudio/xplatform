@@ -4,6 +4,8 @@ export class financial {
   period: number;
   year: number;
 
+  emitentCode: string;
+
   revenue: number;
   operatingIncome: number;
   netIncome: number;
