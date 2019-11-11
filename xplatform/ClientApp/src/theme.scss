@@ -1,5 +1,7 @@
 @import "@material/button/mdc-button";
 @import "@material/textfield/mdc-text-field";
+@import "@material/form-field/mdc-form-field";
+@import "@material/checkbox/mdc-checkbox";
 
 @import "@material/list/mdc-list";
 @import "@material/menu-surface/mdc-menu-surface";
@@ -10,6 +12,9 @@
 @import "@material/tab-scroller/mdc-tab-scroller";
 @import "@material/tab-indicator/mdc-tab-indicator";
 @import "@material/tab/mdc-tab";
+
+$mdc-theme-primary: #1565c0; // primary color
+$mdc-theme-secondary: #388e3c; // secondary color
 
 .foo-input {
   @include mdc-text-field-fill-color(teal)
