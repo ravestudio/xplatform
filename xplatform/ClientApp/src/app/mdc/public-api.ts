@@ -3,7 +3,7 @@ export * from './button';
 //export * from '@angular-mdc/web/card';
 export * from './checkbox';
 //export * from '@angular-mdc/web/chips';
-//export * from '@angular-mdc/web/data-table';
+export * from './data-table';
 //export * from '@angular-mdc/web/dialog';
 //export * from '@angular-mdc/web/drawer';
 //export * from '@angular-mdc/web/elevation';

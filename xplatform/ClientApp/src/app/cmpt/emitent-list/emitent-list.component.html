@@ -10,6 +10,23 @@
   <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
 </table>
 
+<mdc-data-table>
+  <table mdcDataTableTable>
+    <thead>
+      <tr mdcDataTableHeaderRow>
+        <th mdcDataTableHeaderCell>Name</th>
+        <th mdcDataTableHeaderCell numeric>Code</th>
+      </tr>
+    </thead>
+    <tbody mdcDataTableContent>
+      <tr mdcDataTableRow *ngFor="let emitent of emitents">
+        <td mdcDataTableCell>{{emitent.name}}</td>
+        <td mdcDataTableCell numeric>{{emitent.code}}</td>
+      </tr>
+    </tbody>
+  </table>
+</mdc-data-table>
+
 <mdc-text-field label="Standard" required [helperText]="standardHelper"></mdc-text-field>
 <mdc-helper-text #standardHelper validation persistent>Helper Text</mdc-helper-text>
 
@@ -37,3 +54,4 @@
 <button mdc-button>
   Button
 </button>
+
