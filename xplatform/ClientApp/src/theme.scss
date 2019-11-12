@@ -1,4 +1,10 @@
+$mdc-theme-primary: #fcb8ab;
+$mdc-theme-secondary: #feeae6;
+$mdc-theme-on-primary: #442b2d;
+$mdc-theme-on-secondary: #442b2d;
+
 @import "@material/button/mdc-button";
+@import "@material/icon-button/mdc-icon-button";
 @import "@material/textfield/mdc-text-field";
 @import "@material/form-field/mdc-form-field";
 @import "@material/data-table/mdc-data-table";
@@ -14,8 +20,7 @@
 @import "@material/tab-indicator/mdc-tab-indicator";
 @import "@material/tab/mdc-tab";
 
-$mdc-theme-primary: #1565c0; // primary color
-$mdc-theme-secondary: #388e3c; // secondary color
+@import "@material/top-app-bar/mdc-top-app-bar";
 
 .foo-input {
   @include mdc-text-field-fill-color(teal)

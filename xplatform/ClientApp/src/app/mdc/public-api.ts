@@ -30,5 +30,5 @@ export * from './tab-bar';
 export * from './tab-indicator';
 export * from './tab-scroller';
 export * from './textfield';
-//export * from '@angular-mdc/web/top-app-bar';
+export * from './top-app-bar';
 //export * from '@angular-mdc/web/typography';

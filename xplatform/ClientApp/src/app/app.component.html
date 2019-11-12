@@ -1,6 +1,17 @@
-<mat-toolbar color="accent">
-  <span>xplatform.net</span>
-</mat-toolbar>
+<mdc-top-app-bar [scrollTarget]="standardContent">
+  <mdc-top-app-bar-row>
+    <mdc-top-app-bar-section align="start" title="xplatform.net">
+      <button mdcTopAppBarNavIcon>
+        <mdc-icon>menu</mdc-icon>
+      </button>
+    </mdc-top-app-bar-section>
+    <mdc-top-app-bar-section align="end">
+      <mdc-icon mdcTopAppBarActionItem>file_download</mdc-icon>
+      <mdc-icon mdcTopAppBarActionItem>print</mdc-icon>
+      <mdc-icon mdcTopAppBarActionItem>bookmark</mdc-icon>
+    </mdc-top-app-bar-section>
+  </mdc-top-app-bar-row>
+</mdc-top-app-bar>
 
 <!--<mat-sidenav-container class="nav-container">
   <mat-sidenav class="nav-sidenav" mode="side" opened>Sidenav content</mat-sidenav>
