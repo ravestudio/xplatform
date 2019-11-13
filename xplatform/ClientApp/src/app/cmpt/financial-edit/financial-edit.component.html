@@ -1,12 +1,15 @@
-<mdc-tab-bar #financialTabBar [activeTabIndex]="-1">
+
+<div>
+<mdc-tab-bar #financialTabBar [activeTabIndex]="0">
   <mdc-tab-scroller>
-    <mdc-tab label="Flights"></mdc-tab>
-    <mdc-tab label="Hotel"></mdc-tab>
+    <mdc-tab label="Common"></mdc-tab>
+    <mdc-tab label="Incomes"></mdc-tab>
     <mdc-tab label="Favorites"></mdc-tab>
   </mdc-tab-scroller>
 </mdc-tab-bar>
 
 <p>Activated tab: {{ financialTabBar.activeTabIndex }}</p>
+</div>
 
 <div *ngIf="financialTabBar.activeTabIndex==0">
   <form [formGroup]="commonForm">
@@ -31,7 +34,13 @@
 </div>
 
 <div *ngIf="financialTabBar.activeTabIndex==1">
-  Hello
+  <!--<form [formGroup]="incomesForm">
+      <mdc-form-field>
+          <mdc-text-field label="Revenue" currencyMask formControlName="revenue">
+          </mdc-text-field>
+          <mdc-helper-text validation>Field is required</mdc-helper-text>
+      </mdc-form-field>
+  </form>-->
 </div>
 
   <!--<mat-horizontal-stepper [linear]="true">
