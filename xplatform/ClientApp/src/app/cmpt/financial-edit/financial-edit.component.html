@@ -1,15 +1,13 @@
 
-<div>
-<mdc-tab-bar #financialTabBar [activeTabIndex]="0">
+<!--<mdc-tab-bar #financialTabBar [activeTabIndex]="0">
   <mdc-tab-scroller>
     <mdc-tab label="Common"></mdc-tab>
     <mdc-tab label="Incomes"></mdc-tab>
     <mdc-tab label="Favorites"></mdc-tab>
   </mdc-tab-scroller>
-</mdc-tab-bar>
+</mdc-tab-bar>-->
 
 <p>Activated tab: {{ financialTabBar.activeTabIndex }}</p>
-</div>
 
 <div *ngIf="financialTabBar.activeTabIndex==0">
   <form [formGroup]="commonForm">

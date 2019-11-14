@@ -11,6 +11,17 @@
       <mdc-icon mdcTopAppBarActionItem>bookmark</mdc-icon>
     </mdc-top-app-bar-section>
   </mdc-top-app-bar-row>
+  <mdc-top-app-bar-row>
+    <mdc-top-app-bar-section>
+      <mdc-tab-bar #financialTabBar [activeTabIndex]="0">
+        <mdc-tab-scroller>
+          <mdc-tab label="Common"></mdc-tab>
+          <mdc-tab label="Incomes"></mdc-tab>
+          <mdc-tab label="Favorites"></mdc-tab>
+        </mdc-tab-scroller>
+      </mdc-tab-bar>
+    </mdc-top-app-bar-section>
+  </mdc-top-app-bar-row>
 </mdc-top-app-bar>
 
 <!--<mat-sidenav-container class="nav-container">
@@ -20,4 +31,6 @@
   </mat-sidenav-content>
 </mat-sidenav-container>-->
 
-<router-outlet></router-outlet>
+<div #standardContent>
+  <router-outlet></router-outlet>
+</div>
