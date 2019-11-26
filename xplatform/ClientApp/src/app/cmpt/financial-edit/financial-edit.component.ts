@@ -9,6 +9,7 @@ import { financial } from '../../Entity/Financial';
 
 import { EmitentService } from '../../Services/emitent.service';
 import { FinancialService } from '../../Services/financial.service';
+import { TopAppBarService } from '../../Services/top-app-bar.service';
 
 @Component({
   selector: 'app-financial-edit',
@@ -28,6 +29,7 @@ export class FinancialEditComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private fb: FormBuilder,
+    private topAppBarService: TopAppBarService,
     private emitentService: EmitentService,
     private financialService: FinancialService) {
 
@@ -118,6 +120,14 @@ export class FinancialEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    let tabs = [
+      { label: 'Flights', icon: 'airplanemode_active' },
+      { label: 'Hotel', icon: 'hotel' },
+      { label: 'Favorites', icon: 'favorite' }
+    ];
+
+    this.topAppBarService.SetTabs(tabs);
 
     this.route.paramMap.pipe(
       switchMap((_param) => {

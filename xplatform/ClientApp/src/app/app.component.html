@@ -11,13 +11,11 @@
       <mdc-icon mdcTopAppBarActionItem>bookmark</mdc-icon>
     </mdc-top-app-bar-section>
   </mdc-top-app-bar-row>
-  <mdc-top-app-bar-row>
+  <mdc-top-app-bar-row *ngIf="topAppBarService.tabs | async">
     <mdc-top-app-bar-section>
-      <mdc-tab-bar #financialTabBar [activeTabIndex]="0">
+      <mdc-tab-bar #financialTabBar (activated)="logTab($event)" [activeTabIndex]="0">
         <mdc-tab-scroller>
-          <mdc-tab label="Common"></mdc-tab>
-          <mdc-tab label="Incomes"></mdc-tab>
-          <mdc-tab label="Favorites"></mdc-tab>
+          <mdc-tab *ngFor="let tab of topAppBarService.tabs | async" [label]="tab.label" [icon]="tab.icon"></mdc-tab>
         </mdc-tab-scroller>
       </mdc-tab-bar>
     </mdc-top-app-bar-section>

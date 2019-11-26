@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { TopAppBarService } from './Services/top-app-bar.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +9,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ClientApp';
+
+  constructor(private topAppBarService: TopAppBarService) { }
 }
