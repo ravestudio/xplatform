@@ -1,4 +1,4 @@
-<mdc-top-app-bar [scrollTarget]="standardContent">
+<mdc-top-app-bar>
   <mdc-top-app-bar-row>
     <mdc-top-app-bar-section align="start" title="___.__">
       <button mdcTopAppBarNavIcon>
@@ -11,9 +11,9 @@
       <mdc-icon mdcTopAppBarActionItem>bookmark</mdc-icon>
     </mdc-top-app-bar-section>
   </mdc-top-app-bar-row>
-  <mdc-top-app-bar-row *ngIf="topAppBarService.tabs | async">
+  <mdc-top-app-bar-row>
     <mdc-top-app-bar-section>
-      <mdc-tab-bar #financialTabBar (activated)="logTab($event)" [activeTabIndex]="0">
+      <mdc-tab-bar #financialTabBar (activated)="setActiveTab($event)" [activeTabIndex]="0">
         <mdc-tab-scroller>
           <mdc-tab *ngFor="let tab of topAppBarService.tabs | async" [label]="tab.label" [icon]="tab.icon"></mdc-tab>
         </mdc-tab-scroller>
@@ -29,6 +29,14 @@
   </mat-sidenav-content>
 </mat-sidenav-container>-->
 
-<div #standardContent>
+<!--<div #standardContent>
   <router-outlet></router-outlet>
+</div>-->
+
+<div mdcDrawerAppContent>
+  Lorem ipsum dolor sit amet, ad erat postea ullamcorper nec, veri veniam
+  quo et. Diam phaedrum ei mea, quaeque
+  voluptaria efficiantur duo no. Eu adhuc veritus civibus nec, sumo
+  invidunt mel id, in vim dictas detraxit. Per an
+  legere iriure blandit. Veri iisque accusamus an pri.
 </div>

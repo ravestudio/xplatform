@@ -10,11 +10,16 @@ export class TopAppBarService {
 
   }
 
-  tabs : Subject<any> = new BehaviorSubject<any>(null);
+    tabs: Subject<any> = new BehaviorSubject<any>(null);
+    activeTabIndex: Subject<number> = new BehaviorSubject<number>(0);
 
   public SetTabs(newTabs: any): void {
     this.tabs.next(newTabs);
   }
+
+    public SetActiveTab(index: number): void {
+        this.activeTabIndex.next(index);
+    }
 
 
 }

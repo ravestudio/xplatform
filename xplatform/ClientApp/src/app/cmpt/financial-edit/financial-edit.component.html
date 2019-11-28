@@ -7,31 +7,32 @@
   </mdc-tab-scroller>
 </mdc-tab-bar>-->
 
-<p>Activated tab: {{ financialTabBar.activeTabIndex }}</p>
+<div *ngIf="(topAppBarService.activeTabIndex | async) == 0">
 
-<div *ngIf="financialTabBar.activeTabIndex==0">
+  {{index}}
+
   <form [formGroup]="commonForm">
-      <mdc-select placeholder="Emitent" formControlName="emitentCode" [helperText]="emitentCodeHelper">
-        <mdc-menu>
-          <mdc-list>            
-            <mdc-list-item *ngFor="let emitent of emitents" [value]="emitent.code" [disabled]="false">
-              {{emitent.name}}
-            </mdc-list-item>
-          </mdc-list>
-        </mdc-menu>
-      </mdc-select>
-      <mdc-select-helper-text #emitentCodeHelper validation>Field is required</mdc-select-helper-text>
+    <mdc-select placeholder="Emitent" formControlName="emitentCode" [helperText]="emitentCodeHelper">
+      <mdc-menu>
+        <mdc-list>
+          <mdc-list-item *ngFor="let emitent of emitents" [value]="emitent.code" [disabled]="false">
+            {{emitent.name}}
+          </mdc-list-item>
+        </mdc-list>
+      </mdc-menu>
+    </mdc-select>
+    <mdc-select-helper-text #emitentCodeHelper validation>Field is required</mdc-select-helper-text>
 
-      <mdc-form-field>
-          <mdc-text-field type="number" formControlName="year" label="Year">
+    <mdc-form-field>
+      <mdc-text-field type="number" formControlName="year" label="Year">
 
-          </mdc-text-field>
-          <mdc-helper-text validation>Field is required</mdc-helper-text>
-      </mdc-form-field>
+      </mdc-text-field>
+      <mdc-helper-text validation>Field is required</mdc-helper-text>
+    </mdc-form-field>
   </form>
 </div>
 
-<div *ngIf="financialTabBar.activeTabIndex==1">
+<!--<div *ngIf="(topAppBarService.activeTabIndex$ | async) == 1">
   <form [formGroup]="incomesForm">
       <mdc-form-field>
           <mdc-text-field label="Revenue" currencyMask formControlName="revenue">
@@ -39,7 +40,7 @@
           <mdc-helper-text validation>Field is required</mdc-helper-text>
       </mdc-form-field>
   </form>
-</div>
+</div>-->
 
   <!--<mat-horizontal-stepper [linear]="true">
 

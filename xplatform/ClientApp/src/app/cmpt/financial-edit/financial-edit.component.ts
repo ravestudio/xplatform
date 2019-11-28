@@ -111,23 +111,23 @@ export class FinancialEditComponent implements OnInit {
       this.flowForm.controls['ebitda'].setValue(income + amort);
     });
 
-    combineLatest(ebitdaObs, incomeTaxObs, capexObs, nwcObs)
-      .subscribe(([ebitda, incomeTax, capex, nwc]) => {
-        this.flowForm.controls['fcf'].setValue(ebitda - incomeTax - capex + nwc);
-    })
+      combineLatest(ebitdaObs, incomeTaxObs, capexObs, nwcObs)
+          .subscribe(([ebitda, incomeTax, capex, nwc]) => {
+              this.flowForm.controls['fcf'].setValue(ebitda - incomeTax - capex + nwc);
+          });
+
+      let tabs = [
+          { label: 'Flights', icon: 'airplanemode_active' },
+          { label: 'Hotel', icon: 'hotel' },
+          { label: 'Favorites', icon: 'favorite' }
+      ];
+
+      this.topAppBarService.SetTabs(tabs);
 
 
   }
 
   ngOnInit() {
-
-    let tabs = [
-      { label: 'Flights', icon: 'airplanemode_active' },
-      { label: 'Hotel', icon: 'hotel' },
-      { label: 'Favorites', icon: 'favorite' }
-    ];
-
-    this.topAppBarService.SetTabs(tabs);
 
     this.route.paramMap.pipe(
       switchMap((_param) => {
