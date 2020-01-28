@@ -19,6 +19,17 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Deal deal)
+        {
+            _context.DealSet.Add(deal);
+
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
         public IEnumerable<Deal> Get()
         {
             return _context.DealSet.ToList();
