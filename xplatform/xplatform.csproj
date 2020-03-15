@@ -1,71 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-	<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
-	<SpaRoot>ClientApp\</SpaRoot>
-	
-	<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-    <!-- Set this to true if you enable server-side prerendering -->
-    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="ClientApp\src\app\Services\" />
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
-	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.1.2" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <!-- Don't publish the SPA source files, but do show them in the project files list -->
-    <Content Remove="$(SpaRoot)**" />
-    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="ClientApp\src\app\Entity\Account.ts" />
-    <None Remove="ClientApp\src\app\Entity\Deal.ts" />
-    <None Remove="ClientApp\src\app\Entity\Emitent.ts" />
-    <None Remove="ClientApp\src\app\Entity\financial.ts" />
-    <None Remove="ClientApp\src\app\Entity\OperationEnum.ts" />
-    <None Remove="ClientApp\src\app\Entity\Security.ts" />
-  </ItemGroup>
-  
+
+
+
   <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
   </ItemGroup>
   
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\Entity\Account.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Entity\Deal.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Entity\Emitent.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Entity\Financial.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Entity\OperationEnum.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Entity\Security.ts" />
-  </ItemGroup>
   
-  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
-    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
-    
-    <!-- Include the newly-built files in the publish output -->
-    <ItemGroup>
-      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
-      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
-        <RelativePath>%(DistFiles.Identity)</RelativePath>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </ResolvedFileToPublish>
-    </ItemGroup>
-  </Target>
 
 </Project>

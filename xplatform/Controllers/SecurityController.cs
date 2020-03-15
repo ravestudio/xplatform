@@ -21,6 +21,7 @@ namespace xplatform.Controllers
         }
         public IEnumerable<Security> Get()
         {
+            Task.Delay(1000).Wait();
             return _context.SecuritySet.ToList();
         }
 
