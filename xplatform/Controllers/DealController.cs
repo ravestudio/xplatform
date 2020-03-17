@@ -32,7 +32,7 @@ namespace xplatform.Controllers
 
         public IEnumerable<Deal> Get()
         {
-            return _context.DealSet.ToList();
+            return _context.DealSet.OrderBy(d => d.Number).ToList();
         }
 
 

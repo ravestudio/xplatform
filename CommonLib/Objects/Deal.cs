@@ -19,6 +19,8 @@ namespace CommonLib.Objects
         public int Count { get; set; }
         public decimal Volume { get; set; }
 
+        public decimal? NKD { get; set; }
+
         public int securityId { get; set; }
         public Security security { get; set; }
     }

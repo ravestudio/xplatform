@@ -18,6 +18,7 @@ export interface Deal {
     count: number
     volume: number
     securityId: number
+    nkd: number
 }
 
 interface RequestDealsAction {

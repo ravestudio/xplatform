@@ -1,5 +1,5 @@
 import React from 'react'
-import { bindActionCreators, compose } from 'redux'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -84,6 +84,7 @@ class Deals extends React.PureComponent<DealsProps, IState> {
                                 <TableCell align="right">Price</TableCell>
                                 <TableCell align="right">Count</TableCell>
                                 <TableCell align="right">Volume</TableCell>
+                                <TableCell align="right">NKD</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -97,6 +98,7 @@ class Deals extends React.PureComponent<DealsProps, IState> {
                                     <TableCell align="right">{deal.price}</TableCell>
                                     <TableCell align="right">{deal.count}</TableCell>
                                     <TableCell align="right">{deal.volume}</TableCell>
+                                    <TableCell align="right">{deal.nkd}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
