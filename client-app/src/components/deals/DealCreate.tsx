@@ -8,70 +8,77 @@ import {
 import { Security } from '../../store/Securities'
 import { Account } from '../../store/Accounts'
 import { ApplicationState } from '../../store'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 
 interface EditDealDialogProps {
     securities: Security[],
-    accounts: Account[]
+    accounts: Account[],
+    classes: {
+        root: string
+    }
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+const styles = (theme: Theme) =>({
         root: {
             '& .MuiFormControl-root': {
                 margin: theme.spacing(1),
                 width: 200,
             },
         },
-    }),
-);
+    })
 
-const DealCreate: React.FC<EditDealDialogProps> = (props) => {
+class DealCreate extends React.PureComponent<EditDealDialogProps & typeof SecuritiesStore.actionCreators> {
 
-    const classes = useStyles();
-    return (
-        <Paper>
+    public componentDidMount() {
+        this.props.requestSecurities();
+    }
 
-            <form className={classes.root}>
-                <div>
-                    <TextField id="deal-number" label="Number" />
+    public render() {
 
-                    <FormControl>
-                        <InputLabel id="account-select-label">Account</InputLabel>
-                        <Select
-                            labelId="account-select-label"
-                            id="account-select"
-                        >
-                            {props.accounts.map(s => (
-                                <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+        return (
+            <Paper>
 
-                    <FormControl>
-                        <InputLabel id="security-select-label">Security</InputLabel>
-                        <Select
-                            labelId="security-select-label"
-                            id="security-select"
-                        >
-                            {props.securities.map(s => (
-                                <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                    <Button color="primary">
-                        Cancel
+                <form className={this.props.classes.root}>
+                    <div>
+                        <TextField id="deal-number" label="Number" />
+
+                        <FormControl>
+                            <InputLabel id="account-select-label">Account</InputLabel>
+                            <Select
+                                labelId="account-select-label"
+                                id="account-select"
+                            >
+                                {this.props.accounts.map(s => (
+                                    <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl>
+                            <InputLabel id="security-select-label">Security</InputLabel>
+                            <Select
+                                labelId="security-select-label"
+                                id="security-select"
+                            >
+                                {this.props.securities.map(s => (
+                                    <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div>
+                        <Button color="primary">
+                            Cancel
                     </Button>
-                    <Button color="primary">
-                        Subscribe
+                        <Button color="primary">
+                            Subscribe
                     </Button>
-                </div>
-            </form>
+                    </div>
+                </form>
 
-        </Paper>
-    )
+            </Paper>
+        )
+    }
 }
 
 export default connect(
@@ -82,4 +89,4 @@ export default connect(
     (dispatch) => bindActionCreators({
         requestSecurities: SecuritiesStore.actionCreators.requestSecurities
     }, dispatch)
-)(DealCreate as any);
+)(withStyles(styles)(DealCreate as any));
