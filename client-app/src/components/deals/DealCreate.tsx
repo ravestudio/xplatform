@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { Field, reduxForm } from 'redux-form'
 import * as SecuritiesStore from '../../store/Securities'
-import {
-    Paper, Button, TextField, FormControl, InputLabel, Select, MenuItem
-} from '@material-ui/core'
+import { Paper } from '@material-ui/core'
 import { Security } from '../../store/Securities'
 import { Account } from '../../store/Accounts'
 import { ApplicationState } from '../../store'
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+import DealForm from './DealForm'
+
 
 interface EditDealDialogProps {
     securities: Security[],
@@ -19,13 +20,12 @@ interface EditDealDialogProps {
 }
 
 const styles = (theme: Theme) =>({
-        root: {
-            '& .MuiFormControl-root': {
-                margin: theme.spacing(1),
+    root: {
+            /*'& .MuiGrid-item': {
                 width: 200,
-            },
+            },*/
         },
-    })
+})
 
 class DealCreate extends React.PureComponent<EditDealDialogProps & typeof SecuritiesStore.actionCreators> {
 
@@ -33,53 +33,27 @@ class DealCreate extends React.PureComponent<EditDealDialogProps & typeof Securi
         this.props.requestSecurities();
     }
 
+    submit = (values:any) => {
+        // print the form values to the console
+        console.log(values)
+    }
+
     public render() {
 
         return (
             <Paper>
+                <DealForm
 
-                <form className={this.props.classes.root}>
-                    <div>
-                        <TextField id="deal-number" label="Number" />
-
-                        <FormControl>
-                            <InputLabel id="account-select-label">Account</InputLabel>
-                            <Select
-                                labelId="account-select-label"
-                                id="account-select"
-                            >
-                                {this.props.accounts.map(s => (
-                                    <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-
-                        <FormControl>
-                            <InputLabel id="security-select-label">Security</InputLabel>
-                            <Select
-                                labelId="security-select-label"
-                                id="security-select"
-                            >
-                                {this.props.securities.map(s => (
-                                    <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <div>
-                        <Button color="primary">
-                            Cancel
-                    </Button>
-                        <Button color="primary">
-                            Subscribe
-                    </Button>
-                    </div>
-                </form>
-
+                    onSubmit={this.submit} />
             </Paper>
         )
     }
 }
+
+let dealForm = reduxForm({
+    // a unique name for the form
+    form: 'deal'
+})(DealCreate as any)
 
 export default connect(
     (state: ApplicationState) => ({
@@ -89,4 +63,4 @@ export default connect(
     (dispatch) => bindActionCreators({
         requestSecurities: SecuritiesStore.actionCreators.requestSecurities
     }, dispatch)
-)(withStyles(styles)(DealCreate as any));
+)(withStyles(styles)(dealForm as any));
