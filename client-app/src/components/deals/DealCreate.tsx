@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Field, reduxForm } from 'redux-form'
 import * as SecuritiesStore from '../../store/Securities'
+import * as DealStore from '../../store/Deals'
 import { Paper } from '@material-ui/core'
 import { Security } from '../../store/Securities'
 import { Account } from '../../store/Accounts'
@@ -27,7 +28,9 @@ const styles = (theme: Theme) =>({
         },
 })
 
-class DealCreate extends React.PureComponent<EditDealDialogProps & typeof SecuritiesStore.actionCreators> {
+class DealCreate extends React.PureComponent<EditDealDialogProps
+        & typeof SecuritiesStore.actionCreators
+        & typeof DealStore.actionCreators> {
 
     public componentDidMount() {
         this.props.requestSecurities();
@@ -36,6 +39,10 @@ class DealCreate extends React.PureComponent<EditDealDialogProps & typeof Securi
     submit = (values:any) => {
         // print the form values to the console
         console.log(values)
+
+        const d = values.json()
+
+        this.props.postDeal(values)
     }
 
     public render() {
@@ -61,6 +68,7 @@ export default connect(
         accounts: state.accounts?.accounts
     }),
     (dispatch) => bindActionCreators({
-        requestSecurities: SecuritiesStore.actionCreators.requestSecurities
+        requestSecurities: SecuritiesStore.actionCreators.requestSecurities,
+        postDeal: DealStore.actionCreators.postDeal
     }, dispatch)
 )(withStyles(styles)(dealForm as any));

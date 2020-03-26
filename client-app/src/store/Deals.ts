@@ -43,6 +43,11 @@ export const actionCreators = {
             });
 
         dispatch({ type: 'DEALS_REQUEST' });
+    },
+
+    postDeal: (deal: Deal): AppThunkAction<KnownAction> => (dispatch, getState) => {
+        
+        console.log(deal)
     }
 };
 
