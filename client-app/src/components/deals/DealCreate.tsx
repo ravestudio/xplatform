@@ -7,6 +7,7 @@ import * as DealStore from '../../store/Deals'
 import { Paper } from '@material-ui/core'
 import { Security } from '../../store/Securities'
 import { Account } from '../../store/Accounts'
+import { Deal } from '../../store/Deals'
 import { ApplicationState } from '../../store'
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import DealForm from './DealForm'
@@ -40,9 +41,13 @@ class DealCreate extends React.PureComponent<EditDealDialogProps
         // print the form values to the console
         console.log(values)
 
-        const d = values.json()
+        const deal = ({
+            accountId: values['deal-account'],
+            number: values['deal-number'],
+            
+        })
 
-        this.props.postDeal(values)
+        this.props.postDeal(deal)
     }
 
     public render() {

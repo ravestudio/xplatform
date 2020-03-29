@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { connect } from 'react-redux'
 import Grid from '@material-ui/core/Grid';
@@ -87,9 +87,81 @@ const renderSelectField: React.FC<SelectProps> = (props) => {
     )
 }
 
+type OperProps = {
+    input: any,
+    rest: any
+}
+
+const radioButton = ({ input, ...rest }: OperProps) => (
+
+    <FormControl>
+        <FormLabel component="legend">Operation</FormLabel>
+        <RadioGroup {...input} {...rest} defaultValue="1">
+            <FormControlLabel value="1" control={<GreenRadio />} label="Buy" labelPlacement="end" />
+            <FormControlLabel value="2" control={<Radio />} label="Sell" labelPlacement="end" />
+        </RadioGroup>
+    </FormControl>
+    
+)
+
+const DateField = (props:any) => {
+    const {
+        meta: { submitting, error, touched },
+        input: { onBlur, value, ...inputProps },
+        ...others
+    } = props;
+
+    const onChange = (date:any) => {
+        Date.parse(date) ? inputProps.onChange(date.toISOString()) : inputProps.onChange(null);
+    };
+
+    return (
+        <KeyboardDatePicker
+            {...inputProps}
+            {...others}
+            disableToolbar
+            format="dd/MM/yyyy"
+            value={value ? new Date(value) : null}
+            disabled={submitting}
+            onBlur={() => onBlur(value ? new Date(value).toISOString() : null)}
+            error={error && touched}
+            onChange={onChange}
+        />
+    );
+};
+
+const TimeField = (props: any) => {
+    const {
+        meta: { submitting, error, touched },
+        input: { onBlur, value, ...inputProps },
+        ...others
+    } = props;
+
+    const onChange = (date: any) => {
+        Date.parse(date) ? inputProps.onChange(date.toISOString()) : inputProps.onChange(null);
+    };
+
+    return (
+        <KeyboardTimePicker
+            {...inputProps}
+            {...others}
+            disableToolbar
+            value={value ? new Date(value) : null}
+            disabled={submitting}
+            onBlur={() => onBlur(value ? new Date(value).toISOString() : null)}
+            error={error && touched}
+            onChange={onChange}
+        />
+    );
+};
+
+
+
 const DealForm = (props: any) => {
 
-    const { handleSubmit, accounts = [], securities=[] } = props
+    const { handleSubmit, accounts = [], securities = [] } = props
+
+    const [date, setDate] = useState(new Date());
 
     return (
         <form onSubmit={handleSubmit}>
@@ -113,108 +185,75 @@ const DealForm = (props: any) => {
                 <Grid item xs={3}>
 
                     <Field
-                        
                         name="deal-account"
                         component={renderSelectField}
                         label="Account"
                         fullWidth
                     >
                         {accounts.map((s: any) => (
-                            <MenuItem value={s.id}>{s.name}</MenuItem>
+                            <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
                         ))}
                         
                     </Field>
                 </Grid>
 
                 <Grid item xs={3}>
-                    <FormControl fullWidth>
-                        <InputLabel id="security-select-label">Security</InputLabel>
-                        <Select
-                            labelId="security-select-label"
-                            id="security-select"
-                        >
-                            {securities.map((s:any) => (
-                                <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
-
-            <Grid
-                container
-                justify="flex-start"
-                spacing={3}>
-
-                <Grid item xs={3}>
-                    <FormControl component="fieldset" fullWidth>
-                        <FormLabel component="legend">Operation</FormLabel>
-                        <RadioGroup row aria-label="position" name="position" defaultValue="top">
-                            <FormControlLabel
-                                value="top"
-                                control={<GreenRadio />}
-                                label="Buy"
-                                labelPlacement="end"
-                            />
-                            <FormControlLabel
-                                value="start"
-                                control={<RedRadio />}
-                                label="Sell"
-                                labelPlacement="end"
-                            />
-                        </RadioGroup>
-                    </FormControl>
-                </Grid>
-            </Grid>
-
-            <Grid
-                container
-                justify="flex-start"
-                spacing={3}>
-
-                <Grid item xs={3}>
-                    <KeyboardDatePicker
+                    <Field
+                        name="deal-security"
+                        component={renderSelectField}
+                        label="Security"
                         fullWidth
-                        id="dealDate"
+                    >
+                        {securities.map((s: any) => (
+                            <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
+                        ))}
+                    </Field>
+                </Grid>
+            </Grid>
+
+            <Grid
+                container
+                justify="flex-start"
+                spacing={3}>
+
+                <Grid item xs={3}>
+                    <Field name="dealOperation" component={radioButton} row />
+                </Grid>
+            </Grid>
+
+            <Grid
+                container
+                justify="flex-start"
+                spacing={3}>
+
+                <Grid item xs={3}>
+
+                    <Field name="dealDate"
+                        component={DateField}
+                        fullWidth
                         label="Deal Date"
                         variant="inline"
-                        format="dd.MM.yyyy"
-                        value={new Date()}
-                        onChange={(date) => console.log(date)}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
                     />
                 </Grid>
+
                 <Grid item xs={3}>
-                    <KeyboardTimePicker
-                        fullWidth
-                        disableToolbar
-                        variant="inline"
+
+                    <Field name="dealTime"
+                        component={TimeField}
                         ampm={false}
-                        id="dealTime"
+                        variant="inline"
+                        fullWidth
                         label="Deal Time"
-                        value={new Date()}
-                        onChange={(date) => console.log(date)}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
+                        />
                 </Grid>
 
                 <Grid item xs={3}>
-                    <KeyboardDatePicker
-                        fullWidth
 
-                        id="deliveryDate"
+                    <Field name="deliveryDate"
+                        component={DateField}
+                        fullWidth
                         label="Delivery Date"
                         variant="inline"
-                        format="dd.MM.yyyy"
-                        value={new Date()}
-                        onChange={(date) => console.log(date)}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
                     />
                 </Grid>
             </Grid>
@@ -225,11 +264,23 @@ const DealForm = (props: any) => {
                 spacing={3}>
 
                 <Grid item xs={3}>
-                    <TextField id="deal-price" label="Price" fullWidth />
+
+                    <Field
+                        fullWidth
+                        name="dealPrie"
+                        component={renderTextField}
+                        label="Price"
+                    />
                 </Grid>
 
                 <Grid item xs={3}>
-                    <TextField id="deal-count" label="Count" fullWidth />
+
+                    <Field
+                        fullWidth
+                        name="dealCount"
+                        component={renderTextField}
+                        label="Count"
+                    />
                 </Grid>
 
                 <Grid item xs={3}>
@@ -271,6 +322,13 @@ let dealForm = reduxForm({
 export default connect(
     (state: ApplicationState) => ({
         securities: state.securities?.securities,
-        accounts: state.accounts?.accounts
+        accounts: state.accounts?.accounts,
+        initialValues: {
+            dealOperation: "1",
+            dealDate: new Date().toISOString(),
+            deliveryDate: null,
+            //dealDate: "lll",
+            dealTime: null
+        }
     })
 )(dealForm);
