@@ -14,7 +14,7 @@ const unloadedState: AccountsState = {
     accounts: [
         {
             id: 1,
-            name: "BCS"
+            name: "BCS ИИС"
         },
         {
             id: 2,

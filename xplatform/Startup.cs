@@ -26,6 +26,9 @@ namespace xplatform
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = Environment.GetEnvironmentVariable("xpl_db");
+            //string connectionString = Configuration.GetConnectionString("xpl_db");
+
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -34,7 +37,7 @@ namespace xplatform
             }));
 
             services.AddDbContext<XContext>(options => {
-                options.UseNpgsql(Configuration.GetConnectionString("xpl_db"));
+                options.UseNpgsql(connectionString);
             });
 
             services.AddControllers();

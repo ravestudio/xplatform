@@ -12,6 +12,7 @@ import { ApplicationState } from '../../store'
 import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import DealForm from './DealForm'
 
+import { format, parseISO, addHours } from 'date-fns'
 
 interface EditDealDialogProps {
     securities: Security[],
@@ -41,10 +42,30 @@ class DealCreate extends React.PureComponent<EditDealDialogProps
         // print the form values to the console
         console.log(values)
 
+        const toMSK = (iso_dt: string): string => {
+
+            const zoned = parseISO(iso_dt)
+            const offset = zoned.getTimezoneOffset() / 60
+
+            return addHours(zoned, -(offset + 3)).toISOString()
+        }
+
+        const date = parseISO(values['dealDate'])
+        const time = parseISO(values['dealTime'])
+
+        const dateTime = new Date(`${format(date, 'yyyy-MM-dd')}T${format(time, 'HH:mm')}`).toISOString()
+
         const deal = ({
-            accountId: values['deal-account'],
-            number: values['deal-number'],
-            
+            accountId: values['dealAccount'],
+            number: parseInt(values['dealNumber']),
+            operation: parseInt(values['dealOperation']),
+            securityId: values['dealSecurity'],
+            date: toMSK(dateTime),
+            deliveryDate: toMSK(values['deliveryDate']),
+            price: parseFloat(values['dealPrice']),
+            count: parseInt(values['dealCount']),
+            volume: parseFloat(values['dealVolume']),
+            nkd: parseFloat(values['dealNkd'])
         })
 
         this.props.postDeal(deal)

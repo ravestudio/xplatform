@@ -15,5 +15,7 @@ namespace CommonLib.Objects
 
         public ICollection<Deal> Deals { get; set; }
         public ICollection<Position> Positions { get; set; }
+
+        public decimal? NominalPrice { get; set; }
     }
 }

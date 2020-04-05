@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Field, reduxForm } from 'redux-form'
+import React, { useState, useEffect } from 'react'
+import { Field, change, reduxForm, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import Grid from '@material-ui/core/Grid';
 import { Button, TextField, FormControl, FormControlLabel, FormLabel, InputLabel, Select, MenuItem } from '@material-ui/core'
@@ -11,7 +11,30 @@ import {
     KeyboardDatePicker, KeyboardTimePicker
 } from '@material-ui/pickers';
 import { ApplicationState } from '../../store';
+import { SecuritiesState, Security } from '../../store/Securities';
 
+import NumberFormat from 'react-number-format';
+
+interface NumberFormatCustomProps {
+    inputRef: (instance: NumberFormat | null) => void;
+    //onChange: (event: { target: { value: string } }) => void;
+    onChange: (value: string) => void
+}
+
+function NumberFormatCustom(props: NumberFormatCustomProps) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+            {...other}
+            getInputRef={inputRef}
+            onValueChange={(values) => {
+                onChange(values.value);
+            }}
+            isNumericString
+        />
+    );
+}
 
 const GreenRadio = withStyles({
     root: {
@@ -50,6 +73,10 @@ const renderTextField: React.FC<TFProps> = (props) => {
             error={touched && invalid}
             helperText={touched && error}
             {...input}
+            InputProps={{
+                inputComponent: NumberFormatCustom as any,
+            }}
+
             {...custom}
         />
     )
@@ -161,7 +188,13 @@ const DealForm = (props: any) => {
 
     const { handleSubmit, accounts = [], securities = [] } = props
 
-    const [date, setDate] = useState(new Date());
+    useEffect(() => {
+        console.log("change");
+
+        props.dispatch(change("dealForm", "dealVolume",
+            props.nominalPrice ? props.price * props.nominalPrice * props.count / 100
+                : props.price * props.count));
+    });
 
     return (
         <form onSubmit={handleSubmit}>
@@ -175,7 +208,7 @@ const DealForm = (props: any) => {
 
                     <Field
                         fullWidth
-                        name="deal-number"
+                        name="dealNumber"
                         component={renderTextField}
                         label="Number"
                         
@@ -185,7 +218,7 @@ const DealForm = (props: any) => {
                 <Grid item xs={3}>
 
                     <Field
-                        name="deal-account"
+                        name="dealAccount"
                         component={renderSelectField}
                         label="Account"
                         fullWidth
@@ -199,7 +232,7 @@ const DealForm = (props: any) => {
 
                 <Grid item xs={3}>
                     <Field
-                        name="deal-security"
+                        name="dealSecurity"
                         component={renderSelectField}
                         label="Security"
                         fullWidth
@@ -267,7 +300,7 @@ const DealForm = (props: any) => {
 
                     <Field
                         fullWidth
-                        name="dealPrie"
+                        name="dealPrice"
                         component={renderTextField}
                         label="Price"
                     />
@@ -284,7 +317,13 @@ const DealForm = (props: any) => {
                 </Grid>
 
                 <Grid item xs={3}>
-                    <TextField id="deal-nkd" label="NKD" fullWidth />
+
+                    <Field
+                        fullWidth
+                        name="dealNkd"
+                        component={renderTextField}
+                        label="NKD"
+                    />
                 </Grid>
 
             </Grid>
@@ -294,11 +333,18 @@ const DealForm = (props: any) => {
                 justify="flex-start"
                 spacing={3}>
 
-                <Grid item xs={6}>
+                <Grid item xs={6}>{props.nominalPrice ? `nominal price:${props.nominalPrice}`: null}
                 </Grid>
 
                 <Grid item xs={3}>
-                    <TextField id="deal-volume" label="Volume" fullWidth disabled />
+
+                    <Field
+                        fullWidth
+                        disabled
+                        name="dealVolume"
+                        component={renderTextField}
+                        label="Volume"
+                    />
                 </Grid>
 
             </Grid>
@@ -314,21 +360,46 @@ const DealForm = (props: any) => {
     )
 }
 
-let dealForm = reduxForm({
+const SelectingDealForm = reduxForm({
     // a unique name for the form
-    form: 'deal'
-})(DealForm as any)
+    form: 'dealForm'
+})(DealForm)
+
+const selector = formValueSelector('dealForm') // <-- same as form name
+
 
 export default connect(
-    (state: ApplicationState) => ({
-        securities: state.securities?.securities,
-        accounts: state.accounts?.accounts,
-        initialValues: {
-            dealOperation: "1",
-            dealDate: new Date().toISOString(),
-            deliveryDate: null,
-            //dealDate: "lll",
-            dealTime: null
+    (state: ApplicationState) => {
+
+        const selectedSecurityId = selector(state, 'dealSecurity')
+
+        const price = selector(state, 'dealPrice')
+        const count = selector(state, 'dealCount')
+
+        const getNominalPrice = (securities: Security[] | undefined, secId: number | undefined) => {
+
+            if (securities === undefined || secId === undefined) {
+                return 0
+            }
+
+            return securities.find(s => s.id === selectedSecurityId)?.nominalPrice
         }
-    })
-)(dealForm);
+
+        return {
+            securities: state.securities?.securities,
+            accounts: state.accounts?.accounts,
+            nominalPrice: getNominalPrice(state.securities?.securities, selectedSecurityId),
+            price: price,
+            count: count,
+            initialValues: {
+                dealOperation: "1",
+                dealDate: new Date().toISOString(),
+                deliveryDate: null,
+                //dealDate: "lll",
+                dealTime: null,
+                nominalPrice: null,
+                dealVolume: null
+            }
+        }
+    }
+)(SelectingDealForm);

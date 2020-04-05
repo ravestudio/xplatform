@@ -104,7 +104,7 @@ class Deals extends React.PureComponent<DealsProps, IState> {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Button variant="contained" color="primary" onClick={this.handleClickEdit}>Add Dial</Button>
+                <Button variant="contained" color="primary" onClick={this.handleClickEdit}>Add Deal</Button>
             </React.Fragment>
         )
     }

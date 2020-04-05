@@ -8,7 +8,8 @@ export interface SecuritiesState {
 
 export interface Security {
     id: number
-    name: string
+    name: string,
+    nominalPrice?: number
 }
 
 interface RequestSecurityAction {

@@ -23,6 +23,11 @@ namespace xplatform.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Deal deal)
         {
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+
+            deal.Date = TimeZoneInfo.ConvertTimeFromUtc(deal.Date, cstZone);
+            deal.DeliveryDate = TimeZoneInfo.ConvertTimeFromUtc(deal.DeliveryDate, cstZone);
+
             _context.DealSet.Add(deal);
 
             _context.SaveChanges();
@@ -32,7 +37,18 @@ namespace xplatform.Controllers
 
         public IEnumerable<Deal> Get()
         {
-            return _context.DealSet.OrderBy(d => d.Number).ToList();
+            List<Deal> deals = null;
+
+            try
+            {
+                deals = _context.DealSet.OrderBy(d => d.Number).ToList();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return deals;
         }
 
 

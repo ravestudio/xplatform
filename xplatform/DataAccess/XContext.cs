@@ -39,6 +39,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().Property(s => s.Name).HasColumnName("Name");
             modelBuilder.Entity<Security>().Property(s => s.Code).HasColumnName("Code");
             modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
+            modelBuilder.Entity<Security>().Property(s => s.NominalPrice).HasColumnName("NominalPrice").IsRequired(false);
             modelBuilder.Entity<Security>().ToTable("SecuritySet");
 
             modelBuilder.Entity<Deal>().HasKey(d => d.Id);

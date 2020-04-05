@@ -1,4 +1,5 @@
 import { Action, Reducer } from 'redux';
+import { reset } from 'redux-form';
 import { AppThunkAction } from './';
 import C from "../constants"
 
@@ -46,6 +47,25 @@ export const actionCreators = {
     },
 
     postDeal: (deal: any): AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+        fetch(`http://localhost:5000/api/deal`, {
+            method: 'POST',
+            body: JSON.stringify(deal),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                console.log(response.status)
+
+                if (response.status == 200) {
+                    dispatch(reset('dealForm'))
+                }
+            })
+        /*.then(response => response.json() as Promise<any>)
+        .then(data => {
+            console.log(data)
+        });*/
         
         console.log(deal)
     }
