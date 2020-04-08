@@ -6,12 +6,9 @@ networks:
 
 services:
   dockerapi:
-    image: dockerapi:latest
+    image: yakovlevdev/xplatform:latest
     depends_on:
       - "postgres_image"
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - "8000:80"
     environment:
