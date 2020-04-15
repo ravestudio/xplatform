@@ -97,6 +97,8 @@ namespace xplatform.Controllers
                 }
             }
 
+            string last = snapshoots.Last().toJson();
+
             return Ok();
         }
     }

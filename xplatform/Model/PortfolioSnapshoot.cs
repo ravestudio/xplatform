@@ -28,10 +28,10 @@ namespace xplatform.Model
 
             while (this.Accounts[account].PositionItems[security].Count > 0 &&
                 this.Accounts[account].PositionItems[security].Peek().Limit < 0 &&
-                this.Accounts[account].PositionItems[security].Peek().Limit <= limit)
+                Math.Abs(this.Accounts[account].PositionItems[security].Peek().Limit) <= limit)//по модулю
             {
                 var item = this.Accounts[account].PositionItems[security].Dequeue();
-                limit -= item.Limit;
+                limit += item.Limit;
             }
 
             if (this.Accounts[account].PositionItems[security].Count > 0 &&
@@ -150,7 +150,8 @@ namespace xplatform.Model
             new PositionItem() {
                 DealDate = gi.date,
                 Limit = gi.limit
-            })))));
+            }).OrderBy(p => p.DealDate)
+            ))));
         }
         public SnapshotAccount()
         {
