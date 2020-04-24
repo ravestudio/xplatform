@@ -38,7 +38,7 @@ namespace CommonLib.Services
                 IObservable<MarketData> obs = Observable.Interval(TimeSpan.FromSeconds(10))
                     .Select(x => Observable.FromAsync(async () =>
                 {
-                    var response = await _micexClient.GetSecurityInfo(code);
+                    var response = await _micexClient.GetSecurityInfo("shares", "TQBR", code);
                     return response.MarketData[0];
                 })).Concat();
 

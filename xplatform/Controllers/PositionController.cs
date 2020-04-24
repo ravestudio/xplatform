@@ -26,6 +26,9 @@ namespace xplatform.Controllers
         {
             //calculate all
 
+            _context.Database.ExecuteSqlCommand("TRUNCATE TABLE \"SnapshootSet\"");
+            _context.SaveChanges();
+
             List<PortfolioSnapshoot> snapshoots = new List<PortfolioSnapshoot>();
             IDictionary<DateTime, int> snapshootIndex = new Dictionary<DateTime, int>();
 
@@ -96,6 +99,20 @@ namespace xplatform.Controllers
                     decrease(snap, deal);
                 }
             }
+
+            foreach(int index in snapshootIndex.Values)
+            {
+                SnapshootData snapshootData = new SnapshootData()
+                {
+                    Id = Guid.NewGuid(),
+                    ChangeDate = snapshootIndex.Single(kv => kv.Value == index).Key,
+                    Data = snapshoots[index].toJson()
+                };
+
+                _context.SnapshootSet.Add(snapshootData);
+            }
+
+            _context.SaveChanges();
 
             string last = snapshoots.Last().toJson();
 

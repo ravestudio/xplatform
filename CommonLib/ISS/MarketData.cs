@@ -8,6 +8,7 @@ namespace CommonLib.ISS
     {
         public string Code { get; set; }
 
+        public decimal LAST { get; set; }
         public decimal LCURRENTPRICE { get; set; }
         public decimal OPENPERIODPRICE { get; set; }
     }

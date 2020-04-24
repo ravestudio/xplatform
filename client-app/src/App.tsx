@@ -6,6 +6,7 @@ import Layout from './components/blocks/Layout'
 import Emitents from './components/emitents/Emitents'
 import Deals from './components/deals/Deals'
 import DealCreate from './components/deals/DealCreate'
+import Portfolio from './components/portfolio/Portfolio'
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -16,6 +17,7 @@ export default () => (
         <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
             <Route exact path='/deals' component={Deals} />
             <Route path='/deals/create' component={DealCreate} />
+            <Route path='/portfolio' component={Portfolio} />
         </MuiPickersUtilsProvider>
     </Layout>
 )

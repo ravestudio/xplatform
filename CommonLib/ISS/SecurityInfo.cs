@@ -10,5 +10,7 @@ namespace CommonLib.ISS
         public string Code { get; set; }
 
         public decimal PREVLEGALCLOSEPRICE { get; set; }
+
+        public decimal? NKD { get; set; }
     }
 }

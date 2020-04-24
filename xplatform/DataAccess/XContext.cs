@@ -14,6 +14,7 @@ namespace xplatform.DataAccess
         public DbSet<Security> SecuritySet { get; set; }
         public DbSet<Deal> DealSet { get; set; }
         public DbSet<Account> AccountSet { get; set; }
+        public DbSet<SnapshootData> SnapshootSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -40,6 +41,8 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().Property(s => s.Code).HasColumnName("Code");
             modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
             modelBuilder.Entity<Security>().Property(s => s.NominalPrice).HasColumnName("NominalPrice").IsRequired(false);
+            modelBuilder.Entity<Security>().Property(s => s.Market).HasColumnName("Market");
+            modelBuilder.Entity<Security>().Property(s => s.Board).HasColumnName("Board");
             modelBuilder.Entity<Security>().ToTable("SecuritySet");
 
             modelBuilder.Entity<Deal>().HasKey(d => d.Id);
@@ -94,6 +97,12 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Financial>().HasOne(f => f.Emitent).WithMany(e => e.Financials).HasForeignKey(f => f.EmitentId);
             modelBuilder.Entity<Financial>().Ignore(f => f.EmitentCode);
             modelBuilder.Entity<Financial>().ToTable("FinancialSet");
+
+            modelBuilder.Entity<SnapshootData>().HasKey(p => p.Id);
+            modelBuilder.Entity<SnapshootData>().Property(p => p.Id).HasColumnName("Id");
+            modelBuilder.Entity<SnapshootData>().Property(p => p.ChangeDate).HasColumnName("ChangeDate");
+            modelBuilder.Entity<SnapshootData>().Property(p => p.Data).HasColumnName("Data");
+            modelBuilder.Entity<SnapshootData>().ToTable("SnapshootSet");
 
             base.OnModelCreating(modelBuilder);
         }

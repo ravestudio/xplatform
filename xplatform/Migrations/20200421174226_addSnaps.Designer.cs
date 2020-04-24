@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -9,9 +10,10 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20200421174226_addSnaps")]
+    partial class addSnaps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,20 +256,12 @@ namespace xplatform.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Board")
-                        .HasColumnName("Board")
-                        .HasColumnType("text");
-
                     b.Property<string>("Code")
                         .HasColumnName("Code")
                         .HasColumnType("text");
 
                     b.Property<int>("EmitentId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Market")
-                        .HasColumnName("Market")
-                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasColumnName("Name")

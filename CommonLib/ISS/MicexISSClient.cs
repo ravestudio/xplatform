@@ -17,9 +17,9 @@ namespace CommonLib.ISS
 
         }
 
-        public Task<ISSResponse> GetSecurityInfo(string security)
+        public Task<ISSResponse> GetSecurityInfo(string market, string board, string security)
         {
-            string url = string.Format("http://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities/{0}.xml", security);
+            string url = string.Format("http://iss.moex.com/iss/engines/stock/markets/{0}/boards/{1}/securities/{2}.xml", market, board, security);
 
             TaskCompletionSource<ISSResponse> TCS = new TaskCompletionSource<ISSResponse>();
 
@@ -43,6 +43,12 @@ namespace CommonLib.ISS
                         Code = GetAttribute(el, "secid"),
                         PREVLEGALCLOSEPRICE = decimal.Parse(GetAttribute(el, "PREVLEGALCLOSEPRICE"), CultureInfo.InvariantCulture)
                     };
+
+                    if (market == "bonds")
+                    {
+                        info.NKD = decimal.Parse(GetAttribute(el, "ACCRUEDINT"), CultureInfo.InvariantCulture);
+                    }
+
                     response.SecurityInfo.Add(info);
                 }
 
@@ -51,13 +57,14 @@ namespace CommonLib.ISS
 
                 foreach (XElement el in marketdata_rows.Elements())
                 {
-
+                    string last = GetAttribute(el, "LAST");
                     string currentPrice = GetAttribute(el, "LCURRENTPRICE");
                     string openPrice = GetAttribute(el, "OPENPERIODPRICE");
 
                     MarketData market = new MarketData()
                     {
                         Code = GetAttribute(el, "secid"),
+                        LAST = string.IsNullOrEmpty(last) ? 0m : decimal.Parse(last, CultureInfo.InvariantCulture),
                         LCURRENTPRICE = string.IsNullOrEmpty(currentPrice) ? 0m : decimal.Parse(currentPrice, CultureInfo.InvariantCulture),
                         OPENPERIODPRICE = string.IsNullOrEmpty(openPrice) ? 0m : decimal.Parse(openPrice, CultureInfo.InvariantCulture),
                     };

@@ -17,5 +17,8 @@ namespace CommonLib.Objects
         public ICollection<Position> Positions { get; set; }
 
         public decimal? NominalPrice { get; set; }
+
+        public string Market { get; set; }
+        public string Board { get; set; }
     }
 }

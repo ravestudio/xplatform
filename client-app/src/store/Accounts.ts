@@ -23,6 +23,10 @@ const unloadedState: AccountsState = {
         {
             id: 3,
             name: "BCS"
+        },
+		{
+            id: 4,
+            name: "Tinkoff"
         }
     ], isLoading: false
 };
