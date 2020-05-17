@@ -1,5 +1,6 @@
 import { Action, Reducer } from 'redux'
 import { AppThunkAction } from './';
+import C from "../constants"
 
 export interface SecuritiesState {
     isLoading: boolean
@@ -27,7 +28,7 @@ export const actionCreators = {
     requestSecurities: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
 
-        fetch(`http://localhost:5000/api/security`)
+        fetch(`${C.apiUrl}/security`)
             .then(response => response.json() as Promise<Security[]>)
             .then(data => {
                 dispatch({ type: 'SECURITY_RECEIVE', securities: data });

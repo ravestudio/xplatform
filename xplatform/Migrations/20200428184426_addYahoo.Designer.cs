@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -9,9 +10,10 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20200428184426_addYahoo")]
+    partial class addYahoo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,36 +119,6 @@ namespace xplatform.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EmitentSet");
-                });
-
-            modelBuilder.Entity("CommonLib.Objects.FinanceAnnual", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnName("Code")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnName("CreateDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Data")
-                        .IsRequired()
-                        .HasColumnName("Data")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Year")
-                        .HasColumnName("Year")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FinanceAnnualSet");
                 });
 
             modelBuilder.Entity("CommonLib.Objects.Financial", b =>

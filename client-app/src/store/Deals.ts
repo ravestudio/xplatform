@@ -37,7 +37,7 @@ export const actionCreators = {
     requestDeals: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
 
-        fetch(`http://localhost:5000/api/deal`)
+        fetch(`${C.apiUrl}/deal`)
             .then(response => response.json() as Promise<Deal[]>)
             .then(data => {
                 dispatch({ type: 'DEALS_RECEIVE', deals: data });
@@ -48,7 +48,7 @@ export const actionCreators = {
 
     postDeal: (deal: any): AppThunkAction<KnownAction> => (dispatch, getState) => {
 
-        fetch(`http://localhost:5000/api/deal`, {
+        fetch(`${C.apiUrl}/deal`, {
             method: 'POST',
             body: JSON.stringify(deal),
             headers: {

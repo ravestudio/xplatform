@@ -15,6 +15,10 @@ namespace xplatform.DataAccess
         public DbSet<Deal> DealSet { get; set; }
         public DbSet<Account> AccountSet { get; set; }
         public DbSet<SnapshootData> SnapshootSet { get; set; }
+
+        public DbSet<YahooFinanceRaw> YahooFinanceRawSet { get; set; }
+
+        public DbSet<FinanceAnnual> FinanceAnnualSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -103,6 +107,23 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<SnapshootData>().Property(p => p.ChangeDate).HasColumnName("ChangeDate");
             modelBuilder.Entity<SnapshootData>().Property(p => p.Data).HasColumnName("Data");
             modelBuilder.Entity<SnapshootData>().ToTable("SnapshootSet");
+
+            modelBuilder.Entity<YahooFinanceRaw>().HasKey(y => y.Id);
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Id).HasColumnName("Id");
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Code).HasColumnName("Code").IsRequired();
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Data).HasColumnName("Data").IsRequired();
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.LoadDate).HasColumnName("LoadDate").IsRequired();
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.LastFinance).HasColumnName("LastFinance").IsRequired();
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Processed).HasColumnName("Processed").IsRequired();
+            modelBuilder.Entity<YahooFinanceRaw>().ToTable("YahooFinanceRawSet");
+
+            modelBuilder.Entity<FinanceAnnual>().HasKey(y => y.Id);
+            modelBuilder.Entity<FinanceAnnual>().Property(y => y.Id).HasColumnName("Id");
+            modelBuilder.Entity<FinanceAnnual>().Property(y => y.Code).HasColumnName("Code").IsRequired();
+            modelBuilder.Entity<FinanceAnnual>().Property(y => y.Data).HasColumnName("Data").IsRequired();
+            modelBuilder.Entity<FinanceAnnual>().Property(y => y.Year).HasColumnName("Year").IsRequired();
+            modelBuilder.Entity<FinanceAnnual>().Property(y => y.CreateDate).HasColumnName("CreateDate").IsRequired();
+            modelBuilder.Entity<FinanceAnnual>().ToTable("FinanceAnnualSet");
 
             base.OnModelCreating(modelBuilder);
         }

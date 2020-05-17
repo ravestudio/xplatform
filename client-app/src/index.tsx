@@ -9,6 +9,9 @@ import configureStore from './store/configureStore'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
+import xTheme from './Theme'
+import { ThemeProvider } from '@material-ui/core/styles';
+
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
 const history = createBrowserHistory({ basename: baseUrl });
@@ -18,7 +21,9 @@ const store = configureStore(history)
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <App />
+            <ThemeProvider theme={xTheme}>
+                <App />
+            </ThemeProvider>
         </ConnectedRouter>
     </Provider>, document.getElementById('root'));
 

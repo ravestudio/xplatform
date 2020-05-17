@@ -58,6 +58,7 @@ namespace CommonLib.ISS
                 foreach (XElement el in marketdata_rows.Elements())
                 {
                     string last = GetAttribute(el, "LAST");
+                    string open = GetAttribute(el, "OPEN");
                     string currentPrice = GetAttribute(el, "LCURRENTPRICE");
                     string openPrice = GetAttribute(el, "OPENPERIODPRICE");
 
@@ -65,6 +66,7 @@ namespace CommonLib.ISS
                     {
                         Code = GetAttribute(el, "secid"),
                         LAST = string.IsNullOrEmpty(last) ? 0m : decimal.Parse(last, CultureInfo.InvariantCulture),
+                        OPEN = string.IsNullOrEmpty(open) ? 0m : decimal.Parse(open, CultureInfo.InvariantCulture),
                         LCURRENTPRICE = string.IsNullOrEmpty(currentPrice) ? 0m : decimal.Parse(currentPrice, CultureInfo.InvariantCulture),
                         OPENPERIODPRICE = string.IsNullOrEmpty(openPrice) ? 0m : decimal.Parse(openPrice, CultureInfo.InvariantCulture),
                     };
