@@ -1,5 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux';
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
 import { ApplicationState } from '../../store';
 import * as FinancialsStore from '../../store/Financials';
 
@@ -17,6 +21,13 @@ class Financials extends React.PureComponent<FinancialsProps> {
         return (
             <React.Fragment>
                 <h1>Financials</h1>
+
+                <Tabs value={0} aria-label="simple tabs example">
+                    <Tab label="Incomes" />
+                    <Tab label="Item Two" />
+                    <Tab label="Item Three" />
+                </Tabs>
+
                 {this.props.isLoading && <span>Loading...</span>}
                 {this.renderFinancialTable()}
             </React.Fragment>
@@ -40,6 +51,14 @@ class Financials extends React.PureComponent<FinancialsProps> {
                     <tr>
                         <td>Cost of Revenue</td>
                         {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.costOfRevenue.raw}</td>)}
+                    </tr>
+                    <tr>
+                        <td>Total Operating Expenses</td>
+                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.totalOperatingExpenses.raw}</td>)}
+                    </tr>
+                    <tr>
+                        <td>Net Income</td>
+                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.netIncome.raw}</td>)}
                     </tr>
                 </tbody>
             </table>
