@@ -87,7 +87,7 @@ namespace PriceUpdater
 
                 string result = await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
 
-                Console.WriteLine($"{q.symbol}: {q.price}");
+                //Console.WriteLine($"{q.symbol}: {q.price}");
             });
 
             return Task.CompletedTask;
