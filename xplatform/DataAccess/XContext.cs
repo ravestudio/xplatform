@@ -19,6 +19,8 @@ namespace xplatform.DataAccess
         public DbSet<YahooFinanceRaw> YahooFinanceRawSet { get; set; }
 
         public DbSet<FinanceAnnual> FinanceAnnualSet { get; set; }
+
+        public DbSet<Quote> QuoteSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -43,6 +45,8 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().Property(s => s.Id).HasColumnName("Id");
             modelBuilder.Entity<Security>().Property(s => s.Name).HasColumnName("Name");
             modelBuilder.Entity<Security>().Property(s => s.Code).HasColumnName("Code");
+            modelBuilder.Entity<Security>().Property(s => s.Region).HasColumnName("Region");
+            modelBuilder.Entity<Security>().Property(s => s.Currency).HasColumnName("Currency");
             modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
             modelBuilder.Entity<Security>().Property(s => s.NominalPrice).HasColumnName("NominalPrice").IsRequired(false);
             modelBuilder.Entity<Security>().Property(s => s.Market).HasColumnName("Market");
@@ -124,6 +128,16 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<FinanceAnnual>().Property(y => y.Year).HasColumnName("Year").IsRequired();
             modelBuilder.Entity<FinanceAnnual>().Property(y => y.CreateDate).HasColumnName("CreateDate").IsRequired();
             modelBuilder.Entity<FinanceAnnual>().ToTable("FinanceAnnualSet");
+
+            modelBuilder.Entity<Quote>().HasKey(q => q.symbol);
+            modelBuilder.Entity<Quote>().Property(q => q.figi).HasColumnName("Figi");
+            modelBuilder.Entity<Quote>().Property(q => q.symbol).HasColumnName("Symbol");
+            modelBuilder.Entity<Quote>().Property(q => q.lastUpdate).HasColumnName("LastUpdate");
+            modelBuilder.Entity<Quote>().Property(q => q.open).HasColumnName("Open").IsRequired();
+            modelBuilder.Entity<Quote>().Property(q => q.price).HasColumnName("Price").IsRequired();
+            modelBuilder.Entity<Quote>().Property(q => q.previousClose).HasColumnName("PreviousClose").IsRequired();
+            modelBuilder.Entity<Quote>().Property(q => q.change).HasColumnName("Change").IsRequired();
+            modelBuilder.Entity<Quote>().ToTable("QuoteSet");
 
             base.OnModelCreating(modelBuilder);
         }

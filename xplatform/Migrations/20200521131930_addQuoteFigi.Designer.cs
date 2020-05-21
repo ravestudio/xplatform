@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -9,9 +10,10 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20200521131930_addQuoteFigi")]
+    partial class addQuoteFigi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,10 +291,6 @@ namespace xplatform.Migrations
                     b.Property<string>("figi")
                         .HasColumnName("Figi")
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("lastUpdate")
-                        .HasColumnName("LastUpdate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("open")
                         .HasColumnName("Open")

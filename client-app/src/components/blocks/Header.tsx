@@ -13,8 +13,20 @@ import MailIcon from '@material-ui/icons/Mail';
 import Divider from '@material-ui/core/Divider';
 import { useStyles } from './Layout'
 
+const DrawList = () => (
+    <List>
+        {['Common info', 'Documents', 'Address', 'Contacts'].map((text, index) => (
+            <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+            </ListItem>
+        ))}
+    </List>
+)
+
 export default () => {
     const classes = useStyles();
+
 
     return (
         <React.Fragment>
@@ -36,14 +48,7 @@ export default () => {
             >
                 <div className={classes.toolbar} />
                 <Divider />
-                <List>
-                    {['Common info', 'Documents', 'Address', 'Contacts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
+                
             </Drawer>
         </React.Fragment>
     )

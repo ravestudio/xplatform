@@ -18,11 +18,11 @@ COPY client/. ./client/
 COPY PriceUpdater/. ./PriceUpdater/
 COPY CommonLib/. ./CommonLib/
 COPY xplatform/. ./xplatform/
-WORKDIR /sln/xplatform
+WORKDIR /sln/PriceUpdater
 RUN dotnet publish -c Release -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS runtime
 WORKDIR /app
-COPY --from=build-env /sln/xplatform/out ./
-ENTRYPOINT ["dotnet", "xplatform.dll"]
+COPY --from=build-env /sln/PriceUpdater/out ./
+ENTRYPOINT ["dotnet", "PriceUpdater.dll"]

@@ -34,6 +34,15 @@ class Shares extends React.PureComponent<SharesProps> {
         );
     }
 
+    priceColor(change: number | undefined): string {
+
+        if (change === undefined || change > 0) {
+            return 'green'
+        }
+
+        return 'red'
+    }
+
     private renderPortfolioTable() {
         return (
             <TableContainer component={Paper}>
@@ -52,7 +61,7 @@ class Shares extends React.PureComponent<SharesProps> {
                                 <TableCell component="th" scope="row">{sh.code}</TableCell>
                                 <TableCell>{sh.emitent}</TableCell>
                                 <TableCell align="right">{sh.price}</TableCell>
-                                <TableCell align="right">{sh.change}</TableCell>
+                                <TableCell align="right" style={{ color: this.priceColor(sh.change)}}>{sh.change}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

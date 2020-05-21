@@ -10,6 +10,9 @@ namespace CommonLib.Objects
         public string Name { get; set; }
         public string Code { get; set; }
 
+        public string Region { get; set; }
+        public string Currency { get; set; }
+
         public int EmitentId { get; set; }
         public Emitent Emitent { get; set; }
 
