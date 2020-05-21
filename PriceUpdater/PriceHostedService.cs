@@ -24,8 +24,8 @@ namespace PriceUpdater
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            string apiUrl = "http://dockerapi:80/api";
-            //string apiUrl = "http://xplatform.net/api";
+            //string apiUrl = "http://dockerapi:80/api";
+            string apiUrl = "http://xplatform.net/api";
 
             var apiClient = new CommonLib.WebApiClient();
             apiClient.addHeader("Authorization", "Bearer t.FwRjwQy5LHo3uXE0iQ6D4VGVFRvccr1_PItEHgLIOt4sc7QkQkBzd_eDACB0TTfnBBOWi_mtg84cPbvKwD4gpQ");
@@ -85,7 +85,7 @@ namespace PriceUpdater
                 string content = JObject.FromObject(q).ToString();
                 HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
-                string result = await xClient.PostDataAsync($"{apiUrl}/api/Quote", stringContent);
+                string result = await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
 
                 Console.WriteLine($"{q.symbol}: {q.price}");
             });
