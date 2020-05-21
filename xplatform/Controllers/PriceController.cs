@@ -35,16 +35,20 @@ namespace xplatform.Controllers
                 tasks.Add(GetPrice(code, micexClient));
             }
 
-            Task.WaitAll(tasks.ToArray());
+            var taskArray = tasks.ToArray();
+
+            Task.WaitAll(taskArray);
 
             return tasks.Select(t => t.Result);
         }
 
         private async Task<PriceInfo> GetPrice(string security, MicexISSClient micexClient)
         {
+            PriceInfo result = null;
+
             ISSResponse issResp = await micexClient.GetSecurityInfo("shares", "TQBR", security);
 
-            var result = new PriceInfo()
+            result = new PriceInfo()
             {
                 Code = security,
                 LastPrice = issResp.MarketData.First().LAST,

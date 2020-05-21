@@ -43,12 +43,22 @@ namespace PriceUpdater
 
             });
 
+            //test
+            Task.Delay(10000).Wait();
 
             var xClient = new CommonLib.WebApiClient();
+
+            Console.WriteLine("request quote");
+
+            string currentQuotes = xClient.GetData($"{apiUrl}/Quote").Result;
+
+            Console.WriteLine(currentQuotes);
 
             CommonLib.Tinkoff.TinkoffClient _tinkoffClient = new CommonLib.Tinkoff.TinkoffClient(apiClient);
 
             Observable.Create<Quote>(async observer => {
+
+
                 string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
 
                 var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes).OrderBy(q => q.symbol);
@@ -60,6 +70,7 @@ namespace PriceUpdater
 
                 observer.OnCompleted();
                 return Disposable.Empty;
+
             })
             .Select(q => Observable.FromAsync(async () =>
             {
