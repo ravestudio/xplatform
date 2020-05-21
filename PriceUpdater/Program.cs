@@ -82,7 +82,7 @@ namespace PriceUpdater
                 Console.WriteLine($"{q.symbol}: {q.price}");
             });
 
-            Console.ReadKey();
+            Console.Read();
         }
 
 
