@@ -17,12 +17,22 @@ services:
     environment:
       xpl_db: "host=postgres_image;port=5432;database=xpl_db;username=xuser;password=xpss"
     networks:
-      - dockerapi-dev  
+      - dockerapi-dev
+
+  priceupdater:
+    image: priceupdater:latest
+    depends_on:
+      - "dockerapi"
+    build:
+      context: .
+      dockerfile: Dockerfile_priceUpdater
+    networks:
+      - dockerapi-dev
   
   postgres_image:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "25432:5432"
     restart: always
     volumes:
       - db_volume:/var/lib/postgresql/data
