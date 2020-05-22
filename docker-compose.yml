@@ -26,6 +26,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_priceUpdater
+    environment:
+      ENVIRONMENT: "Local"
     networks:
       - dockerapi-dev
   
