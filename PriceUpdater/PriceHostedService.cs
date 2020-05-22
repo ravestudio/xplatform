@@ -13,6 +13,7 @@ using CommonLib.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CommonLib.ISS;
+using Serilog;
 
 namespace PriceUpdater
 {
@@ -26,6 +27,12 @@ namespace PriceUpdater
         private IDisposable moscowSubscription = null;
 
         private System.Reactive.Subjects.Subject<string> restartStream = new System.Reactive.Subjects.Subject<string>();
+
+        private readonly ILogger _logger = null;
+        public PriceHostedService(ILogger logger)
+        {
+            _logger = logger;
+        }
         public void Dispose()
         {
             //throw new NotImplementedException();
@@ -72,28 +79,32 @@ namespace PriceUpdater
 
             
 
-            Action<string> activate = new Action<string>((aprg) =>
+            Action<string> activate = new Action<string>((arg) =>
             {
-                if (aprg == "usaPriceUpdater")
+                _logger.Information($"Activation: {arg}");
+
+                if (arg == "usaPriceUpdater")
                 {
                     usaSubscription = usaQuoteSeq.Subscribe(q =>
                     {
-
+                        Log.Information($"update price {q.symbol}");
                     },
                     ex =>
                     {
+                        _logger.Error(ex, "usaPriceUpdater error");
                         restartStream.OnNext("usaPriceUpdater");
                     });
                 }
 
-                if (aprg == "moscowPriceUpdater")
+                if (arg == "moscowPriceUpdater")
                 {
                     moscowSubscription = moscowQuoteSeq.Subscribe(q =>
                     {
-
+                        Log.Information($"update price {q.symbol}");
                     },
                     ex =>
                     {
+                        _logger.Error(ex, "usaPriceUpdater moscowPriceUpdater");
                         restartStream.OnNext("moscowPriceUpdater");
                     });
                 }
