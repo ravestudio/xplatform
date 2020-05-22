@@ -17,18 +17,27 @@ namespace PriceUpdater
 {
     public class PriceHostedService : IHostedService, IDisposable
     {
+
+        private IObservable<Quote> quoteSeq = null;
+        private IDisposable subscription = null;
+
+        private System.Reactive.Subjects.Subject<string> restartStream = new System.Reactive.Subjects.Subject<string>();
         public void Dispose()
         {
             //throw new NotImplementedException();
+            subscription.Dispose();
+            subscription = null;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            //string apiUrl = "http://dockerapi:80/api";
-            string apiUrl = "http://xplatform.net/api";
+            string apiUrl = "http://dockerapi:80/api";
+            //string apiUrl = "http://xplatform.net/api";
 
             var apiClient = new CommonLib.WebApiClient();
             apiClient.addHeader("Authorization", "Bearer t.FwRjwQy5LHo3uXE0iQ6D4VGVFRvccr1_PItEHgLIOt4sc7QkQkBzd_eDACB0TTfnBBOWi_mtg84cPbvKwD4gpQ");
+
+            var xClient = new CommonLib.WebApiClient();
 
             Func<string, Quote> GetQuoteFromCandles = new Func<string, Quote>(data => {
 
@@ -50,11 +59,25 @@ namespace PriceUpdater
 
             });
 
-            var xClient = new CommonLib.WebApiClient();
+            
+
+            Action activate = new Action(() =>
+            {
+                subscription = quoteSeq.Subscribe(q =>
+                {
+
+                    Console.WriteLine($"{q.symbol}: {q.price}");
+                },
+                ex =>
+                {
+                    restartStream.OnNext("priceUpdater");
+                });
+            });
+            
 
             CommonLib.Tinkoff.TinkoffClient _tinkoffClient = new CommonLib.Tinkoff.TinkoffClient(apiClient);
 
-            Observable.Create<Quote>(async observer => {
+            quoteSeq = Observable.Create<Quote>(async observer => {
 
                 string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
 
@@ -71,27 +94,38 @@ namespace PriceUpdater
             })
             .Select(q => Observable.FromAsync(async () =>
             {
+                //throw new Exception();
                 string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-3), DateTime.UtcNow);
 
                 Quote result = GetQuoteFromCandles(candles);
                 result.symbol = q.symbol;
 
+                //post quote to server
+                string content = JObject.FromObject(result).ToString();
+                HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+
                 return result;
             }).Delay(TimeSpan.FromSeconds(20)))
             .Concat()
-            .Repeat()
-            .Subscribe(async q =>
+            .Repeat();
+
+            restartStream
+                .Delay(TimeSpan.FromMinutes(10))
+                .Subscribe(proc =>
             {
-                string content = JObject.FromObject(q).ToString();
-                HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
-                string result = await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                subscription.Dispose();
+                subscription = null;
 
-                //Console.WriteLine($"{q.symbol}: {q.price}");
+                activate();
             });
+
+            activate();
 
             return Task.CompletedTask;
         }
+
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
