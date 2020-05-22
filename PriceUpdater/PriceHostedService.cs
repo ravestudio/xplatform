@@ -66,7 +66,7 @@ namespace PriceUpdater
                 subscription = quoteSeq.Subscribe(q =>
                 {
 
-                    Console.WriteLine($"{q.symbol}: {q.price}");
+                    //Console.WriteLine($"{q.symbol}: {q.price}");
                 },
                 ex =>
                 {
