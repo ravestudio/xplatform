@@ -23,7 +23,7 @@ namespace xplatform.Controllers
         }
         public IEnumerable<ShareInfo> Get()
         {
-            return _context.SecuritySet.Where(s => s.Market == "shares").Select(s => new ShareInfo()
+            return _context.SecuritySet.Where(s => s.Market == "shares" && s.Region == "Moscow").Select(s => new ShareInfo()
             {
                 Code = s.Code,
                 Emitent = s.Emitent.Name,

@@ -12,30 +12,41 @@ using System.Reactive.Linq;
 using CommonLib.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CommonLib.ISS;
 
 namespace PriceUpdater
 {
     public class PriceHostedService : IHostedService, IDisposable
     {
 
-        private IObservable<Quote> quoteSeq = null;
-        private IDisposable subscription = null;
+        private IObservable<Quote> usaQuoteSeq = null;
+        private IDisposable usaSubscription = null;
+
+        private IObservable<Quote> moscowQuoteSeq = null;
+        private IDisposable moscowSubscription = null;
 
         private System.Reactive.Subjects.Subject<string> restartStream = new System.Reactive.Subjects.Subject<string>();
         public void Dispose()
         {
             //throw new NotImplementedException();
-            subscription.Dispose();
-            subscription = null;
+            usaSubscription.Dispose();
+            usaSubscription = null;
+
+            moscowSubscription.Dispose();
+            moscowSubscription = null;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
+            //string apiUrl = "http://localhost:5000/api";
 
             var apiClient = new CommonLib.WebApiClient();
             apiClient.addHeader("Authorization", "Bearer t.FwRjwQy5LHo3uXE0iQ6D4VGVFRvccr1_PItEHgLIOt4sc7QkQkBzd_eDACB0TTfnBBOWi_mtg84cPbvKwD4gpQ");
+            CommonLib.Tinkoff.TinkoffClient _tinkoffClient = new CommonLib.Tinkoff.TinkoffClient(apiClient);
+
+            MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
 
             var xClient = new CommonLib.WebApiClient();
 
@@ -61,27 +72,46 @@ namespace PriceUpdater
 
             
 
-            Action activate = new Action(() =>
+            Action<string> activate = new Action<string>((aprg) =>
             {
-                subscription = quoteSeq.Subscribe(q =>
+                if (aprg == "usaPriceUpdater")
                 {
+                    usaSubscription = usaQuoteSeq.Subscribe(q =>
+                    {
 
-                    //Console.WriteLine($"{q.symbol}: {q.price}");
-                },
-                ex =>
+                    },
+                    ex =>
+                    {
+                        restartStream.OnNext("usaPriceUpdater");
+                    });
+                }
+
+                if (aprg == "moscowPriceUpdater")
                 {
-                    restartStream.OnNext("priceUpdater");
-                });
+                    moscowSubscription = moscowQuoteSeq.Subscribe(q =>
+                    {
+
+                    },
+                    ex =>
+                    {
+                        restartStream.OnNext("moscowPriceUpdater");
+                    });
+                }
             });
             
 
-            CommonLib.Tinkoff.TinkoffClient _tinkoffClient = new CommonLib.Tinkoff.TinkoffClient(apiClient);
+            
 
-            quoteSeq = Observable.Create<Quote>(async observer => {
+            usaQuoteSeq = Observable.Create<Quote>(async observer => {
 
+                string securities = await xClient.GetData($"{apiUrl}/security");
                 string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
 
-                var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes).OrderBy(q => q.symbol);
+                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => s.Market == "shares" && s.Region == "United States").Select(s => s.Code);
+
+                var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
+                .Where(q => securityCodes.Contains(q.symbol))
+                .OrderBy(q => q.symbol);
 
                 foreach (Quote quote in quoteList)
                 {
@@ -110,18 +140,69 @@ namespace PriceUpdater
             .Concat()
             .Repeat();
 
+            moscowQuoteSeq = Observable.Create<Quote>(async observer =>
+            {
+                string securities = await xClient.GetData($"{apiUrl}/security");
+                string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
+
+                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => s.Market == "shares" && s.Region == "Moscow").Select(s => s.Code);
+                var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
+                .Where(q => securityCodes.Contains(q.symbol))
+                .OrderBy(q => q.symbol);
+
+                foreach (Quote quote in quoteList)
+                {
+                    observer.OnNext(quote);
+                }
+
+                observer.OnCompleted();
+                return Disposable.Empty;
+            }).Select(q => Observable.FromAsync(async () =>
+            {
+
+                ISSResponse issResp = await micexClient.GetSecurityInfo("shares", "TQBR", q.symbol);
+
+                var result = new Quote()
+                {
+                    symbol = q.symbol,
+                    figi = q.figi,
+                    open = issResp.MarketData.First().OPEN,
+                    price = issResp.MarketData.First().LAST,
+                    previousClose = issResp.SecurityInfo.First().PREVLEGALCLOSEPRICE
+                };
+
+                //post quote to server
+                string content = JObject.FromObject(result).ToString();
+                HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+
+                return result;
+            }).Delay(TimeSpan.FromSeconds(20)))
+            .Concat()
+            .Repeat();
+
             restartStream
                 .Delay(TimeSpan.FromMinutes(10))
                 .Subscribe(proc =>
             {
 
-                subscription.Dispose();
-                subscription = null;
+                if (proc == "usaPriceUpdater")
+                {
+                    usaSubscription.Dispose();
+                    usaSubscription = null;
+                }
 
-                activate();
+                if (proc == "moscowPriceUpdater")
+                {
+                    moscowSubscription.Dispose();
+                    moscowSubscription = null;
+                }
+
+                activate(proc);
             });
 
-            activate();
+            activate("usaPriceUpdater");
+            activate("moscowPriceUpdater");
 
             return Task.CompletedTask;
         }

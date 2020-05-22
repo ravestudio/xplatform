@@ -25,35 +25,31 @@ namespace xplatform.Controllers
         {
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
 
-            var values = _context.SecuritySet.Where(s => s.Market == "shares")
+            var values = _context.SecuritySet.Where(s => s.Market == "shares" && s.Region == "Moscow")
                 .Select(s => s.Code).ToArray();
 
-            IList<Task<PriceInfo>> tasks = new List<Task<PriceInfo>>();
+            IList<PriceInfo> results = new List<PriceInfo>();
 
             foreach(string code in values)
             {
-                tasks.Add(GetPrice(code, micexClient));
+                results.Add(GetPrice(code, micexClient));
             }
 
-            var taskArray = tasks.ToArray();
-
-            Task.WaitAll(taskArray);
-
-            return tasks.Select(t => t.Result);
+            return results;
         }
 
-        private async Task<PriceInfo> GetPrice(string security, MicexISSClient micexClient)
+        private PriceInfo GetPrice(string security, MicexISSClient micexClient)
         {
-            PriceInfo result = null;
+            var quote = _context.QuoteSet.Single(q => q.symbol == security);
 
-            ISSResponse issResp = await micexClient.GetSecurityInfo("shares", "TQBR", security);
+            PriceInfo result = null;
 
             result = new PriceInfo()
             {
-                Code = security,
-                LastPrice = issResp.MarketData.First().LAST,
-                OpenPrice = issResp.MarketData.First().OPEN,
-                PrevClose = issResp.SecurityInfo.First().PREVLEGALCLOSEPRICE
+                Code = quote.symbol,
+                LastPrice = quote.price,
+                OpenPrice = quote.open,
+                PrevClose = quote.previousClose
             };
 
             decimal priceChange = result.LastPrice - result.PrevClose;
