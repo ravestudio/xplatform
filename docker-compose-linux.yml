@@ -20,6 +20,8 @@ services:
     image: yakovlevdev/priceupdater:latest
     depends_on:
       - "dockerapi"
+    volumes:
+      - /var/log/xplatform/priceupdater:/var/log/xplatform/priceupdater
     networks:
       - dockerapi-dev
   

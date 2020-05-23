@@ -104,7 +104,7 @@ namespace PriceUpdater
                     },
                     ex =>
                     {
-                        _logger.Error(ex, "usaPriceUpdater moscowPriceUpdater");
+                        _logger.Error(ex, "moscowPriceUpdater error");
                         restartStream.OnNext("moscowPriceUpdater");
                     });
                 }

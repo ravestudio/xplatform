@@ -35,7 +35,7 @@ namespace CommonLib
 
             var uri = new Uri(url);
 
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             System.Net.Http.HttpResponseMessage response = await httpClient.PostAsync(uri, body);
 
