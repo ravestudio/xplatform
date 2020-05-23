@@ -9,6 +9,8 @@ namespace xplatform.Model
     {
         public string Code { get; set; }
         public string Emitent { get; set; }
+        public string Currency { get; set; }
         public decimal Price { get; set; }
+        public decimal PriceChange { get; set; }
     }
 }

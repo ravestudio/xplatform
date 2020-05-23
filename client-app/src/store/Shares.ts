@@ -11,8 +11,9 @@ export interface SharesState {
 export interface ShareInfo {
     code: string,
     emitent: string,
+    currency: string,
     price?: number,
-    change?: number
+    priceChange?: number
 }
 
 export interface PriceValues {
@@ -30,12 +31,8 @@ interface ReceiveShareInfoAction {
     shares: ShareInfo[]
 }
 
-interface ReceivePriceAction {
-    type: 'PRICE_RECEIVE',
-    priceValues: PriceValues[]
-}
 
-type KnownAction = RequestShareInfoAction | ReceiveShareInfoAction | ReceivePriceAction;
+type KnownAction = RequestShareInfoAction | ReceiveShareInfoAction;
 
 export const actionCreators = {
     requestShareInfo: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -48,18 +45,6 @@ export const actionCreators = {
             });
 
         dispatch({ type: 'SHARESINFO_REQUEST' });
-    },
-
-    requestPriceValues: (): AppThunkAction<KnownAction> => (dispatch) => {
-
-        fetch(`${C.apiUrl}/Price`)
-            .then(response => response.json() as Promise<PriceValues[]>)
-            .then(data => {
-
-                dispatch({ type: 'PRICE_RECEIVE', priceValues: data });
-
-
-            });
     }
 };
 
@@ -82,18 +67,6 @@ export const reducer: Reducer<SharesState> = (state: SharesState | undefined, in
                 shares: action.shares,
                 isLoading: false
             }
-        case 'PRICE_RECEIVE':
-
-            const newState: SharesState = { shares: [], isLoading: false }
-
-            state.shares.map((share: ShareInfo) => {
-
-                const price = action.priceValues.find(p => p.code === share.code)
-
-                newState.shares.push({ ...share, price: price?.lastPrice, change: price?.change })
-            })
-
-            return newState
         default: return state
     }
 }

@@ -23,12 +23,35 @@ namespace xplatform.Controllers
         }
         public IEnumerable<ShareInfo> Get()
         {
+            var quotes = _context.QuoteSet.ToList();
+
+            Func<IList<Quote>, string, decimal> getPrice = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
+            {
+                return quotes.Single(q => q.symbol == symbol).price;
+            });
+
+            Func<IList<Quote>, string, decimal> getPriceChange = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
+            {
+                Quote quote = quotes.Single(q => q.symbol == symbol);
+
+                decimal priceChange = quote.price - quote.previousClose;
+
+                return priceChange != 0 ? Math.Round(priceChange / quote.previousClose * 100, 2) : 0;
+            });
+
             return _context.SecuritySet.Where(s => s.Market == "shares" && s.Region == "Moscow").Select(s => new ShareInfo()
             {
                 Code = s.Code,
                 Emitent = s.Emitent.Name,
-                Price = 0
+                Currency = s.Currency,
+                Price = getPrice(quotes, s.Code),
+                PriceChange = getPriceChange(quotes, s.Code)
             }).ToArray();
         }
+
+        //private static decimal GetPrice(List<Quote> quotes, string symbol)
+        //{
+        //    return quotes.Single(q => q.symbol == symbol).price;
+        //}
     }
 }

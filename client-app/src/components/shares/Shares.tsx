@@ -20,7 +20,6 @@ class Shares extends React.PureComponent<SharesProps> {
 
     public componentDidMount() {
         this.props.requestShareInfo();
-        this.props.requestPriceValues();
     }
 
 
@@ -52,6 +51,7 @@ class Shares extends React.PureComponent<SharesProps> {
                             <TableCell>Code</TableCell>
                             <TableCell>Emitent</TableCell>
                             <TableCell align="right">Price</TableCell>
+                            <TableCell>Currency</TableCell>
                             <TableCell align="right">Change (%)</TableCell>
                         </TableRow>
                     </TableHead>
@@ -61,7 +61,8 @@ class Shares extends React.PureComponent<SharesProps> {
                                 <TableCell component="th" scope="row">{sh.code}</TableCell>
                                 <TableCell>{sh.emitent}</TableCell>
                                 <TableCell align="right">{sh.price}</TableCell>
-                                <TableCell align="right" style={{ color: this.priceColor(sh.change)}}>{sh.change}</TableCell>
+                                <TableCell>{sh.currency}</TableCell>
+                                <TableCell align="right" style={{ color: this.priceColor(sh.priceChange)}}>{sh.priceChange}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
