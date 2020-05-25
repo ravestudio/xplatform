@@ -24,15 +24,8 @@ namespace CommonLib.Tinkoff
             string url = $"https://api-invest.tinkoff.ru/openapi/sandbox/market/candles?figi={figi}&from={fromPr}&to={toPr}&interval={interval}";
 
             string response = "error";
-
-            try
-            {
-                response = await _apiClient.GetData(url);
-            }
-            catch(Exception ex)
-            {
-
-            }
+            
+            response = await _apiClient.GetData(url);
 
             return response;
         }
