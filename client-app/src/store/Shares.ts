@@ -4,7 +4,8 @@ import C from "../constants"
 import { request } from 'https';
 
 export interface SharesState {
-    isLoading: boolean
+    isLoading: boolean,
+    region?: string,
     shares: ShareInfo[]
 }
 
@@ -23,11 +24,13 @@ export interface PriceValues {
 }
 
 interface RequestShareInfoAction {
-    type: 'SHARESINFO_REQUEST'
+    type: 'SHARESINFO_REQUEST',
+    region: string
 }
 
 interface ReceiveShareInfoAction {
     type: 'SHARESINFO_RECEIVE',
+    region: string,
     shares: ShareInfo[]
 }
 
@@ -35,16 +38,18 @@ interface ReceiveShareInfoAction {
 type KnownAction = RequestShareInfoAction | ReceiveShareInfoAction;
 
 export const actionCreators = {
-    requestShareInfo: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestShareInfo: (region: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
 
-        fetch(`${C.apiUrl}/sharesInfo`)
+        //const region = 'United States'
+
+        fetch(`${C.apiUrl}/sharesInfo?region=${region}`)
             .then(response => response.json() as Promise<ShareInfo[]>)
             .then(data => {
-                dispatch({ type: 'SHARESINFO_RECEIVE', shares: data });
+                dispatch({ type: 'SHARESINFO_RECEIVE', region: region, shares: data });
             });
 
-        dispatch({ type: 'SHARESINFO_REQUEST' });
+        dispatch({ type: 'SHARESINFO_REQUEST', region: region });
     }
 };
 
@@ -61,9 +66,14 @@ export const reducer: Reducer<SharesState> = (state: SharesState | undefined, in
 
     switch (action.type) {
         case 'SHARESINFO_REQUEST':
-            return { ...state, isLoading: true }
+            return {
+                ...state,
+                region: action.region,
+                isLoading: true
+            }
         case 'SHARESINFO_RECEIVE':
             return {
+                region: action.region,
                 shares: action.shares,
                 isLoading: false
             }

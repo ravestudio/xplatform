@@ -19,7 +19,7 @@ type SharesProps =
 class Shares extends React.PureComponent<SharesProps> {
 
     public componentDidMount() {
-        this.props.requestShareInfo();
+        this.props.requestShareInfo('Moscow');
     }
 
 

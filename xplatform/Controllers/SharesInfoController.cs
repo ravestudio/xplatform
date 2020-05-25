@@ -21,7 +21,8 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
-        public IEnumerable<ShareInfo> Get()
+
+        public IEnumerable<ShareInfo> Get(string region)
         {
             var quotes = _context.QuoteSet.ToList();
 
@@ -39,7 +40,7 @@ namespace xplatform.Controllers
                 return priceChange != 0 ? Math.Round(priceChange / quote.previousClose * 100, 2) : 0;
             });
 
-            return _context.SecuritySet.Where(s => s.Market == "shares" && s.Region == "Moscow").Select(s => new ShareInfo()
+            return _context.SecuritySet.Where(s => s.Market == "shares" && s.Region == region).Select(s => new ShareInfo()
             {
                 Code = s.Code,
                 Emitent = s.Emitent.Name,
