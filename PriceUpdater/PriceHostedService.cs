@@ -136,7 +136,7 @@ namespace PriceUpdater
             .Select(q => Observable.FromAsync(async () =>
             {
                 //throw new Exception();
-                string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-3), DateTime.UtcNow);
+                string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-5), DateTime.UtcNow);
 
                 Quote result = GetQuoteFromCandles(candles);
                 result.symbol = q.symbol;
