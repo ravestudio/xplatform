@@ -53,7 +53,17 @@ namespace xplatform.Controllers
 
                 decimal cost = 0m;
 
-                cost = quote.price * el.limit;
+                if (security.Market == "shares")
+                {
+                    cost = quote.price * el.limit;
+                }
+
+                if (security.Market == "bonds")
+                {
+                    cost = (quote.price / 100) *
+                        security.NominalPrice.Value * el.limit +
+                        el.limit * quote.NKD.Value;
+                }
 
                 result.AddItem(el.code, security.Name, el.limit, cost, security.Market);
             }
