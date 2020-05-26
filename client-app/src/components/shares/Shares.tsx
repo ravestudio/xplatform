@@ -8,12 +8,18 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography';
 
 import { ApplicationState } from '../../store';
 import * as SharesStore from '../../store/Shares';
 
+import withWidth, { WithWidthProps } from '@material-ui/core/withWidth';
+
+import { compose } from 'recompose';
+
 type SharesProps =
     SharesStore.SharesState
+    & WithWidthProps
     & typeof SharesStore.actionCreators
 
 class Shares extends React.PureComponent<SharesProps> {
@@ -26,9 +32,11 @@ class Shares extends React.PureComponent<SharesProps> {
     public render() {
         return (
             <React.Fragment>
-                <h1>Shares</h1>
+                <Typography variant="h5">
+                    Shares
+                </Typography>
                 {this.props.isLoading && <span>Loading...</span>}
-                {this.renderPortfolioTable()}
+                {this.props.width === 'xs' ? this.renderSharesTableShort(): this.renderSharesTable()}
             </React.Fragment>
         );
     }
@@ -42,7 +50,32 @@ class Shares extends React.PureComponent<SharesProps> {
         return 'red'
     }
 
-    private renderPortfolioTable() {
+    private renderSharesTableShort() {
+        return (
+            <TableContainer component={Paper}>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Code</TableCell>
+                            <TableCell>Emitent</TableCell>
+                            <TableCell align="right">Price</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {this.props.shares.map(sh => (
+                            <TableRow key={sh.code}>
+                                <TableCell component="th" scope="row">{sh.code}</TableCell>
+                                <TableCell>{sh.emitent}</TableCell>
+                                <TableCell align="right" style={{ color: this.priceColor(sh.priceChange) }}>{sh.price}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        )
+    }
+
+    private renderSharesTable() {
         return (
             <TableContainer component={Paper}>
                 <Table>
@@ -72,7 +105,7 @@ class Shares extends React.PureComponent<SharesProps> {
     }
 }
 
-export default connect(
-    (state: ApplicationState) => state.shares,
-    SharesStore.actionCreators
+export default compose(
+    withWidth(),
+    connect((state: ApplicationState) => state.shares, SharesStore.actionCreators)
 )(Shares as any);

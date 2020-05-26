@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import AppBar from '@material-ui/core/AppBar'
 import ToolBar from '@material-ui/core/Toolbar'
 import Drawer from '@material-ui/core/Drawer'
+import Hidden from '@material-ui/core/Hidden';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -18,6 +19,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { useStyles } from './Layout'
 import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const DrawList = () => (
     <List>
@@ -33,16 +35,31 @@ const DrawList = () => (
 export default function Header() {
     const classes = useStyles();
     const theme = useTheme();
+
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
+
     const [open, setOpen] = React.useState(false);
 
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+
     const handleDrawerOpen = () => {
-        setOpen(true);
+
+        if (!matches) {
+            setMobileOpen(true)
+        }
+
+        else {
+            setOpen(true);
+        }
     };
 
     const handleDrawerClose = () => {
         setOpen(false);
     };
 
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
 
     return (
         <React.Fragment>
@@ -54,6 +71,7 @@ export default function Header() {
                 })}
             >
                 <ToolBar>
+
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -65,32 +83,53 @@ export default function Header() {
                     >
                         <MenuIcon />
                     </IconButton>
+
                     <Typography variant="h6" noWrap>
                         XPlatform.Net
                     </Typography>
                 </ToolBar>
             </AppBar>
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx({
+
+            <Hidden smUp implementation="css">
+                <Drawer
+                    variant="temporary"
+                    anchor='left'
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+
+                </Drawer>
+            </Hidden>
+
+            <Hidden xsDown implementation="css">
+                <Drawer
+                    variant="permanent"
+                    className={clsx(classes.drawer, {
                         [classes.drawerOpen]: open,
                         [classes.drawerClose]: !open,
-                    }),
-                }}
-            >
-                <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
-                </div>
-                <Divider />
-                
-            </Drawer>
+                    })}
+                    classes={{
+                        paper: clsx({
+                            [classes.drawerOpen]: open,
+                            [classes.drawerClose]: !open,
+                        }),
+                    }}
+                >
+                    <div className={classes.toolbar}>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </div>
+                    <Divider />
+
+                </Drawer>
+            </Hidden>
         </React.Fragment>
     )
     

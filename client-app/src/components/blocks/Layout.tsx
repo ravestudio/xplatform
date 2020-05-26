@@ -56,9 +56,9 @@ export const useStyles = makeStyles((theme: Theme) =>
                 width: theme.spacing(9) + 1,
             },
         },
-        //drawerPaper: {
-        //    width: drawerWidth,
-        //},
+        drawerPaper: {
+            width: drawerWidth,
+        },
         toolbar: {
             display: 'flex',
             alignItems: 'center',
@@ -69,7 +69,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         //toolbar: theme.mixins.toolbar,
         content: {
-            flexGrow: 1,
+            flexGrow: 0,
+            width:'100%',
+
             backgroundColor: theme.palette.background.default,
             padding: theme.spacing(3),
         }
