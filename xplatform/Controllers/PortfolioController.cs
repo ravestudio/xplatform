@@ -46,21 +46,14 @@ namespace xplatform.Controllers
             foreach(var el in ds)
             {
                 Security security = _context.SecuritySet.Single(s => s.Code == el.code);
-                ISSResponse issResp = await micexClient.GetSecurityInfo(security.Market, security.Board, el.code);
+
+                Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code);
+
+                //ISSResponse issResp = await micexClient.GetSecurityInfo(security.Market, security.Board, el.code);
 
                 decimal cost = 0m;
 
-                if (security.Market == "shares")
-                {
-                    cost = issResp.MarketData.First().LAST * el.limit;
-                }
-
-                if (security.Market == "bonds")
-                {
-                    cost = (issResp.MarketData.First().LAST / 100) *
-                        security.NominalPrice.Value * el.limit +
-                        el.limit * issResp.SecurityInfo.First().NKD.Value;
-                }
+                cost = quote.price * el.limit;
 
                 result.AddItem(el.code, security.Name, el.limit, cost, security.Market);
             }
