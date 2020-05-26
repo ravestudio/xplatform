@@ -20,10 +20,11 @@ namespace PriceUpdater
     public class PriceHostedService : IHostedService, IDisposable
     {
 
-        private IObservable<Quote> tcsQuoteSeq = null;
-        private IDisposable tcsSubscription = null;
+        private IObservable<Quote> usaQuoteSeq = null;
+        private IDisposable usaSubscription = null;
 
-
+        private IObservable<Quote> moscowQuoteSeq = null;
+        private IDisposable moscowSubscription = null;
 
         private System.Reactive.Subjects.Subject<string> restartStream = new System.Reactive.Subjects.Subject<string>();
 
@@ -35,8 +36,11 @@ namespace PriceUpdater
         public void Dispose()
         {
             //throw new NotImplementedException();
-            tcsSubscription.Dispose();
-            tcsSubscription = null;
+            usaSubscription.Dispose();
+            usaSubscription = null;
+
+            moscowSubscription.Dispose();
+            moscowSubscription = null;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -72,32 +76,49 @@ namespace PriceUpdater
                 };
 
             });
-            
+
+
 
             Action<string> activate = new Action<string>((arg) =>
             {
                 _logger.Information($"Activation: {arg}");
 
-                if (arg == "tcsPriceUpdater")
+                if (arg == "usaPriceUpdater")
                 {
-                    tcsSubscription = tcsQuoteSeq.Subscribe(q =>
+                    usaSubscription = usaQuoteSeq.Subscribe(q =>
                     {
                         Log.Information($"update price {q.symbol}");
                     },
                     ex =>
                     {
-                        _logger.Error(ex, "tcsPriceUpdater error");
-                        restartStream.OnNext("tcsPriceUpdater");
+                        _logger.Error(ex, "usaPriceUpdater error");
+                        restartStream.OnNext("usaPriceUpdater");
+                    });
+                }
+
+                if (arg == "moscowPriceUpdater")
+                {
+                    moscowSubscription = moscowQuoteSeq.Subscribe(q =>
+                    {
+                        Log.Information($"update price {q.symbol}");
+                    },
+                    ex =>
+                    {
+                        _logger.Error(ex, "moscowPriceUpdater error");
+                        restartStream.OnNext("moscowPriceUpdater");
                     });
                 }
             });
 
-            tcsQuoteSeq = Observable.Create<Quote>(async observer => {
+
+
+
+            usaQuoteSeq = Observable.Create<Quote>(async observer => {
 
                 string securities = await xClient.GetData($"{apiUrl}/security");
                 string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
 
-                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Select(s => s.Code);
+                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => s.Market == "shares" && s.Region == "United States").Select(s => s.Code);
 
                 var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
                 .Where(q => securityCodes.Contains(q.symbol))
@@ -110,6 +131,7 @@ namespace PriceUpdater
 
                 observer.OnCompleted();
                 return Disposable.Empty;
+
             })
             .Select(q => Observable.FromAsync(async () =>
             {
@@ -125,6 +147,55 @@ namespace PriceUpdater
                 await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
 
                 return result;
+            }).Delay(TimeSpan.FromSeconds(20)))
+            .Concat()
+            .Repeat();
+
+            moscowQuoteSeq = Observable.Create<MarketData>(async observer =>
+            {
+                string securities = await xClient.GetData($"{apiUrl}/security");
+                string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
+
+                var securityObj = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => s.Region == "Moscow");
+
+                var securityCodes = securityObj.Select(s => s.Code);
+                var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
+                .Where(q => securityCodes.Contains(q.symbol))
+                .OrderBy(q => q.symbol);
+
+                foreach (Quote quote in quoteList)
+                {
+                    observer.OnNext(new MarketData()
+                    {
+                        quote = quote,
+                        board = securityObj.Single(s => s.Code == quote.symbol).Board,
+                        market = securityObj.Single(s => s.Code == quote.symbol).Market
+                    });
+                }
+
+                observer.OnCompleted();
+                return Disposable.Empty;
+            }).Select(md => Observable.FromAsync(async () =>
+            {
+
+                ISSResponse issResp = await micexClient.GetSecurityInfo(md.market, md.board, md.quote.symbol);
+
+                var result = new Quote()
+                {
+                    symbol = md.quote.symbol,
+                    figi = md.quote.figi,
+                    open = issResp.MarketData.First().OPEN,
+                    price = issResp.MarketData.First().LAST,
+                    NKD = issResp.SecurityInfo.First().NKD,
+                    previousClose = issResp.SecurityInfo.First().PREVLEGALCLOSEPRICE,
+                };
+
+                //post quote to server
+                string content = JObject.FromObject(result).ToString();
+                HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+
+                return result;
             }).Delay(TimeSpan.FromSeconds(10)))
             .Concat()
             .Repeat();
@@ -132,19 +203,25 @@ namespace PriceUpdater
             restartStream
                 .Delay(TimeSpan.FromMinutes(10))
                 .Subscribe(proc =>
-            {
-
-                if (proc == "tcsPriceUpdater")
                 {
-                    tcsSubscription.Dispose();
-                    tcsSubscription = null;
-                }
 
-                activate(proc);
-            });
+                    if (proc == "usaPriceUpdater")
+                    {
+                        usaSubscription.Dispose();
+                        usaSubscription = null;
+                    }
 
-            activate("tcsPriceUpdater");
-            //activate("moscowPriceUpdater");
+                    if (proc == "moscowPriceUpdater")
+                    {
+                        moscowSubscription.Dispose();
+                        moscowSubscription = null;
+                    }
+
+                    activate(proc);
+                });
+
+            //activate("usaPriceUpdater");
+            activate("moscowPriceUpdater");
 
             return Task.CompletedTask;
         }

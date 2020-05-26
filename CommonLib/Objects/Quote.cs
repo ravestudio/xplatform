@@ -11,6 +11,8 @@ namespace CommonLib.Objects
         public DateTime? lastUpdate { get; set; }
         public decimal open { get; set; }
         public decimal price { get; set; }
+
+        public decimal? NKD { get; set; }
         public decimal previousClose { get; set; }
         public decimal change { get; set; }
 
