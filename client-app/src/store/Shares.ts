@@ -54,7 +54,9 @@ export const actionCreators = {
 };
 
 const unloadedState: SharesState = {
-    shares: [], isLoading: false
+    region: 'Moscow',
+    shares: [],
+    isLoading: false
 };
 
 export const reducer: Reducer<SharesState> = (state: SharesState | undefined, incomingAction: Action): SharesState => {

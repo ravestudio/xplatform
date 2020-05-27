@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Header from './Header'
-
+import Container from '@material-ui/core/Container';
 
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
@@ -86,10 +86,10 @@ export default (props: { children?: React.ReactNode }) => {
         <div className={styles.root}>
             <Header />
 
-            <div className={styles.content}>
+            <Container maxWidth="md">
                 <div className={styles.toolbar} />
                 {props.children}
-            </div>
+            </Container>
 
         </div>
     )

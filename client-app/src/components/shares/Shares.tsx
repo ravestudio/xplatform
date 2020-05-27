@@ -9,6 +9,11 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import { ApplicationState } from '../../store';
 import * as SharesStore from '../../store/Shares';
@@ -17,25 +22,78 @@ import withWidth, { WithWidthProps } from '@material-ui/core/withWidth';
 
 import { compose } from 'recompose';
 
+
+const styles = (theme: Theme) =>
+    createStyles({
+
+        title: {
+            flexGrow:1
+        },
+
+        filterPanel: {
+            display: 'flex',
+            margin: '10px 0 10px 0'
+        },
+
+        formControl: {
+            //margin: theme.spacing(1),
+            minWidth: 120,
+        }
+    })
+
 type SharesProps =
     SharesStore.SharesState
     & WithWidthProps
+    & WithStyles<typeof styles>
     & typeof SharesStore.actionCreators
 
 class Shares extends React.PureComponent<SharesProps> {
 
-    public componentDidMount() {
-        this.props.requestShareInfo('Moscow');
+    constructor(props: SharesProps) {
+        super(props)
+
+        this.handleRegionChange = this.handleRegionChange.bind(this)
     }
 
+    public componentDidMount() {
+        if (this.props.region !== undefined) {
+            this.props.requestShareInfo(this.props.region);
+        }
+    }
+
+    handleRegionChange(event: React.ChangeEvent<{ value: unknown }>) {
+
+        this.props.requestShareInfo(event.target.value as string);
+
+    };
 
     public render() {
         return (
             <React.Fragment>
-                <Typography variant="h5">
-                    Shares
-                </Typography>
+
                 {this.props.isLoading && <span>Loading...</span>}
+
+                <div className={this.props.classes.filterPanel}>
+                    <Typography variant="h5" className={this.props.classes.title}>
+                        Shares
+                    </Typography>
+
+                    
+
+                    <FormControl className={this.props.classes.formControl}>
+                        <Select
+                            value={this.props.region}
+                            onChange={this.handleRegionChange}
+                            displayEmpty
+
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value={'Moscow'}>Moscow</MenuItem>
+                            <MenuItem value={'United States'}>United States</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
+
                 {this.props.width === 'xs' ? this.renderSharesTableShort(): this.renderSharesTable()}
             </React.Fragment>
         );
@@ -107,5 +165,6 @@ class Shares extends React.PureComponent<SharesProps> {
 
 export default compose(
     withWidth(),
+    withStyles(styles),
     connect((state: ApplicationState) => state.shares, SharesStore.actionCreators)
 )(Shares as any);

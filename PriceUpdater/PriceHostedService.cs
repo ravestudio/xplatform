@@ -220,7 +220,7 @@ namespace PriceUpdater
                     activate(proc);
                 });
 
-            //activate("usaPriceUpdater");
+            activate("usaPriceUpdater");
             activate("moscowPriceUpdater");
 
             return Task.CompletedTask;
