@@ -61,7 +61,7 @@ namespace xplatform.Controllers
                 if (security.Market == "bonds")
                 {
                     cost = (quote.price / 100) *
-                        security.NominalPrice.Value * el.limit +
+                        ((Bond)security).NominalPrice.Value * el.limit +
                         el.limit * quote.NKD.Value;
                 }
 

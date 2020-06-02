@@ -26,6 +26,7 @@ class Portfolio extends React.PureComponent<PortfolioProps> {
                 {this.props.isLoading && <span>Loading...</span>}
                 {this.renderPortfolioTable()}
                 {!this.props.isLoading && this.renderSummary()}
+
             </React.Fragment>
         );
     }

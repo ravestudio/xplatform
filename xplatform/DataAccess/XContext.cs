@@ -12,6 +12,9 @@ namespace xplatform.DataAccess
         public DbSet<Emitent> EmitentSet { get; set; }
         public DbSet<Financial> FinancialSet { get; set; }
         public DbSet<Security> SecuritySet { get; set; }
+
+        public DbSet<Share> SharesSet { get; set; }
+        public DbSet<Bond> BondsSet { get; set; }
         public DbSet<Deal> DealSet { get; set; }
         public DbSet<Account> AccountSet { get; set; }
         public DbSet<SnapshootData> SnapshootSet { get; set; }
@@ -41,6 +44,10 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Emitent>().Property(e => e.WebSite).HasColumnName("WebSite");
             modelBuilder.Entity<Emitent>().ToTable("EmitentSet");
 
+            modelBuilder.Entity<Security>().HasDiscriminator(s => s.Market)
+                .HasValue<Share>("shares")
+                .HasValue<Bond>("bonds");
+
             modelBuilder.Entity<Security>().HasKey(s => s.Id);
             modelBuilder.Entity<Security>().Property(s => s.Id).HasColumnName("Id");
             modelBuilder.Entity<Security>().Property(s => s.Name).HasColumnName("Name");
@@ -48,10 +55,11 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().Property(s => s.Region).HasColumnName("Region");
             modelBuilder.Entity<Security>().Property(s => s.Currency).HasColumnName("Currency");
             modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
-            modelBuilder.Entity<Security>().Property(s => s.NominalPrice).HasColumnName("NominalPrice").IsRequired(false);
             modelBuilder.Entity<Security>().Property(s => s.Market).HasColumnName("Market");
             modelBuilder.Entity<Security>().Property(s => s.Board).HasColumnName("Board");
             modelBuilder.Entity<Security>().ToTable("SecuritySet");
+
+            modelBuilder.Entity<Bond>().Property(s => s.NominalPrice).HasColumnName("NominalPrice").IsRequired(false);
 
             modelBuilder.Entity<Deal>().HasKey(d => d.Id);
             modelBuilder.Entity<Deal>().Property(d => d.Id).HasColumnName("Id");

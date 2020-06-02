@@ -19,9 +19,17 @@ namespace CommonLib.Objects
         public ICollection<Deal> Deals { get; set; }
         public ICollection<Position> Positions { get; set; }
 
-        public decimal? NominalPrice { get; set; }
-
         public string Market { get; set; }
         public string Board { get; set; }
+    }
+
+    public class Share: Security
+    {
+
+    }
+
+    public class Bond: Security
+    {
+        public decimal? NominalPrice { get; set; }
     }
 }
