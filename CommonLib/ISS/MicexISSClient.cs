@@ -41,7 +41,7 @@ namespace CommonLib.ISS
                 {
                     BoardId = GetAttribute(el, "boardid"),
                     Code = GetAttribute(el, "secid"),
-                    PREVLEGALCLOSEPRICE = decimal.Parse(GetAttribute(el, "PREVLEGALCLOSEPRICE"), CultureInfo.InvariantCulture)
+                    PREVPRICE = decimal.Parse(GetAttribute(el, "PREVPRICE"), CultureInfo.InvariantCulture)
                 };
 
                 if (market == "bonds")

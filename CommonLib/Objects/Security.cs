@@ -7,6 +7,7 @@ namespace CommonLib.Objects
     public class Security
     {
         public int Id { get; set; }
+
         public string Name { get; set; }
         public string Code { get; set; }
 
@@ -19,6 +20,8 @@ namespace CommonLib.Objects
         public ICollection<Deal> Deals { get; set; }
         public ICollection<Position> Positions { get; set; }
 
+        public string Type { get; set; }
+
         public string Market { get; set; }
         public string Board { get; set; }
     }
@@ -30,6 +33,12 @@ namespace CommonLib.Objects
 
     public class Bond: Security
     {
-        public decimal? NominalPrice { get; set; }
+        public decimal NominalPrice { get; set; }
     }
+
+    public class ETF: Security
+    {
+        public string Structure { get; set; }
+    }
+
 }

@@ -13,8 +13,9 @@ namespace xplatform.DataAccess
         public DbSet<Financial> FinancialSet { get; set; }
         public DbSet<Security> SecuritySet { get; set; }
 
-        public DbSet<Share> SharesSet { get; set; }
-        public DbSet<Bond> BondsSet { get; set; }
+        public DbSet<Share> ShareSet { get; set; }
+        public DbSet<Bond> BondSet { get; set; }
+        public DbSet<ETF> ETFSet { get; set; }
         public DbSet<Deal> DealSet { get; set; }
         public DbSet<Account> AccountSet { get; set; }
         public DbSet<SnapshootData> SnapshootSet { get; set; }
@@ -44,9 +45,10 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Emitent>().Property(e => e.WebSite).HasColumnName("WebSite");
             modelBuilder.Entity<Emitent>().ToTable("EmitentSet");
 
-            modelBuilder.Entity<Security>().HasDiscriminator(s => s.Market)
-                .HasValue<Share>("shares")
-                .HasValue<Bond>("bonds");
+            modelBuilder.Entity<Security>().HasDiscriminator(s => s.Type)
+                .HasValue<Share>("stock")
+                .HasValue<Bond>("bond")
+                .HasValue<ETF>("etf");
 
             modelBuilder.Entity<Security>().HasKey(s => s.Id);
             modelBuilder.Entity<Security>().Property(s => s.Id).HasColumnName("Id");
@@ -57,9 +59,11 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
             modelBuilder.Entity<Security>().Property(s => s.Market).HasColumnName("Market");
             modelBuilder.Entity<Security>().Property(s => s.Board).HasColumnName("Board");
+            modelBuilder.Entity<Security>().Property(s => s.Type).HasColumnName("Type");
             modelBuilder.Entity<Security>().ToTable("SecuritySet");
 
-            modelBuilder.Entity<Bond>().Property(s => s.NominalPrice).HasColumnName("NominalPrice").IsRequired(false);
+            modelBuilder.Entity<Bond>().Property(s => s.NominalPrice).HasColumnName("NominalPrice");
+            modelBuilder.Entity<ETF>().Property(s => s.Structure).HasColumnName("Structure").IsRequired();
 
             modelBuilder.Entity<Deal>().HasKey(d => d.Id);
             modelBuilder.Entity<Deal>().Property(d => d.Id).HasColumnName("Id");

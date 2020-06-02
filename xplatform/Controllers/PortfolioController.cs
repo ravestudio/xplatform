@@ -21,7 +21,7 @@ namespace xplatform.Controllers
             _context = context;
         }
 
-        public async Task<PortfolioCost> Get()
+        public PortfolioCost Get()
         {
             PortfolioCost result = new PortfolioCost();
 
@@ -61,7 +61,7 @@ namespace xplatform.Controllers
                 if (security.Market == "bonds")
                 {
                     cost = (quote.price / 100) *
-                        ((Bond)security).NominalPrice.Value * el.limit +
+                        ((Bond)security).NominalPrice * el.limit +
                         el.limit * quote.NKD.Value;
                 }
 

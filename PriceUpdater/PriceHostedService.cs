@@ -165,12 +165,17 @@ namespace PriceUpdater
 
                 foreach (Quote quote in quoteList)
                 {
-                    observer.OnNext(new MarketData()
+                    MarketData md = null;
+
+                    md = new MarketData()
                     {
                         quote = quote,
                         board = securityObj.Single(s => s.Code == quote.symbol).Board,
-                        market = securityObj.Single(s => s.Code == quote.symbol).Market
-                    });
+                        market = securityObj.Single(s => s.Code == quote.symbol).Market,
+                        ticker = quote.symbol
+                    };
+
+                    observer.OnNext(md);
                 }
 
                 observer.OnCompleted();
@@ -178,7 +183,7 @@ namespace PriceUpdater
             }).Select(md => Observable.FromAsync(async () =>
             {
 
-                ISSResponse issResp = await micexClient.GetSecurityInfo(md.market, md.board, md.quote.symbol);
+                ISSResponse issResp = await micexClient.GetSecurityInfo(md.market, md.board, md.ticker);
 
                 var result = new Quote()
                 {
@@ -187,7 +192,7 @@ namespace PriceUpdater
                     open = issResp.MarketData.First().OPEN,
                     price = issResp.MarketData.First().LAST,
                     NKD = issResp.SecurityInfo.First().NKD,
-                    previousClose = issResp.SecurityInfo.First().PREVLEGALCLOSEPRICE,
+                    previousClose = issResp.SecurityInfo.First().PREVPRICE,
                 };
 
                 //post quote to server

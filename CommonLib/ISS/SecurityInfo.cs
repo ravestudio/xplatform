@@ -9,7 +9,7 @@ namespace CommonLib.ISS
         public string BoardId { get; set; }
         public string Code { get; set; }
 
-        public decimal PREVLEGALCLOSEPRICE { get; set; }
+        public decimal PREVPRICE { get; set; }
 
         public decimal? NKD { get; set; }
     }

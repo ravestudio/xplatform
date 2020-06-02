@@ -339,7 +339,6 @@ namespace xplatform.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Market")
-                        .IsRequired()
                         .HasColumnName("Market")
                         .HasColumnType("text");
 
@@ -351,13 +350,18 @@ namespace xplatform.Migrations
                         .HasColumnName("Region")
                         .HasColumnType("text");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnName("Type")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmitentId");
 
                     b.ToTable("SecuritySet");
 
-                    b.HasDiscriminator<string>("Market").HasValue("Security");
+                    b.HasDiscriminator<string>("Type").HasValue("Security");
                 });
 
             modelBuilder.Entity("CommonLib.Objects.SnapshootData", b =>
@@ -418,18 +422,30 @@ namespace xplatform.Migrations
                 {
                     b.HasBaseType("CommonLib.Objects.Security");
 
-                    b.Property<decimal?>("NominalPrice")
+                    b.Property<decimal>("NominalPrice")
                         .HasColumnName("NominalPrice")
                         .HasColumnType("numeric");
 
-                    b.HasDiscriminator().HasValue("bonds");
+                    b.HasDiscriminator().HasValue("bond");
+                });
+
+            modelBuilder.Entity("CommonLib.Objects.ETF", b =>
+                {
+                    b.HasBaseType("CommonLib.Objects.Security");
+
+                    b.Property<string>("Structure")
+                        .IsRequired()
+                        .HasColumnName("Structure")
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("etf");
                 });
 
             modelBuilder.Entity("CommonLib.Objects.Share", b =>
                 {
                     b.HasBaseType("CommonLib.Objects.Security");
 
-                    b.HasDiscriminator().HasValue("shares");
+                    b.HasDiscriminator().HasValue("stock");
                 });
 
             modelBuilder.Entity("CommonLib.Objects.Deal", b =>

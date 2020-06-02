@@ -10,5 +10,6 @@ namespace PriceUpdater
         public Quote quote {get; set;}
         public string market { get; set; }
         public string board { get; set; }
+        public string ticker { get; set; }
     }
 }
