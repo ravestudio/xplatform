@@ -20,7 +20,7 @@ export default () => (
 
             <Route exact path='/' component={Shares} />
             <Route path='/deals' component={Deals} />
-            <Route path='/deals/create' component={DealCreate} />
+            <Route path='/createDeal' component={DealCreate} />
             <Route path='/portfolio' component={Portfolio} />
             <Route path='/financials' component={Financials} />
 

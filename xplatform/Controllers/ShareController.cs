@@ -11,19 +11,17 @@ namespace xplatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SecurityController : ControllerBase
+    public class ShareController : ControllerBase
     {
         private readonly XContext _context;
 
-        public SecurityController(XContext context)
+        public ShareController(XContext context)
         {
             _context = context;
         }
-        public IEnumerable<Security> Get()
+        public IEnumerable<Share> Get()
         {
-            return _context.SecuritySet.ToList();
-
+            return _context.ShareSet.ToList();
         }
-
     }
 }
