@@ -23,7 +23,8 @@ namespace xplatform.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Deal deal)
         {
-            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+            //TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Moscow");
 
             deal.Date = TimeZoneInfo.ConvertTimeFromUtc(deal.Date, cstZone);
             deal.DeliveryDate = TimeZoneInfo.ConvertTimeFromUtc(deal.DeliveryDate, cstZone);
