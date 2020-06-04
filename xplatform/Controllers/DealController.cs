@@ -24,7 +24,7 @@ namespace xplatform.Controllers
         public IActionResult Post([FromBody] Deal deal)
         {
             //TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
-            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Moscow");
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Moscow");
 
             deal.Date = TimeZoneInfo.ConvertTimeFromUtc(deal.Date, cstZone);
             deal.DeliveryDate = TimeZoneInfo.ConvertTimeFromUtc(deal.DeliveryDate, cstZone);
