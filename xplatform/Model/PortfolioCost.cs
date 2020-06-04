@@ -12,7 +12,7 @@ namespace xplatform.Model
             Items = new List<PortfolioItem>();
         }
 
-        public void AddItem(string code, string name, int limit, decimal cost, string market)
+        public void AddItem(string code, string name, int limit, decimal cost, string type)
         {
             Items.Add(new PortfolioItem()
             {
@@ -20,7 +20,7 @@ namespace xplatform.Model
                 Name = name,
                 Limit = limit,
                 Cost = cost,
-                Market = market
+                Type = type
             });
         }
 
@@ -39,7 +39,7 @@ namespace xplatform.Model
         public int Limit { get; set; }
         public decimal Cost { get; set; }
 
-        public string Market { get; set; }
+        public string Type { get; set; }
     }
 }
 
