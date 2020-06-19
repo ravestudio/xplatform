@@ -21,6 +21,9 @@ import { useStyles } from './Layout'
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+import { ReactComponent as Logo } from '../../logo2.svg';
+import SvgIcon from "@material-ui/core/SvgIcon";
+
 const DrawList = () => (
     <List>
         {['Common info', 'Documents', 'Address', 'Contacts'].map((text, index) => (
@@ -83,6 +86,8 @@ export default function Header() {
                     >
                         <MenuIcon />
                     </IconButton>
+
+                    <SvgIcon component={Logo} viewBox="100 80 750 450" fontSize="large" />
 
                     <Typography variant="h6" noWrap>
                         XPlatform.Net
