@@ -45,9 +45,9 @@ namespace PriceUpdater
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            string apiUrl = "http://dockerapi:80/api";
+            //string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
-            //string apiUrl = "http://localhost:5000/api";
+            string apiUrl = "http://localhost:5000/api";
 
             var apiClient = new CommonLib.WebApiClient();
             apiClient.addHeader("Authorization", "Bearer t.FwRjwQy5LHo3uXE0iQ6D4VGVFRvccr1_PItEHgLIOt4sc7QkQkBzd_eDACB0TTfnBBOWi_mtg84cPbvKwD4gpQ");
@@ -170,8 +170,8 @@ namespace PriceUpdater
                     md = new MarketData()
                     {
                         quote = quote,
-                        board = securityObj.Single(s => s.Code == quote.symbol).Board,
-                        market = securityObj.Single(s => s.Code == quote.symbol).Market,
+                        board = securityObj.Single(s => s.Code == quote.symbol && s.Board == quote.Board).Board,
+                        market = securityObj.Single(s => s.Code == quote.symbol && s.Board == quote.Board).Market,
                         ticker = quote.symbol
                     };
 
@@ -193,6 +193,7 @@ namespace PriceUpdater
                     price = issResp.MarketData.First().LAST,
                     NKD = issResp.SecurityInfo.First().NKD,
                     previousClose = issResp.SecurityInfo.First().PREVPRICE,
+                    Board = md.quote.Board
                 };
 
                 //post quote to server
@@ -225,7 +226,7 @@ namespace PriceUpdater
                     activate(proc);
                 });
 
-            activate("usaPriceUpdater");
+            //activate("usaPriceUpdater");
             activate("moscowPriceUpdater");
 
             return Task.CompletedTask;

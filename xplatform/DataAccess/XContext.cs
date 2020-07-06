@@ -150,6 +150,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Quote>().Property(q => q.NKD).HasColumnName("NKD");
             modelBuilder.Entity<Quote>().Property(q => q.previousClose).HasColumnName("PreviousClose").IsRequired();
             modelBuilder.Entity<Quote>().Property(q => q.change).HasColumnName("Change").IsRequired();
+            modelBuilder.Entity<Quote>().Property(q => q.Board).HasColumnName("Board");
             modelBuilder.Entity<Quote>().ToTable("QuoteSet");
 
             base.OnModelCreating(modelBuilder);

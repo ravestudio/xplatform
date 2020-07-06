@@ -16,5 +16,7 @@ namespace CommonLib.Objects
         public decimal previousClose { get; set; }
         public decimal change { get; set; }
 
+        public string Board { get; set; }
+
     }
 }

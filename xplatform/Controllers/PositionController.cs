@@ -68,12 +68,12 @@ namespace xplatform.Controllers
 
             Action<PortfolioSnapshoot, Deal> increase = (snap, deal) =>
             {
-                snap.increse(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count);
+                snap.increse(deal.accountId, deal.security.Code, deal.security.Board, deal.Date.Date, deal.Count);
             };
 
             Action<PortfolioSnapshoot, Deal> decrease = (snap, deal) =>
             {
-                snap.decrease(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count);
+                snap.decrease(deal.accountId, deal.security.Code, deal.security.Board, deal.Date.Date, deal.Count);
             };
 
             var deals = _context.DealSet.Include(d => d.security)

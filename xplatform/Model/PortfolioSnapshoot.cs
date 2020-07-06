@@ -14,38 +14,43 @@ namespace xplatform.Model
         }
         public IDictionary<int, SnapshotAccount> Accounts { get; set; }
 
-        public void increse(int account, string security, DateTime dealDate, int limit)
+        private string GetCodeBoard(string security, string board)
+        {
+            return $"{board}\\{security}";
+        }
+
+        public void increse(int account, string security, string board, DateTime dealDate, int limit)
         {
             if (!this.Accounts.ContainsKey(account))
             {
                 this.Accounts[account] = new SnapshotAccount();
             }
 
-            if (!this.Accounts[account].PositionItems.ContainsKey(security))
+            if (!this.Accounts[account].PositionItems.ContainsKey(GetCodeBoard(security, board)))
             {
-                this.Accounts[account].PositionItems[security] = new Queue<PositionItem>();
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)] = new Queue<PositionItem>();
             }
 
-            while (this.Accounts[account].PositionItems[security].Count > 0 &&
-                this.Accounts[account].PositionItems[security].Peek().Limit < 0 &&
-                Math.Abs(this.Accounts[account].PositionItems[security].Peek().Limit) <= limit)//по модулю
+            while (this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Count > 0 &&
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek().Limit < 0 &&
+                Math.Abs(this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek().Limit) <= limit)//по модулю
             {
-                var item = this.Accounts[account].PositionItems[security].Dequeue();
+                var item = this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Dequeue();
                 limit += item.Limit;
             }
 
-            if (this.Accounts[account].PositionItems[security].Count > 0 &&
-                this.Accounts[account].PositionItems[security].Peek().Limit < 0 &&
+            if (this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Count > 0 &&
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek().Limit < 0 &&
                 limit > 0)
             {
-                var first = this.Accounts[account].PositionItems[security].Peek();
+                var first = this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek();
                 first.Limit += limit;
                 limit = 0;
             }
 
             if (limit > 0)
             {
-                this.Accounts[account].PositionItems[security].Enqueue(new PositionItem()
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Enqueue(new PositionItem()
                 {
                     DealDate = dealDate,
                     Limit = limit
@@ -54,38 +59,38 @@ namespace xplatform.Model
 
         }
 
-        public void decrease(int account, string security, DateTime dealDate, int limit)
+        public void decrease(int account, string security, string board, DateTime dealDate, int limit)
         {
             if (!this.Accounts.ContainsKey(account))
             {
                 this.Accounts[account] = new SnapshotAccount();
             }
 
-            if (!this.Accounts[account].PositionItems.ContainsKey(security))
+            if (!this.Accounts[account].PositionItems.ContainsKey(GetCodeBoard(security, board)))
             {
-                this.Accounts[account].PositionItems[security] = new Queue<PositionItem>();
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)] = new Queue<PositionItem>();
             }
 
-            while(this.Accounts[account].PositionItems[security].Count > 0 &&
-                this.Accounts[account].PositionItems[security].Peek().Limit > 0 &&
-                this.Accounts[account].PositionItems[security].Peek().Limit <= limit)
+            while(this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Count > 0 &&
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek().Limit > 0 &&
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek().Limit <= limit)
             {
-                var item = this.Accounts[account].PositionItems[security].Dequeue();
+                var item = this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Dequeue();
                 limit -= item.Limit;
             }
 
-            if (this.Accounts[account].PositionItems[security].Count > 0 &&
-                this.Accounts[account].PositionItems[security].Peek().Limit > 0 &&
+            if (this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Count > 0 &&
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek().Limit > 0 &&
                 limit > 0)
             {
-                var first = this.Accounts[account].PositionItems[security].Peek();
+                var first = this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Peek();
                 first.Limit -= limit;
                 limit = 0;
             }
 
             if (limit > 0)
             {
-                this.Accounts[account].PositionItems[security].Enqueue(new PositionItem()
+                this.Accounts[account].PositionItems[GetCodeBoard(security, board)].Enqueue(new PositionItem()
                 {
                     DealDate = dealDate,
                     Limit = limit*(-1)
