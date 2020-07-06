@@ -26,14 +26,14 @@ namespace xplatform.Controllers
         {
             var quotes = _context.QuoteSet.ToList();
 
-            Func<IList<Quote>, string, decimal> getPrice = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
+            Func<IList<Quote>, string, string, decimal> getPrice = new Func<IList<Quote>, string, string, decimal>((quotes, board, symbol) =>
             {
-                return quotes.Single(q => q.symbol == symbol).price;
+                return quotes.Single(q => q.Board == board && q.symbol == symbol).price;
             });
 
-            Func<IList<Quote>, string, decimal> getPriceChange = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
+            Func<IList<Quote>, string, string, decimal> getPriceChange = new Func<IList<Quote>, string, string, decimal>((quotes, board, symbol) =>
             {
-                Quote quote = quotes.Single(q => q.symbol == symbol);
+                Quote quote = quotes.Single(q => q.Board == board && q.symbol == symbol);
 
                 decimal priceChange = quote.price - quote.previousClose;
 
@@ -45,8 +45,8 @@ namespace xplatform.Controllers
                 Code = s.Code,
                 Emitent = s.Emitent.Name,
                 Currency = s.Currency,
-                Price = getPrice(quotes, s.Code),
-                PriceChange = getPriceChange(quotes, s.Code)
+                Price = getPrice(quotes, s.Board, s.Code),
+                PriceChange = getPriceChange(quotes, s.Board, s.Code)
             }).ToArray();
         }
 
