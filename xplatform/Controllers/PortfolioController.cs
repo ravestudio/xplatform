@@ -6,6 +6,7 @@ using CommonLib.ISS;
 using CommonLib.Objects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
 using xplatform.Model;
 
@@ -66,11 +67,28 @@ namespace xplatform.Controllers
                         el.limit * quote.NKD.Value;
                 }
 
-                result.AddItem(el.code, security.Name, el.limit, cost, security.Market);
+                if (security.Currency == "USD")
+                {
+                    Quote usdrub = _context.QuoteSet.Single(q => q.symbol == "USD000UTSTOM");
+                    cost = cost * usdrub.price;
+                }
+
+                result.AddItem(el.code, security.Name, el.limit, cost, security.Type);
             }
 
-            result.SharesTotal = result.Items.Where(i => i.Market == "shares").Sum(s => s.Cost);
-            result.BondsTotal = result.Items.Where(i => i.Market == "bonds").Sum(s => s.Cost);
+            result.SharesTotal = result.Items.Where(i => i.Type == "stock").Sum(s => s.Cost);
+            result.BondsTotal = result.Items.Where(i => i.Type == "bond").Sum(s => s.Cost);
+
+            foreach(PortfolioItem etfItem in result.Items.Where(i => i.Type == "etf"))
+            {
+                var structure = JObject.Parse(_context.ETFSet.Single(s => s.Code == etfItem.Code).Structure);
+                decimal bondPrc = structure.Value<decimal>("bond") + structure.Value<decimal>("gold");
+                decimal bondCost = etfItem.Cost * (bondPrc / 100);
+                decimal stockCost = etfItem.Cost * ((100 - bondPrc) / 100);
+
+                result.SharesTotal += stockCost;
+                result.BondsTotal += bondCost;
+            }
 
             result.SharesPerc = Math.Round(result.SharesTotal / (result.SharesTotal + result.BondsTotal) * 100, 2);
             result.BondsPerc = Math.Round(result.BondsTotal / (result.SharesTotal + result.BondsTotal) * 100, 2);

@@ -8,7 +8,8 @@ export interface FinancialsState {
 }
 
 export interface Financials {
-    incomeStatementHistory:any,
+    incomeStatementHistory: any,
+    cashflowStatementHistory: any,
     years: number[]
 }
 

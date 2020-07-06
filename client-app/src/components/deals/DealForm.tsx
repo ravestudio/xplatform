@@ -11,7 +11,7 @@ import {
     KeyboardDatePicker, KeyboardTimePicker
 } from '@material-ui/pickers';
 import { ApplicationState } from '../../store';
-import { SecuritiesState, Security } from '../../store/Securities';
+import { SecuritiesState, Security, Share, Bond } from '../../store/Securities';
 
 import NumberFormat from 'react-number-format';
 
@@ -382,7 +382,13 @@ export default connect(
                 return 0
             }
 
-            return securities.find(s => s.id === selectedSecurityId)?.nominalPrice
+            const security = securities.find(s => s.id === selectedSecurityId);
+
+            if (security?.type === "bond") {
+                return (security as Bond).nominalPrice;
+            }
+
+            return 0;
         }
 
         return {

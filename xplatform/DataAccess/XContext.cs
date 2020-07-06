@@ -48,7 +48,8 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().HasDiscriminator(s => s.Type)
                 .HasValue<Share>("stock")
                 .HasValue<Bond>("bond")
-                .HasValue<ETF>("etf");
+                .HasValue<ETF>("etf")
+                .HasValue<Currency>("currency");
 
             modelBuilder.Entity<Security>().HasKey(s => s.Id);
             modelBuilder.Entity<Security>().Property(s => s.Id).HasColumnName("Id");

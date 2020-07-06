@@ -14,7 +14,7 @@ namespace CommonLib.Objects
         public string Region { get; set; }
         public string Currency { get; set; }
 
-        public int EmitentId { get; set; }
+        public int? EmitentId { get; set; }
         public Emitent Emitent { get; set; }
 
         public ICollection<Deal> Deals { get; set; }
@@ -41,4 +41,8 @@ namespace CommonLib.Objects
         public string Structure { get; set; }
     }
 
+    public class Currency: Security
+    {
+
+    }
 }

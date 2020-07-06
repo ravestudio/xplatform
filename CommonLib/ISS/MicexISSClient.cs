@@ -19,7 +19,14 @@ namespace CommonLib.ISS
 
         public async Task<ISSResponse> GetSecurityInfo(string market, string board, string security)
         {
-            string url = string.Format("http://iss.moex.com/iss/engines/stock/markets/{0}/boards/{1}/securities/{2}.xml", market, board, security);
+            string engine = "stock";
+
+            if (market == "selt")
+            {
+                engine = "currency";
+            }
+
+            string url = string.Format("http://iss.moex.com/iss/engines/{0}/markets/{1}/boards/{2}/securities/{3}.xml", engine, market, board, security);
 
             TaskCompletionSource<ISSResponse> TCS = new TaskCompletionSource<ISSResponse>();
 
@@ -59,16 +66,16 @@ namespace CommonLib.ISS
             {
                 string last = GetAttribute(el, "LAST");
                 string open = GetAttribute(el, "OPEN");
-                string currentPrice = GetAttribute(el, "LCURRENTPRICE");
-                string openPrice = GetAttribute(el, "OPENPERIODPRICE");
+                //string currentPrice = GetAttribute(el, "LCURRENTPRICE");
+                //string openPrice = GetAttribute(el, "OPENPERIODPRICE");
 
                 MarketData marketData = new MarketData()
                 {
                     Code = GetAttribute(el, "secid"),
                     LAST = string.IsNullOrEmpty(last) ? 0m : decimal.Parse(last, CultureInfo.InvariantCulture),
-                    OPEN = string.IsNullOrEmpty(open) ? 0m : decimal.Parse(open, CultureInfo.InvariantCulture),
-                    LCURRENTPRICE = string.IsNullOrEmpty(currentPrice) ? 0m : decimal.Parse(currentPrice, CultureInfo.InvariantCulture),
-                    OPENPERIODPRICE = string.IsNullOrEmpty(openPrice) ? 0m : decimal.Parse(openPrice, CultureInfo.InvariantCulture),
+                    OPEN = string.IsNullOrEmpty(open) ? 0m : decimal.Parse(open, CultureInfo.InvariantCulture)
+                    //LCURRENTPRICE = string.IsNullOrEmpty(currentPrice) ? 0m : decimal.Parse(currentPrice, CultureInfo.InvariantCulture),
+                    //OPENPERIODPRICE = string.IsNullOrEmpty(openPrice) ? 0m : decimal.Parse(openPrice, CultureInfo.InvariantCulture),
                 };
 
                 response.MarketData.Add(marketData);

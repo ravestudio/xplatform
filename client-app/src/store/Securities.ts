@@ -8,9 +8,17 @@ export interface SecuritiesState {
 }
 
 export interface Security {
-    id: number
+    id: number,
     name: string,
-    nominalPrice?: number
+    type: string
+}
+
+export interface Share extends Security {
+
+}
+
+export interface Bond extends Security {
+    nominalPrice: number
 }
 
 interface RequestSecurityAction {
@@ -28,11 +36,19 @@ export const actionCreators = {
     requestSecurities: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
 
-        fetch(`${C.apiUrl}/security`)
-            .then(response => response.json() as Promise<Security[]>)
-            .then(data => {
-                dispatch({ type: 'SECURITY_RECEIVE', securities: data });
-            });
+        const shares = fetch(`${C.apiUrl}/share`)
+            .then(response => response.json() as Promise<Security[]>);
+
+        const bonds = fetch(`${C.apiUrl}/bond`)
+            .then(response => response.json() as Promise<Security[]>);
+
+        const etf = fetch(`${C.apiUrl}/etf`)
+            .then(response => response.json() as Promise<Security[]>);
+
+        Promise.all([shares, bonds, etf]).then(([shares, bonds, etf]) => {
+            dispatch({ type: 'SECURITY_RECEIVE', securities: [...shares, ...bonds, ...etf] });
+        })
+
 
         dispatch({ type: 'SECURITY_REQUEST' });
     }

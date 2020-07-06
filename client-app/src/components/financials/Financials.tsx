@@ -11,30 +11,96 @@ type FinancialsProps =
     FinancialsStore.FinancialsState
     & typeof FinancialsStore.actionCreators
 
-class Financials extends React.PureComponent<FinancialsProps> {
+interface IState {
+    activeTab: number;
+}
+
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: any;
+    value: any;
+}
+
+function TabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {children}
+        </div>
+    );
+}
+
+class Financials extends React.PureComponent<FinancialsProps, IState> {
+
+    constructor(props: FinancialsProps) {
+        super(props)
+
+        this.state = { activeTab: 0 }
+
+        this.handleChange = this.handleChange.bind(this)
+    }
 
     public componentDidMount() {
         this.props.requestFinancials();
     }
+
+    private handleChange (event: React.ChangeEvent<{}>, newValue: number) {
+        this.setState((state) => ({ ...state, activeTab: newValue }))
+    };
 
     public render() {
         return (
             <React.Fragment>
                 <h1>Financials</h1>
 
-                <Tabs value={0} aria-label="simple tabs example">
+                <Tabs value={this.state.activeTab} onChange={this.handleChange} aria-label="simple tabs example">
                     <Tab label="Incomes" />
-                    <Tab label="Item Two" />
+                    <Tab label="Cash Flow" />
                     <Tab label="Item Three" />
                 </Tabs>
 
                 {this.props.isLoading && <span>Loading...</span>}
-                {this.renderFinancialTable()}
+
+                <TabPanel value={this.state.activeTab} index={0}>
+                    {this.renderIncomesTable()}
+                </TabPanel>
+
+                <TabPanel value={this.state.activeTab} index={1}>
+                    {this.renderFlowsTable()}
+                </TabPanel>
+                
             </React.Fragment>
         );
     }
 
-    private renderFinancialTable() {
+    private renderFlowsTable() {
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <th>Breakdown</th>
+                        {this.props.financials?.years.map((year: number) => <th key={year}>{year}</th>)}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Depreciation</td>
+                        {this.props.financials?.cashflowStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.depreciation.raw}</td>)}
+                    </tr>
+                </tbody>
+            </table>
+        )
+    }
+
+    private renderIncomesTable() {
         return (
             <table>
                 <thead>
