@@ -2,7 +2,7 @@
 
 namespace xplatform.Migrations
 {
-    public partial class removeQuoteUnique : Migration
+    public partial class quoteKey : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,10 +16,19 @@ namespace xplatform.Migrations
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text");
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_QuoteSet",
+                table: "QuoteSet",
+                column: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_QuoteSet",
+                table: "QuoteSet");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Symbol",
                 table: "QuoteSet",

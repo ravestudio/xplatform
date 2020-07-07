@@ -139,6 +139,7 @@ namespace PriceUpdater
                 string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-5), DateTime.UtcNow);
 
                 Quote result = GetQuoteFromCandles(candles);
+                result.Id = q.Id;
                 result.symbol = q.symbol;
 
                 //post quote to server
@@ -187,6 +188,7 @@ namespace PriceUpdater
 
                 var result = new Quote()
                 {
+                    Id = md.quote.Id,
                     symbol = md.quote.symbol,
                     figi = md.quote.figi,
                     open = issResp.MarketData.First().OPEN,

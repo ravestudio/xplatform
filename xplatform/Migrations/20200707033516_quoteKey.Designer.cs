@@ -10,8 +10,8 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    [Migration("20200706193318_removeQuoteUnique")]
-    partial class removeQuoteUnique
+    [Migration("20200707033516_quoteKey")]
+    partial class quoteKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -280,6 +280,11 @@ namespace xplatform.Migrations
 
             modelBuilder.Entity("CommonLib.Objects.Quote", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Board")
                         .HasColumnName("Board")
                         .HasColumnType("text");
@@ -315,6 +320,8 @@ namespace xplatform.Migrations
                     b.Property<string>("symbol")
                         .HasColumnName("Symbol")
                         .HasColumnType("text");
+
+                    b.HasKey("Id");
 
                     b.ToTable("QuoteSet");
                 });

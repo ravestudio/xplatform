@@ -142,7 +142,8 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<FinanceAnnual>().Property(y => y.CreateDate).HasColumnName("CreateDate").IsRequired();
             modelBuilder.Entity<FinanceAnnual>().ToTable("FinanceAnnualSet");
 
-            modelBuilder.Entity<Quote>().HasNoKey();
+            modelBuilder.Entity<Quote>().HasKey(q => q.Id);
+            modelBuilder.Entity<Quote>().Property(q => q.Id).HasColumnName("Id");
             modelBuilder.Entity<Quote>().Property(q => q.figi).HasColumnName("Figi");
             modelBuilder.Entity<Quote>().Property(q => q.symbol).HasColumnName("Symbol");
             modelBuilder.Entity<Quote>().Property(q => q.lastUpdate).HasColumnName("LastUpdate");

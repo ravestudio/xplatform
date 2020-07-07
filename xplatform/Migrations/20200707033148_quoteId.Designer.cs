@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -9,9 +10,10 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20200707033148_quoteId")]
+    partial class quoteId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -278,14 +280,17 @@ namespace xplatform.Migrations
 
             modelBuilder.Entity("CommonLib.Objects.Quote", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("uuid");
+                    b.Property<string>("symbol")
+                        .HasColumnName("Symbol")
+                        .HasColumnType("text");
 
                     b.Property<string>("Board")
                         .HasColumnName("Board")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnName("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<decimal?>("NKD")
                         .HasColumnName("NKD")
@@ -315,11 +320,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("symbol")
-                        .HasColumnName("Symbol")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
+                    b.HasKey("symbol");
 
                     b.ToTable("QuoteSet");
                 });
