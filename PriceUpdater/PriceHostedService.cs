@@ -141,6 +141,7 @@ namespace PriceUpdater
                 Quote result = GetQuoteFromCandles(candles);
                 result.Id = q.Id;
                 result.symbol = q.symbol;
+                result.Board = q.Board;
 
                 //post quote to server
                 string content = JObject.FromObject(result).ToString();

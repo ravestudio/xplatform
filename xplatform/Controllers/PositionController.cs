@@ -78,7 +78,8 @@ namespace xplatform.Controllers
 
             var deals = _context.DealSet.Include(d => d.security)
                 //.Where(d => (d.Date > new DateTime(2017, 01, 18)) && (d.security.Code == "LKOH"))
-                .OrderBy(d => d.Number).ToList();
+                //.OrderBy(d => d.Number).ToList();
+                .OrderBy(d => d.Date).ThenBy(d => d.security.Region).ThenBy(d => d.Number);
 
             var dates = deals.Select(d => d.Date.Date).Distinct().ToList();
 
