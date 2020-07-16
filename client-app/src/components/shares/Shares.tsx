@@ -13,6 +13,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import Link from '@material-ui/core/Link';
+
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
 
 import { ApplicationState } from '../../store';
@@ -32,7 +34,7 @@ const styles = (theme: Theme) =>
 
         filterPanel: {
             display: 'flex',
-            margin: '10px 0 10px 0'
+            margin: '10px 0 10px 0',
         },
 
         formControl: {
@@ -150,7 +152,7 @@ class Shares extends React.PureComponent<SharesProps> {
                         {this.props.shares.map(sh => (
                             <TableRow key={sh.code}>
                                 <TableCell component="th" scope="row">{sh.code}</TableCell>
-                                <TableCell>{sh.emitent}</TableCell>
+                                <TableCell>{sh.financialPage ? <Link href={`financials/${sh.financialPage}`} color="inherit" underline="always">{sh.emitent}</Link> : sh.emitent}</TableCell>
                                 <TableCell align="right">{sh.price}</TableCell>
                                 <TableCell>{sh.currency}</TableCell>
                                 <TableCell align="right" style={{ color: this.priceColor(sh.priceChange)}}>{sh.priceChange}</TableCell>

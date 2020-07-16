@@ -14,7 +14,8 @@ export interface ShareInfo {
     emitent: string,
     currency: string,
     price?: number,
-    priceChange?: number
+    priceChange?: number,
+    financialPage?: string
 }
 
 export interface PriceValues {

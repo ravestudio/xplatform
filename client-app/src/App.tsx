@@ -22,7 +22,7 @@ export default () => (
             <Route path='/deals' component={Deals} />
             <Route path='/createDeal' component={DealCreate} />
             <Route path='/portfolio' component={Portfolio} />
-            <Route path='/financials' component={Financials} />
+            <Route path='/financials/:code?' component={Financials} />
 
         </MuiPickersUtilsProvider>
     </Layout>

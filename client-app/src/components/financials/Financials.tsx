@@ -1,15 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux';
-
+import { RouteComponentProps } from 'react-router';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import { ApplicationState } from '../../store';
 import * as FinancialsStore from '../../store/Financials';
 
+import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+
+import NumberFormat from 'react-number-format';
+import { compose } from 'recompose';
+
+const styles = (theme: Theme) => createStyles({
+    cellHead: {
+        padding: 10
+    },
+    cell: {
+        padding: 10,
+        textAlign: 'right'
+    },
+})
+
 type FinancialsProps =
     FinancialsStore.FinancialsState
     & typeof FinancialsStore.actionCreators
+    & WithStyles<typeof styles>
+    & RouteComponentProps<{ code: string }>
 
 interface IState {
     activeTab: number;
@@ -48,12 +65,43 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
     }
 
     public componentDidMount() {
-        this.props.requestFinancials();
+        const code = this.props.match.params.code;
+        this.props.requestFinancials(code);
     }
 
     private handleChange (event: React.ChangeEvent<{}>, newValue: number) {
         this.setState((state) => ({ ...state, activeTab: newValue }))
     };
+
+    private CalcNWC(fl: any) {
+
+        if (fl.changeToLiabilities && fl.changeToInventory && fl.changeToAccountReceivables && fl.changeToOperatingActivities) {
+            return {
+                raw: fl.changeToLiabilities.raw + fl.changeToInventory.raw + fl.changeToAccountReceivables.raw + fl.changeToOperatingActivities.raw
+            }
+        }
+
+        return undefined
+    }
+
+    private CalcLongLiab(bl: any) {
+        if (bl.totalLiab && bl.totalCurrentLiabilities) {
+            return {
+                raw: bl.totalLiab.raw - bl.totalCurrentLiabilities.raw
+            }
+        }
+
+        return undefined
+    }
+
+    private RenderValue2(obj: any) {
+        return obj ? obj.raw : '-'
+    }
+
+    private RenderValue(obj: any) {
+
+        return obj? <NumberFormat value={obj.raw / 1000} displayType={'text'} thousandSeparator={true} /> : '-'
+    }
 
     public render() {
         return (
@@ -63,7 +111,7 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
                 <Tabs value={this.state.activeTab} onChange={this.handleChange} aria-label="simple tabs example">
                     <Tab label="Incomes" />
                     <Tab label="Cash Flow" />
-                    <Tab label="Item Three" />
+                    <Tab label="Balance Sheet" />
                 </Tabs>
 
                 {this.props.isLoading && <span>Loading...</span>}
@@ -75,7 +123,10 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
                 <TabPanel value={this.state.activeTab} index={1}>
                     {this.renderFlowsTable()}
                 </TabPanel>
-                
+
+                <TabPanel value={this.state.activeTab} index={2}>
+                    {this.renderBalanceSheet()}
+                </TabPanel>
             </React.Fragment>
         );
     }
@@ -85,15 +136,40 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
             <table>
                 <thead>
                     <tr>
-                        <th>Breakdown</th>
-                        {this.props.financials?.years.map((year: number) => <th key={year}>{year}</th>)}
+                        <th className={this.props.classes.cellHead}>Breakdown</th>
+                        {this.props.financials?.years.map((year: number) => <th className={this.props.classes.cellHead} key={year}>{year}</th>)}
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
                         <td>Depreciation</td>
-                        {this.props.financials?.cashflowStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.depreciation.raw}</td>)}
+                        {this.props.financials?.cashflowStatementHistory.map((fl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(fl.depreciation)}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Flows from investing activities</td>
+                        {this.props.financials?.cashflowStatementHistory.map((fl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(fl.totalCashflowsFromInvestingActivities)}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Capital expenditures</td>
+                        {this.props.financials?.cashflowStatementHistory.map((fl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(fl.capitalExpenditures)}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>NWC</td>
+                        {this.props.financials?.cashflowStatementHistory.map((fl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(this.CalcNWC(fl))}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Repurchase Of Stock</td>
+                        {this.props.financials?.cashflowStatementHistory.map((fl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(fl.repurchaseOfStock)}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Dividends Paid</td>
+                        {this.props.financials?.cashflowStatementHistory.map((fl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(fl.dividendsPaid)}</td>)}
                     </tr>
                 </tbody>
             </table>
@@ -105,34 +181,80 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
             <table>
                 <thead>
                     <tr>
-                        <th>Breakdown</th>
-                        {this.props.financials?.years.map((year: number) => <th key={year}>{year}</th>)}
+                        <th className={this.props.classes.cellHead}>Breakdown</th>
+                        {this.props.financials?.years.map((year: number) => <th className={this.props.classes.cellHead} key={year}>{year}</th>)}
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Total Revenue</td>
-                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.totalRevenue.raw}</td>)}
+                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(inc.totalRevenue)}</td>)}
                     </tr>
                     <tr>
                         <td>Cost of Revenue</td>
-                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.costOfRevenue.raw}</td>)}
+                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(inc.costOfRevenue)}</td>)}
                     </tr>
                     <tr>
                         <td>Total Operating Expenses</td>
-                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.totalOperatingExpenses.raw}</td>)}
+                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(inc.totalOperatingExpenses)}</td>)}
                     </tr>
                     <tr>
                         <td>Net Income</td>
-                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td key={index}>{inc.netIncome.raw}</td>)}
+                        {this.props.financials?.incomeStatementHistory.map((inc: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(inc.netIncome)}</td>)}
                     </tr>
+                </tbody>
+            </table>
+        );
+    }
+
+    private renderBalanceSheet() {
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <th className={this.props.classes.cellHead}>Balance Sheet</th>
+                        {this.props.financials?.years.map((year: number) => <th className={this.props.classes.cellHead} key={year}>{year}</th>)}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Current Liabilities</td>
+                        {this.props.financials?.balanceSheetHistory.map((bl: any, index: number) => <td className={ this.props.classes.cell } key={index}>{this.RenderValue(bl.totalCurrentLiabilities)}</td>)}
+                    </tr>
+
+
+                    <tr>
+                        <td>Non-Current Liabilities</td>
+                        {this.props.financials?.balanceSheetHistory.map((bl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(this.CalcLongLiab(bl))}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Total Liabilities</td>
+                        {this.props.financials?.balanceSheetHistory.map((bl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(bl.totalLiab)}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Current Assets</td>
+                        {this.props.financials?.balanceSheetHistory.map((bl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(bl.totalCurrentAssets)}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Total Assets</td>
+                        {this.props.financials?.balanceSheetHistory.map((bl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(bl.totalAssets)}</td>)}
+                    </tr>
+
+                    <tr>
+                        <td>Stockholder Equity</td>
+                        {this.props.financials?.balanceSheetHistory.map((bl: any, index: number) => <td className={this.props.classes.cell} key={index}>{this.RenderValue(bl.totalStockholderEquity)}</td>)}
+                    </tr>
+                    
                 </tbody>
             </table>
         );
     }
 }
 
-export default connect(
-    (state: ApplicationState) => state.financials,
-    FinancialsStore.actionCreators
+export default compose(
+    withStyles(styles),
+    connect((state: ApplicationState) => state.financials, FinancialsStore.actionCreators)
 )(Financials as any);

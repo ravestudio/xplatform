@@ -43,6 +43,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Emitent>().Property(e => e.Code).HasColumnName("Code");
             modelBuilder.Entity<Emitent>().Property(e => e.Description).HasColumnName("Description");
             modelBuilder.Entity<Emitent>().Property(e => e.WebSite).HasColumnName("WebSite");
+            modelBuilder.Entity<Emitent>().Property(e => e.FinancialPage).HasColumnName("FinancialPage");
             modelBuilder.Entity<Emitent>().ToTable("EmitentSet");
 
             modelBuilder.Entity<Security>().HasDiscriminator(s => s.Type)

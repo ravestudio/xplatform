@@ -12,5 +12,7 @@ namespace xplatform.Model
         public string Currency { get; set; }
         public decimal Price { get; set; }
         public decimal PriceChange { get; set; }
+
+        public string FinancialPage { get; set; }
     }
 }

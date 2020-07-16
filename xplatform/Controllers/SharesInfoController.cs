@@ -44,6 +44,7 @@ namespace xplatform.Controllers
             {
                 Code = s.Code,
                 Emitent = s.Emitent.Name,
+                FinancialPage = s.Emitent.FinancialPage,
                 Currency = s.Currency,
                 Price = getPrice(quotes, s.Board, s.Code),
                 PriceChange = getPriceChange(quotes, s.Board, s.Code)
