@@ -172,8 +172,8 @@ namespace PriceUpdater
                     md = new MarketData()
                     {
                         quote = quote,
-                        board = securityObj.Single(s => s.Code == quote.symbol && s.Board == quote.Board).Board,
-                        market = securityObj.Single(s => s.Code == quote.symbol && s.Board == quote.Board).Market,
+                        board = quote.Board,
+                        market = securityObj.First(s => s.Code == quote.symbol).Market,
                         ticker = quote.symbol
                     };
 

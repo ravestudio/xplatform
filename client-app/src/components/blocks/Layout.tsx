@@ -2,6 +2,7 @@ import * as React from 'react'
 import Header from './Header'
 import Container from '@material-ui/core/Container';
 
+import Login from '../auth/Login'
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
@@ -85,6 +86,8 @@ export default (props: { children?: React.ReactNode }) => {
     return (
         <div className={styles.root}>
             <Header />
+
+            <Login open={true} />
 
             <Container maxWidth="md">
                 <div className={styles.toolbar} />

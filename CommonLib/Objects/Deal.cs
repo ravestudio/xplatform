@@ -23,5 +23,6 @@ namespace CommonLib.Objects
 
         public int securityId { get; set; }
         public Security security { get; set; }
+        public string Board { get; set; }
     }
 }
