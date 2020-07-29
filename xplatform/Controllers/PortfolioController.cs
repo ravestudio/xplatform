@@ -44,7 +44,7 @@ namespace xplatform.Controllers
                 limit = g.Sum(p => p.limit)
             }).ToList();
 
-            foreach(var el in ds)
+            foreach (var el in ds)
             {
                 string[] codes = el.code.Split('\\');
                 Security security = _context.SecuritySet.Single(s => s.Board == codes[0] && s.Code == codes[1]);
@@ -79,11 +79,9 @@ namespace xplatform.Controllers
             result.SharesTotal = result.Items.Where(i => i.Type == "stock").Sum(s => s.Cost);
             result.BondsTotal = result.Items.Where(i => i.Type == "bond").Sum(s => s.Cost);
 
-            foreach(PortfolioItem etfItem in result.Items.Where(i => i.Type == "etf"))
+            foreach (PortfolioItem etfItem in result.Items.Where(i => i.Type == "etf"))
             {
-                string[] codes = etfItem.Code.Split('\\');
-
-                var structure = JObject.Parse(_context.ETFSet.Single(s => s.Board == codes[0] && s.Code == codes[1]).Structure);
+                var structure = JObject.Parse(_context.ETFSet.Single(s => s.Code == etfItem.Code).Structure);
                 decimal bondPrc = structure.Value<decimal>("bond") + structure.Value<decimal>("gold");
                 decimal bondCost = etfItem.Cost * (bondPrc / 100);
                 decimal stockCost = etfItem.Cost * ((100 - bondPrc) / 100);

@@ -50,7 +50,8 @@ namespace xplatform.Controllers
 
                 PortfolioSnapshoot result = null;
 
-                if (snapshootIndex.ContainsKey(_dt)) {
+                if (snapshootIndex.ContainsKey(_dt))
+                {
                     result = snapshoots[snapshootIndex[_dt]];
                 }
 
@@ -68,25 +69,25 @@ namespace xplatform.Controllers
 
             Action<PortfolioSnapshoot, Deal> increase = (snap, deal) =>
             {
-                snap.increse(deal.accountId, deal.security.Code, deal.security.Board, deal.Date.Date, deal.Count);
+                snap.increse(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count);
             };
 
             Action<PortfolioSnapshoot, Deal> decrease = (snap, deal) =>
             {
-                snap.decrease(deal.accountId, deal.security.Code, deal.security.Board, deal.Date.Date, deal.Count);
+                snap.decrease(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count);
             };
 
             var deals = _context.DealSet.Include(d => d.security)
-                //.Where(d => (d.Date > new DateTime(2017, 01, 18)) && (d.security.Code == "LKOH"))
-                //.OrderBy(d => d.Number).ToList();
-                .OrderBy(d => d.Date).ThenBy(d => d.security.Region).ThenBy(d => d.Number);
+                 //.Where(d => (d.Date > new DateTime(2017, 01, 18)) && (d.security.Code == "LKOH"))
+                 //.OrderBy(d => d.Number).ToList();
+                 .OrderBy(d => d.Date).ThenBy(d => d.security.Region).ThenBy(d => d.Number);
 
             var dates = deals.Select(d => d.Date.Date).Distinct().ToList();
 
             snapshoots.Add(new PortfolioSnapshoot());
             snapshootIndex.Add(dates.First(), 0);
 
-            foreach(Deal deal in deals)
+            foreach (Deal deal in deals)
             {
                 var snap = getSnap(deal.Date);
 
@@ -101,7 +102,7 @@ namespace xplatform.Controllers
                 }
             }
 
-            foreach(int index in snapshootIndex.Values)
+            foreach (int index in snapshootIndex.Values)
             {
                 SnapshootData snapshootData = new SnapshootData()
                 {
