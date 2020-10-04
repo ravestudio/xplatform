@@ -3,6 +3,7 @@ import Header from "./Header";
 import Container from "@material-ui/core/Container";
 
 import Login from "../auth/Login";
+import InfoBlock from "./InfoBlock";
 
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 
@@ -91,6 +92,8 @@ export default (props: { children?: React.ReactNode }) => {
       <Container maxWidth="md">
         <div className={styles.toolbar} />
         {props.children}
+
+        <InfoBlock />
       </Container>
     </div>
   );
