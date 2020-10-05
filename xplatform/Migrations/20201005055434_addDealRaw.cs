@@ -10,7 +10,8 @@ namespace xplatform.Migrations
                 name: "deal_raw",
                 columns: table => new
                 {
-                    number = table.Column<decimal>(nullable: false, defaultValue: 0m),
+                    number = table.Column<decimal>(nullable: false),
+                    board = table.Column<string>(nullable: false),
                     symbol = table.Column<string>(nullable: true),
                     operation = table.Column<string>(nullable: true),
                     date = table.Column<string>(nullable: true),
@@ -20,12 +21,11 @@ namespace xplatform.Migrations
                     count = table.Column<int>(nullable: false),
                     volume = table.Column<decimal>(nullable: false),
                     nkd = table.Column<decimal>(nullable: true),
-                    board = table.Column<string>(nullable: true),
                     client = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_deal_raw", x => x.number);
+                    table.PrimaryKey("PK_deal_raw", x => new { x.number, x.board });
                 });
         }
 

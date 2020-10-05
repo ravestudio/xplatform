@@ -157,8 +157,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Quote>().Property(q => q.Board).HasColumnName("Board");
             modelBuilder.Entity<Quote>().ToTable("QuoteSet");
 
-            modelBuilder.Entity<DealRaw>().HasKey(d => d.number);
-            modelBuilder.Entity<DealRaw>().Property(d => d.number).HasDefaultValue(0);
+            modelBuilder.Entity<DealRaw>().HasKey(d => new { d.number, d.board });
             modelBuilder.Entity<DealRaw>().ToTable("deal_raw");
 
             base.OnModelCreating(modelBuilder);

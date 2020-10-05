@@ -10,7 +10,7 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    [Migration("20201005053033_addDealRaw")]
+    [Migration("20201005055434_addDealRaw")]
     partial class addDealRaw
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,9 +99,7 @@ namespace xplatform.Migrations
             modelBuilder.Entity("CommonLib.Objects.DealRaw", b =>
                 {
                     b.Property<decimal>("number")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("numeric")
-                        .HasDefaultValue(0m);
+                        .HasColumnType("numeric");
 
                     b.Property<string>("board")
                         .HasColumnType("text");
@@ -136,7 +134,7 @@ namespace xplatform.Migrations
                     b.Property<decimal>("volume")
                         .HasColumnType("numeric");
 
-                    b.HasKey("number");
+                    b.HasKey("number", "board");
 
                     b.ToTable("deal_raw");
                 });
