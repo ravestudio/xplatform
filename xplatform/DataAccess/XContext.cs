@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace xplatform.DataAccess
 {
-    public class XContext: DbContext
+    public class XContext : DbContext
     {
         public DbSet<Emitent> EmitentSet { get; set; }
         public DbSet<Financial> FinancialSet { get; set; }
@@ -156,6 +156,10 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Quote>().Property(q => q.change).HasColumnName("Change").IsRequired();
             modelBuilder.Entity<Quote>().Property(q => q.Board).HasColumnName("Board");
             modelBuilder.Entity<Quote>().ToTable("QuoteSet");
+
+            modelBuilder.Entity<DealRaw>().HasKey(d => d.number);
+            modelBuilder.Entity<DealRaw>().Property(d => d.number).HasDefaultValue(0);
+            modelBuilder.Entity<DealRaw>().ToTable("deal_raw");
 
             base.OnModelCreating(modelBuilder);
         }
