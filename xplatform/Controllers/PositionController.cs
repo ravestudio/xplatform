@@ -82,7 +82,7 @@ namespace xplatform.Controllers
                  //.OrderBy(d => d.Number).ToList();
                  .OrderBy(d => d.Date).ThenBy(d => d.security.Region).ThenBy(d => d.Number);
 
-            var dates = deals.Select(d => d.Date.Date).Distinct().ToList();
+            var dates = deals.Select(d => d.Date.Date).Distinct().OrderBy(d => d).ToList();
 
             snapshoots.Add(new PortfolioSnapshoot());
             snapshootIndex.Add(dates.First(), 0);
