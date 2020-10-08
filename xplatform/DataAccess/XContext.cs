@@ -25,6 +25,8 @@ namespace xplatform.DataAccess
         public DbSet<FinanceAnnual> FinanceAnnualSet { get; set; }
 
         public DbSet<Quote> QuoteSet { get; set; }
+
+        public DbSet<DealRaw> DealRawSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -35,6 +37,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Account>().HasKey(a => a.Id);
             modelBuilder.Entity<Account>().Property(a => a.Id).HasColumnName("Id");
             modelBuilder.Entity<Account>().Property(a => a.Name).HasColumnName("Name");
+            modelBuilder.Entity<Account>().Property(a => a.Client).HasColumnName("Client");
             modelBuilder.Entity<Account>().ToTable("AccountSet");
 
             modelBuilder.Entity<Emitent>().HasKey(e => e.Id);
