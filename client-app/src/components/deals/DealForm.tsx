@@ -27,6 +27,8 @@ import { SecuritiesState, Security, Share, Bond } from "../../store/Securities";
 
 import NumberFormat from "react-number-format";
 
+import {renderTextField} from "client-libs"
+
 interface NumberFormatCustomProps {
   inputRef: (instance: NumberFormat | null) => void;
   //onChange: (event: { target: { value: string } }) => void;
@@ -48,6 +50,25 @@ function NumberFormatCustom(props: NumberFormatCustomProps) {
   );
 }
 
+/*const renderTextField: React.FC<TFProps> = (props) => {
+  const {
+    input,
+    label,
+    meta: { touched, invalid, error },
+    ...custom
+  } = props;
+  return (
+    <TextField
+      label={label}
+      placeholder={label}
+      error={touched && invalid}
+      helperText={touched && error}
+      {...input}
+      {...custom}
+    />
+  );
+};*/
+
 const GreenRadio = withStyles({
   root: {
     color: green[400],
@@ -68,34 +89,7 @@ const RedRadio = withStyles({
   checked: {},
 })((props: RadioProps) => <Radio color="default" {...props} />);
 
-interface TFProps {
-  label: any;
-  input: any;
-  meta: any;
-  custom: any;
-}
 
-const renderTextField: React.FC<TFProps> = (props) => {
-  const {
-    input,
-    label,
-    meta: { touched, invalid, error },
-    ...custom
-  } = props;
-  return (
-    <TextField
-      label={label}
-      placeholder={label}
-      error={touched && invalid}
-      helperText={touched && error}
-      {...input}
-      InputProps={{
-        inputComponent: NumberFormatCustom as any,
-      }}
-      {...custom}
-    />
-  );
-};
 
 interface SelectProps {
   label: any;
@@ -242,6 +236,9 @@ const DealForm = (props: any) => {
             name="dealNumber"
             component={renderTextField}
             label="Number"
+            InputProps={{
+              inputComponent: NumberFormatCustom as any,
+            }}
             validate={required}
           />
         </Grid>
@@ -322,6 +319,9 @@ const DealForm = (props: any) => {
             fullWidth
             name="dealPrice"
             component={renderTextField}
+            InputProps={{
+              inputComponent: NumberFormatCustom as any,
+            }}
             label="Price"
           />
         </Grid>
@@ -331,6 +331,9 @@ const DealForm = (props: any) => {
             fullWidth
             name="dealCount"
             component={renderTextField}
+            InputProps={{
+              inputComponent: NumberFormatCustom as any,
+            }}
             label="Count"
           />
         </Grid>
@@ -340,6 +343,9 @@ const DealForm = (props: any) => {
             fullWidth
             name="dealNkd"
             component={renderTextField}
+            InputProps={{
+              inputComponent: NumberFormatCustom as any,
+            }}
             label="NKD"
           />
         </Grid>
@@ -356,6 +362,9 @@ const DealForm = (props: any) => {
             disabled
             name="dealVolume"
             component={renderTextField}
+            InputProps={{
+              inputComponent: NumberFormatCustom as any,
+            }}
             label="Volume"
           />
         </Grid>
