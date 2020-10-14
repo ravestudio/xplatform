@@ -27,7 +27,7 @@ import { SecuritiesState, Security, Share, Bond } from "../../store/Securities";
 
 import NumberFormat from "react-number-format";
 
-import {renderTextField} from "client-libs"
+import {renderTextField} from "xplatform-controls"
 
 interface NumberFormatCustomProps {
   inputRef: (instance: NumberFormat | null) => void;

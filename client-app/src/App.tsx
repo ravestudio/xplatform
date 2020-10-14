@@ -14,8 +14,6 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import ruLocale from "date-fns/locale/ru"
 
-import { TestComponent } from "client-libs";
-
 export default () => (
     <Layout>
         
