@@ -6,28 +6,35 @@ networks:
 
 services:
   clientapp:
-    image: yakovlevdev
+    image: yakovlevdev/client-app:latest
+    container_name: clientapp
+    networks:
+      - dockerapi-dev
 
   dockerapi:
     image: yakovlevdev/xplatform:latest
-    depends_on:
-      - "postgres_image"
+    container_name: api
     ports:
       - "8000:80"
     environment:
       xpl_db: "host=postgres_image;port=5432;database=xpl_db;username=xuser;password=xpss"
       logPath: "/logpath"
     volumes:
-      - /logpath:/var/log/xplatform/xplatform
+      - ./logs:/logpath
     networks:
       - dockerapi-dev
 
-  priceupdater:
-    image: yakovlevdev/priceupdater:latest
-    depends_on:
-      - "dockerapi"
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
-      - /var/log/xplatform/priceupdater:/var/log/xplatform/priceupdater
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
     networks:
       - dockerapi-dev
 
@@ -38,12 +45,12 @@ services:
     restart: always
     volumes:
       - db_volume:/var/lib/postgresql/data
-      - ./dbscripts/seed.sql :/docker-entrypoint-initdb.d/seed.sql
     environment:
       POSTGRES_USER: "xuser"
       POSTGRES_PASSWORD: "xpss"
       POSTGRES_DB: "xpl_db"
     networks:
       - dockerapi-dev
+
 volumes:
   db_volume:

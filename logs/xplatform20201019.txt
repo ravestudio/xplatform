@@ -1,0 +1,68 @@
+2020-10-19 08:45:19.907 +00:00 [INF] Request starting HTTP/1.0 GET http://api/api/sharesInfo?region=Moscow  
+2020-10-19 08:45:19.941 +00:00 [WRN] Failed to determine the https port for redirect.
+2020-10-19 08:45:19.964 +00:00 [INF] Executing endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 08:45:19.987 +00:00 [INF] Route matched with {action = "Get", controller = "SharesInfo"}. Executing controller action with signature System.Collections.Generic.IEnumerable`1[xplatform.Model.ShareInfo] Get(System.String) on controller xplatform.Controllers.SharesInfoController (xplatform).
+2020-10-19 08:45:20.555 +00:00 [INF] Entity Framework Core 3.1.1 initialized 'XContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None
+2020-10-19 08:45:20.955 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT q."Id", q."Board", q."NKD", q."Change", q."Figi", q."LastUpdate", q."Open", q."PreviousClose", q."Price", q."Symbol"
+FROM "QuoteSet" AS q
+2020-10-19 08:45:21.049 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__region_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Code", e."Name", e."FinancialPage", s."Currency", s."Board"
+FROM "SecuritySet" AS s
+LEFT JOIN "EmitentSet" AS e ON s."EmitentId" = e."Id"
+WHERE s."Type" IN ('Security', 'bond', 'currency', 'etf', 'stock') AND ((s."Market" = 'shares') AND (s."Region" = @__region_0))
+2020-10-19 08:45:21.051 +00:00 [INF] Executing ObjectResult, writing value of type 'xplatform.Model.ShareInfo[]'.
+2020-10-19 08:45:21.061 +00:00 [INF] Executed action xplatform.Controllers.SharesInfoController.Get (xplatform) in 1068.9148ms
+2020-10-19 08:45:21.062 +00:00 [INF] Executed endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 08:45:21.065 +00:00 [INF] Request finished in 1162.7841ms 200 application/json; charset=utf-8
+2020-10-19 09:05:10.037 +00:00 [INF] Request starting HTTP/1.0 GET http://api/api/sharesInfo?region=Moscow  
+2020-10-19 09:05:10.072 +00:00 [WRN] Failed to determine the https port for redirect.
+2020-10-19 09:05:10.095 +00:00 [INF] Executing endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 09:05:10.117 +00:00 [INF] Route matched with {action = "Get", controller = "SharesInfo"}. Executing controller action with signature System.Collections.Generic.IEnumerable`1[xplatform.Model.ShareInfo] Get(System.String) on controller xplatform.Controllers.SharesInfoController (xplatform).
+2020-10-19 09:05:10.693 +00:00 [INF] Entity Framework Core 3.1.1 initialized 'XContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None
+2020-10-19 09:05:11.104 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT q."Id", q."Board", q."NKD", q."Change", q."Figi", q."LastUpdate", q."Open", q."PreviousClose", q."Price", q."Symbol"
+FROM "QuoteSet" AS q
+2020-10-19 09:05:11.202 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__region_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Code", e."Name", e."FinancialPage", s."Currency", s."Board"
+FROM "SecuritySet" AS s
+LEFT JOIN "EmitentSet" AS e ON s."EmitentId" = e."Id"
+WHERE s."Type" IN ('Security', 'bond', 'currency', 'etf', 'stock') AND ((s."Market" = 'shares') AND (s."Region" = @__region_0))
+2020-10-19 09:05:11.205 +00:00 [INF] Executing ObjectResult, writing value of type 'xplatform.Model.ShareInfo[]'.
+2020-10-19 09:05:11.215 +00:00 [INF] Executed action xplatform.Controllers.SharesInfoController.Get (xplatform) in 1094.4777ms
+2020-10-19 09:05:11.216 +00:00 [INF] Executed endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 09:05:11.219 +00:00 [INF] Request finished in 1186.0114ms 200 application/json; charset=utf-8
+2020-10-19 09:11:09.465 +00:00 [INF] Request starting HTTP/1.0 GET http://api/api/sharesInfo?region=Moscow  
+2020-10-19 09:11:09.501 +00:00 [WRN] Failed to determine the https port for redirect.
+2020-10-19 09:11:09.525 +00:00 [INF] Executing endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 09:11:09.549 +00:00 [INF] Route matched with {action = "Get", controller = "SharesInfo"}. Executing controller action with signature System.Collections.Generic.IEnumerable`1[xplatform.Model.ShareInfo] Get(System.String) on controller xplatform.Controllers.SharesInfoController (xplatform).
+2020-10-19 09:11:10.129 +00:00 [INF] Entity Framework Core 3.1.1 initialized 'XContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None
+2020-10-19 09:11:10.534 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT q."Id", q."Board", q."NKD", q."Change", q."Figi", q."LastUpdate", q."Open", q."PreviousClose", q."Price", q."Symbol"
+FROM "QuoteSet" AS q
+2020-10-19 09:11:10.670 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__region_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Code", e."Name", e."FinancialPage", s."Currency", s."Board"
+FROM "SecuritySet" AS s
+LEFT JOIN "EmitentSet" AS e ON s."EmitentId" = e."Id"
+WHERE s."Type" IN ('Security', 'bond', 'currency', 'etf', 'stock') AND ((s."Market" = 'shares') AND (s."Region" = @__region_0))
+2020-10-19 09:11:10.674 +00:00 [INF] Executing ObjectResult, writing value of type 'xplatform.Model.ShareInfo[]'.
+2020-10-19 09:11:10.686 +00:00 [INF] Executed action xplatform.Controllers.SharesInfoController.Get (xplatform) in 1133.1485ms
+2020-10-19 09:11:10.687 +00:00 [INF] Executed endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 09:11:10.690 +00:00 [INF] Request finished in 1229.4608ms 200 application/json; charset=utf-8
+2020-10-19 09:12:39.567 +00:00 [INF] Request starting HTTP/1.0 GET http://api/api/sharesInfo?region=Moscow  
+2020-10-19 09:12:39.605 +00:00 [WRN] Failed to determine the https port for redirect.
+2020-10-19 09:12:39.630 +00:00 [INF] Executing endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 09:12:39.653 +00:00 [INF] Route matched with {action = "Get", controller = "SharesInfo"}. Executing controller action with signature System.Collections.Generic.IEnumerable`1[xplatform.Model.ShareInfo] Get(System.String) on controller xplatform.Controllers.SharesInfoController (xplatform).
+2020-10-19 09:12:40.246 +00:00 [INF] Entity Framework Core 3.1.1 initialized 'XContext' using provider 'Npgsql.EntityFrameworkCore.PostgreSQL' with options: None
+2020-10-19 09:12:40.651 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT q."Id", q."Board", q."NKD", q."Change", q."Figi", q."LastUpdate", q."Open", q."PreviousClose", q."Price", q."Symbol"
+FROM "QuoteSet" AS q
+2020-10-19 09:12:40.787 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__region_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Code", e."Name", e."FinancialPage", s."Currency", s."Board"
+FROM "SecuritySet" AS s
+LEFT JOIN "EmitentSet" AS e ON s."EmitentId" = e."Id"
+WHERE s."Type" IN ('Security', 'bond', 'currency', 'etf', 'stock') AND ((s."Market" = 'shares') AND (s."Region" = @__region_0))
+2020-10-19 09:12:40.791 +00:00 [INF] Executing ObjectResult, writing value of type 'xplatform.Model.ShareInfo[]'.
+2020-10-19 09:12:40.803 +00:00 [INF] Executed action xplatform.Controllers.SharesInfoController.Get (xplatform) in 1145.9124ms
+2020-10-19 09:12:40.804 +00:00 [INF] Executed endpoint 'xplatform.Controllers.SharesInfoController.Get (xplatform)'
+2020-10-19 09:12:40.807 +00:00 [INF] Request finished in 1245.1703ms 200 application/json; charset=utf-8
