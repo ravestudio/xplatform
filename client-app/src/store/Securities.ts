@@ -1,6 +1,5 @@
 import { Action, Reducer } from 'redux'
 import { AppThunkAction } from './';
-import C from "../constants"
 
 export interface SecuritiesState {
     isLoading: boolean
@@ -36,13 +35,13 @@ export const actionCreators = {
     requestSecurities: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
 
-        const shares = fetch(`${C.apiUrl}/share`)
+        const shares = fetch(`/api/share`)
             .then(response => response.json() as Promise<Security[]>);
 
-        const bonds = fetch(`${C.apiUrl}/bond`)
+        const bonds = fetch(`/api/bond`)
             .then(response => response.json() as Promise<Security[]>);
 
-        const etf = fetch(`${C.apiUrl}/etf`)
+        const etf = fetch(`/api/etf`)
             .then(response => response.json() as Promise<Security[]>);
 
         Promise.all([shares, bonds, etf]).then(([shares, bonds, etf]) => {

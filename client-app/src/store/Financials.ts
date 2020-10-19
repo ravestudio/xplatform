@@ -1,6 +1,5 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from './';
-import C from "../constants"
 
 export interface FinancialsState {
     isLoading: boolean
@@ -33,7 +32,7 @@ export const actionCreators = {
         const appState = getState();
 
         if (appState && appState.financials && code !== appState.financials.code) {
-            fetch(`${C.apiUrl}/yahoo/${code}`)
+            fetch(`/api/yahoo/${code}`)
                 .then(response => response.json() as Promise<Financials>)
                 .then(data => {
                     dispatch({ type: 'FINANCIALS_RECEIVE', code: code, financials: data });

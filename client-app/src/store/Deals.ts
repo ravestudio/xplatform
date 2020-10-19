@@ -1,7 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { reset } from 'redux-form';
 import { AppThunkAction } from './';
-import C from "../constants"
 
 export interface DealsState {
     isLoading: boolean
@@ -37,7 +36,7 @@ export const actionCreators = {
     requestDeals: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const appState = getState();
 
-        fetch(`${C.apiUrl}/deal`)
+        fetch(`/api/deal`)
             .then(response => response.json() as Promise<Deal[]>)
             .then(data => {
                 dispatch({ type: 'DEALS_RECEIVE', deals: data });
@@ -48,7 +47,7 @@ export const actionCreators = {
 
     postDeal: (deal: any): AppThunkAction<KnownAction> => (dispatch, getState) => {
 
-        fetch(`${C.apiUrl}/deal`, {
+        fetch(`/api/deal`, {
             method: 'POST',
             body: JSON.stringify(deal),
             headers: {

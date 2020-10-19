@@ -1,6 +1,5 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from './';
-import C from "../constants"
 
 export interface PortfolioState {
     isLoading: boolean,
@@ -42,7 +41,7 @@ export const actionCreators = {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
         if (appState && appState.portfolio && appState.portfolio.viewType !== viewType) {
-            fetch(`${C.apiUrl}/portfolio`)
+            fetch(`/api/portfolio`)
                 .then(response => response.json() as Promise<Portfolio>)
                 .then(data => {
                     dispatch({ type: 'RECEIVE_PORTFOLIO', data: data, viewType });

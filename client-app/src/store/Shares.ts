@@ -1,7 +1,5 @@
 import { Action, Reducer } from 'redux'
 import { AppThunkAction } from './';
-import C from "../constants"
-import { request } from 'https';
 
 export interface SharesState {
     isLoading: boolean,
@@ -44,7 +42,7 @@ export const actionCreators = {
 
         //const region = 'United States'
 
-        fetch(`${C.apiUrl}/sharesInfo?region=${region}`)
+        fetch(`/api/sharesInfo?region=${region}`)
             .then(response => response.json() as Promise<ShareInfo[]>)
             .then(data => {
                 dispatch({ type: 'SHARESINFO_RECEIVE', region: region, shares: data });
