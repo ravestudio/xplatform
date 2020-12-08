@@ -2,13 +2,13 @@ import React from 'react';
 import {Switch, Route } from 'react-router';
 import logo from './logo.svg';
 import './App.css'
-import Layout from './components/blocks/Layout'
+import Layout from './components/blocks/2Layout'
 import Emitents from './components/emitents/Emitents'
 import Deals from './components/deals/Deals'
 import DealCreate from './components/deals/DealCreate'
 import Portfolio from './components/portfolio/Portfolio'
 import Financials from './components/financials/Financials'
-import Shares from './components/shares/Shares'
+import Shares from './components/shares/2Shares'
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';

@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  font-family: "Roboto";
+}
+
+.root {
+  display: flex;
+}
+
+.container {
+  max-width: 960px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+}
