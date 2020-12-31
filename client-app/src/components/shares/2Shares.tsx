@@ -1,19 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 
 import {
   createStyles,
@@ -28,7 +18,6 @@ import * as SharesStore from "../../store/Shares";
 import withWidth, { WithWidthProps } from "@material-ui/core/withWidth";
 
 import Dropdown from "../dropdown";
-import countries from "../dropdown/countries.json";
 
 import { compose } from "recompose";
 
@@ -121,81 +110,69 @@ class Shares extends React.PureComponent<SharesProps> {
 
   private renderSharesTableShort() {
     return (
-      <TableContainer component={Paper}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Code</TableCell>
-              <TableCell>Emitent</TableCell>
-              <TableCell align="right">Price</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.props.shares.map((sh) => (
-              <TableRow key={sh.code}>
-                <TableCell component="th" scope="row">
-                  {sh.code}
-                </TableCell>
-                <TableCell>{sh.emitent}</TableCell>
-                <TableCell
-                  align="right"
-                  style={{ color: this.priceColor(sh.priceChange) }}
-                >
-                  {sh.price}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <table className="xtable">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Emitent</th>
+            <th align="right">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.shares.map((sh) => (
+            <tr key={sh.code}>
+              <th>{sh.code}</th>
+              <td>{sh.emitent}</td>
+              <td
+                align="right"
+                style={{ color: this.priceColor(sh.priceChange) }}
+              >
+                {sh.price}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
   }
 
   private renderSharesTable() {
     return (
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Code</TableCell>
-              <TableCell>Emitent</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell>Currency</TableCell>
-              <TableCell align="right">Change (%)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.props.shares.map((sh) => (
-              <TableRow key={sh.code}>
-                <TableCell component="th" scope="row">
-                  {sh.code}
-                </TableCell>
-                <TableCell>
-                  {sh.financialPage ? (
-                    <Link
-                      href={`financials/${sh.financialPage}`}
-                      color="inherit"
-                      underline="always"
-                    >
-                      {sh.emitent}
-                    </Link>
-                  ) : (
-                    sh.emitent
-                  )}
-                </TableCell>
-                <TableCell align="right">{sh.price}</TableCell>
-                <TableCell>{sh.currency}</TableCell>
-                <TableCell
-                  align="right"
-                  style={{ color: this.priceColor(sh.priceChange) }}
-                >
-                  {sh.priceChange}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <table className="xtable">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Emitent</th>
+            <th align="right">Price</th>
+            <th>Currency</th>
+            <th align="right">Change (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.shares.map((sh) => (
+            <tr key={sh.code}>
+              <th>{sh.code}</th>
+              <td>
+                {sh.financialPage ? (
+                  <Link to={`financials/${sh.financialPage}`}>
+                    {sh.emitent}
+                  </Link>
+                ) : (
+                  sh.emitent
+                )}
+              </td>
+              <td align="right">{sh.price}</td>
+              <td>{sh.currency}</td>
+              <td
+                align="right"
+                style={{ color: this.priceColor(sh.priceChange) }}
+              >
+                {sh.priceChange}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
   }
 }

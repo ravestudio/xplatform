@@ -1,6 +1,6 @@
 .dropdown {
   position: relative;
-  color: #333;
+  /*color: #333;*/
   cursor: default;
 }
 
@@ -24,11 +24,16 @@
 }
 
 .dropdown .selected-value input {
+  color: white;
   line-height: 1.5;
   font-size: 1rem;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 2px;
+  /*background-color: #fff;*/
+  background-color: #15425f;
+  /*border: 1px solid #ccc;*/
+  border: 2px solid white;
+
+  /*border-radius: 2px;*/
+
   box-sizing: border-box;
   cursor: default;
   outline: none;
