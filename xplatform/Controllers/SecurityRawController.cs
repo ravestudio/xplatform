@@ -65,7 +65,7 @@ namespace xplatform.Controllers
                 if (sec != null)
                 {
                     raw.Processed = true;
-                    raw.Emitent = sec.Code;
+                    raw.Emitent = sec.Emitent.Code;
                 };
 
                 if (!_context.SecurityRawSet.Any(r => r.isin == raw.isin))
