@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
 using xplatform.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace xplatform.Controllers
 {
@@ -61,7 +62,7 @@ namespace xplatform.Controllers
                 SecurityRaw raw = jtoken.ToObject<SecurityRaw>();
                 raw.Board = moex_isin.Contains(raw.isin) ? "TQBR" : "SPBMX";
 
-                Security sec = _context.SecuritySet.SingleOrDefault(c => c.ISIN == raw.isin);
+                Security sec = _context.SecuritySet.Include(s => s.Emitent).SingleOrDefault(c => c.ISIN == raw.isin);
                 if (sec != null)
                 {
                     raw.Processed = true;
