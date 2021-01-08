@@ -8,5 +8,7 @@ namespace xplatform.Model
     public class ImportRequest
     {
         public string Object { get; set; }
+
+        public string[] ISIN { get; set; }
     }
 }

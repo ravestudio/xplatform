@@ -1,0 +1,17 @@
+version: "3.4"
+
+services:
+  postgres_image:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: "xuser"
+      POSTGRES_PASSWORD: "xpss"
+      POSTGRES_DB: "xpl_db"
+    volumes:
+      - postgresql-volume:/var/lib/postgresql/data
+volumes:
+  postgresql-volume:
+    external: true

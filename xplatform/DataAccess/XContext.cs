@@ -27,6 +27,7 @@ namespace xplatform.DataAccess
         public DbSet<Quote> QuoteSet { get; set; }
 
         public DbSet<DealRaw> DealRawSet { get; set; }
+        public DbSet<SecurityRaw> SecurityRawSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -57,6 +58,7 @@ namespace xplatform.DataAccess
 
             modelBuilder.Entity<Security>().HasKey(s => s.Id);
             modelBuilder.Entity<Security>().Property(s => s.Id).HasColumnName("Id");
+            modelBuilder.Entity<Security>().Property(s => s.ISIN).HasColumnName("ISIN");
             modelBuilder.Entity<Security>().Property(s => s.Name).HasColumnName("Name");
             modelBuilder.Entity<Security>().Property(s => s.Code).HasColumnName("Code");
             modelBuilder.Entity<Security>().Property(s => s.Region).HasColumnName("Region");
@@ -162,6 +164,9 @@ namespace xplatform.DataAccess
 
             modelBuilder.Entity<DealRaw>().HasKey(d => new { d.number, d.board });
             modelBuilder.Entity<DealRaw>().ToTable("deal_raw");
+
+            modelBuilder.Entity<SecurityRaw>().HasKey(s => s.isin);
+            modelBuilder.Entity<SecurityRaw>().ToTable("security_raw");
 
             base.OnModelCreating(modelBuilder);
         }

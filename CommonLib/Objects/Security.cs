@@ -7,6 +7,7 @@ namespace CommonLib.Objects
     public class Security
     {
         public int Id { get; set; }
+        public string ISIN { get; set; }
 
         public string Name { get; set; }
         public string Code { get; set; }
@@ -26,22 +27,22 @@ namespace CommonLib.Objects
         public string Board { get; set; }
     }
 
-    public class Share: Security
+    public class Share : Security
     {
 
     }
 
-    public class Bond: Security
+    public class Bond : Security
     {
         public decimal NominalPrice { get; set; }
     }
 
-    public class ETF: Security
+    public class ETF : Security
     {
         public string Structure { get; set; }
     }
 
-    public class Currency: Security
+    public class Currency : Security
     {
 
     }

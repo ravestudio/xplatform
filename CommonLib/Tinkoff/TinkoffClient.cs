@@ -24,10 +24,17 @@ namespace CommonLib.Tinkoff
             string url = $"https://api-invest.tinkoff.ru/openapi/sandbox/market/candles?figi={figi}&from={fromPr}&to={toPr}&interval={interval}";
 
             string response = "error";
-            
+
             response = await _apiClient.GetData(url);
 
             return response;
+        }
+
+        public async Task<String> GetStocks()
+        {
+            string url = "https://api-invest.tinkoff.ru/openapi/sandbox/market/stocks";
+
+            return await _apiClient.GetData(url);
         }
     }
 }

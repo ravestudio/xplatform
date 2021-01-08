@@ -58,6 +58,60 @@ namespace xplatform.Controllers
 
             }
 
+            if (requestModel.Object == "stock")
+            {
+                foreach (string isin in requestModel.ISIN)
+                {
+                    Emitent emitent = null;
+
+                    SecurityRaw rawItem = _context.SecurityRawSet.Single(s => s.isin == isin);
+
+                    if (string.IsNullOrEmpty(rawItem.Emitent))
+                    {
+                        emitent = new Emitent()
+                        {
+                            Code = rawItem.ticker,
+                            Name = rawItem.name,
+                            FinancialPage = rawItem.Board == "SPBMX" ? rawItem.ticker : $"{rawItem.ticker}.ME"
+                        };
+                    }
+                    else emitent = _context.EmitentSet.Single(e => e.Code == rawItem.Emitent);
+
+                    Share stock = new Share()
+                    {
+                        Emitent = emitent,
+                        ISIN = rawItem.isin,
+                        Code = rawItem.ticker,
+                        Name = rawItem.name,
+                        Region = rawItem.Board == "SPBMX" ? "United States" : "Moscow",
+                        Currency = rawItem.currency,
+                        Market = "shares",
+                        Board = rawItem.Board
+
+                    };
+
+                    Quote quote = new Quote()
+                    {
+                        Id = Guid.NewGuid(),
+                        figi = rawItem.figi,
+                        symbol = rawItem.ticker,
+                        Board = rawItem.Board
+                    };
+
+                    _context.ShareSet.Add(stock);
+                    _context.QuoteSet.Add(quote);
+
+
+                    rawItem.Processed = true;
+                    rawItem.Emitent = emitent.Code;
+
+                    _context.SecurityRawSet.Update(rawItem);
+
+                    _context.SaveChanges();
+                }
+
+            }
+
             return Ok();
         }
     }

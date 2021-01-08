@@ -17,6 +17,13 @@ namespace CommonLib.ISS
 
         }
 
+        public async Task<string> GetSecurityList(string market, string board)
+        {
+            string url = $"http://iss.moex.com/iss/engines/stock/markets/{market}/boards/{board}/securities.json";
+
+            return await _apiClient.GetData(url);
+        }
+
         public async Task<ISSResponse> GetSecurityInfo(string market, string board, string security)
         {
             string engine = "stock";

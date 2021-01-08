@@ -2,14 +2,14 @@ import React from "react";
 import { Switch, Route } from "react-router";
 import logo from "./logo.svg";
 import "./App.css";
-import "./fontawesome-free/css/all.css";
 import Layout from "./components/blocks/2Layout";
 import Emitents from "./components/emitents/Emitents";
 import Deals from "./components/deals/Deals";
 import DealCreate from "./components/deals/DealCreate";
 import Portfolio from "./components/portfolio/Portfolio";
-import Financials from "./components/financials/2Financials";
+import Financials from "./components/financials/Financials";
 import Shares from "./components/shares/2Shares";
+import ImportSecurities from "./components/import/ImportSecurities";
 import ImgViewer from "./components/imageViewer";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -25,6 +25,7 @@ export default () => (
       <Route path="/createDeal" component={DealCreate} />
       <Route path="/portfolio" component={Portfolio} />
       <Route path="/financials/:code?" component={Financials} />
+      <Route path="/import" component={ImportSecurities} />
       <Route path="/img" component={ImgViewer} />
     </MuiPickersUtilsProvider>
   </Layout>
