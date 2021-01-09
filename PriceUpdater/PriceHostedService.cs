@@ -57,7 +57,8 @@ namespace PriceUpdater
 
             var xClient = new CommonLib.WebApiClient();
 
-            Func<string, Quote> GetQuoteFromCandles = new Func<string, Quote>(data => {
+            Func<string, Quote> GetQuoteFromCandles = new Func<string, Quote>(data =>
+            {
 
                 JObject obj = JObject.Parse(data);
 
@@ -113,7 +114,8 @@ namespace PriceUpdater
 
 
 
-            usaQuoteSeq = Observable.Create<Quote>(async observer => {
+            usaQuoteSeq = Observable.Create<Quote>(async observer =>
+            {
 
                 string securities = await xClient.GetData($"{apiUrl}/security");
                 string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
@@ -136,7 +138,7 @@ namespace PriceUpdater
             .Select(q => Observable.FromAsync(async () =>
             {
                 //throw new Exception();
-                string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-5), DateTime.UtcNow);
+                string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-20), DateTime.UtcNow);
 
                 Quote result = GetQuoteFromCandles(candles);
                 result.Id = q.Id;
@@ -149,7 +151,7 @@ namespace PriceUpdater
                 await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
 
                 return result;
-            }).Delay(TimeSpan.FromSeconds(20)))
+            }).Delay(TimeSpan.FromSeconds(5)))
             .Concat()
             .Repeat();
 
