@@ -11,9 +11,9 @@ namespace CommonLib.Objects
         public string Code { get; set; }
         public string Data { get; set; }
 
-        public DateTime LoadDate { get; set; }
+        public DateTime? LoadDate { get; set; }
 
-        public DateTime LastFinance { get; set; }
+        public DateTime? LastFinance { get; set; }
 
         public bool Processed { get; set; }
 

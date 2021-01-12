@@ -8,6 +8,6 @@ namespace xplatform.Model
     public class YahooRequest
     {
         public string Type { get; set; }
-        public string Code { get; set; }
+        public string[] Codes { get; set; }
     }
 }

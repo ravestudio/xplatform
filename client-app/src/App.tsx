@@ -9,7 +9,7 @@ import DealCreate from "./components/deals/DealCreate";
 import Portfolio from "./components/portfolio/Portfolio";
 import Financials from "./components/financials/Financials";
 import Shares from "./components/shares/2Shares";
-import ImportSecurities from "./components/import/ImportSecurities";
+import ImportSecurities from "./components/import";
 import ImgViewer from "./components/imageViewer";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
