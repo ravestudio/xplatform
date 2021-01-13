@@ -15,7 +15,8 @@ namespace CommonLib.Objects
 
         public DateTime? LastFinance { get; set; }
 
-        public bool Processed { get; set; }
+        public FinanceProcessEnum Status { get; set; }
+
 
     }
 }

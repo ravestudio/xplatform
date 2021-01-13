@@ -59,13 +59,13 @@ const columns: ColDef[] = [
     width: 200,
   },
   {
-    field: "processed",
-    headerName: "Processed",
+    field: "status",
+    headerName: "Status",
     width: 100,
     cellClassName: (params: CellClassParams) =>
       clsx("super-app", {
-        negative: (params.value as boolean) === false,
-        positive: (params.value as boolean) === true,
+        negative: params.value && (params.value as string) !== "Processed",
+        positive: (params.value as string) === "Processed",
       }),
   },
 ];

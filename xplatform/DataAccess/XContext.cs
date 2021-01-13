@@ -135,10 +135,10 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<YahooFinanceRaw>().HasKey(y => y.Id);
             modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Id).HasColumnName("Id");
             modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Code).HasColumnName("Code").IsRequired();
-            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Data).HasColumnName("Data").IsRequired();
-            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.LoadDate).HasColumnName("LoadDate").IsRequired();
-            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.LastFinance).HasColumnName("LastFinance").IsRequired();
-            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Processed).HasColumnName("Processed").IsRequired();
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Data).HasColumnName("Data");
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.LoadDate).HasColumnName("LoadDate");
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.LastFinance).HasColumnName("LastFinance");
+            modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Status).HasColumnName("Status");
             modelBuilder.Entity<YahooFinanceRaw>().ToTable("YahooFinanceRawSet");
 
             modelBuilder.Entity<FinanceAnnual>().HasKey(y => y.Id);

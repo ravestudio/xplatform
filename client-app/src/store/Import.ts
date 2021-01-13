@@ -31,7 +31,7 @@ export interface YahooFinancial {
   name: string;
   loadDate?: Date;
   lastFinance?: Date;
-  processed: boolean;
+  status: string;
 }
 
 interface RequestDataAction {
@@ -96,7 +96,7 @@ export const actionCreators = {
       fetch(`/api/Yahoo`, {
         method: "POST",
         body: JSON.stringify({
-          Type: "financial",
+          Type: "init",
           Codes: isin,
         }),
         headers: {

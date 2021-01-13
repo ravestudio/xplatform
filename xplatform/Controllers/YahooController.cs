@@ -38,13 +38,13 @@ namespace xplatform.Controllers
                             name = emitent.Name,
                             loadDate = p.LoadDate,
                             lastFinance = p.LastFinance,
-                            processed = p.Processed
+                            status = p.Status
                         };
 
 
             var list = first.ToList().GroupBy(x => x.code)
                .SelectMany(g =>
-                   g.Select((j, i) => new { j.code, j.name, j.loadDate, j.lastFinance, j.processed, rn = i + 1 })
+                   g.Select((j, i) => new { j.code, j.name, j.loadDate, j.lastFinance, status = j.status > 0 ? j.status.ToString() : null, rn = i + 1 })
                ).Where(r => r.rn == 1);
 
 
@@ -86,7 +86,7 @@ namespace xplatform.Controllers
             {
                 foreach (string code in request.Codes)
                 {
-                    var raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Processed == false);
+                    var raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Loaded);
 
                     JObject obj = JObject.Parse(raw.Data);
 
@@ -122,7 +122,7 @@ namespace xplatform.Controllers
                         }
                     }
 
-                    raw.Processed = true;
+                    raw.Status = FinanceProcessEnum.Processed;
                     _context.SaveChanges();
                 }
             }
@@ -148,19 +148,31 @@ namespace xplatform.Controllers
 
                     System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
 
-                    _context.YahooFinanceRawSet.Add(new CommonLib.Objects.YahooFinanceRaw()
-                    {
-                        Id = Guid.NewGuid(),
-                        Data = resp,
-                        LoadDate = DateTime.Now,
-                        Processed = false,
-                        Code = code,
-                        LastFinance = dateTime.AddSeconds(max_timestamp)
-                    });
+                    var raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Init);
+
+                    raw.Data = resp;
+                    raw.LoadDate = DateTime.Now;
+                    raw.Status = FinanceProcessEnum.Loaded;
+                    raw.LastFinance = dateTime.AddSeconds(max_timestamp);
 
                     _context.SaveChanges();
                 }
 
+            }
+
+            if (request.Type == "init")
+            {
+                foreach (string code in request.Codes)
+                {
+                    _context.YahooFinanceRawSet.Add(new CommonLib.Objects.YahooFinanceRaw()
+                    {
+                        Id = Guid.NewGuid(),
+                        Status = FinanceProcessEnum.Init,
+                        Code = code,
+                    });
+                }
+
+                _context.SaveChanges();
             }
 
 
