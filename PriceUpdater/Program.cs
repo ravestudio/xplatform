@@ -40,7 +40,7 @@ namespace PriceUpdater
                 string env = hostContext.HostingEnvironment.EnvironmentName;
                 services.AddSingleton<ILogger>(provider => { return Log.Logger; });
                 // Add your services with depedency injection.
-                //services.AddHostedService<PriceHostedService>();
+                services.AddHostedService<PriceHostedService>();
                 services.AddHostedService<FinanceHostedService>();
             }).UseSerilog();
 
