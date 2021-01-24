@@ -14,6 +14,7 @@ namespace xplatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PortfolioController : ControllerBase
     {
         private readonly XContext _context;
@@ -39,7 +40,8 @@ namespace xplatform.Controllers
                 account = a.Key,
                 limit = pos.Value.Sum(p => p.Limit),
                 code = pos.Key
-            }).GroupBy(v => new { v.code }).Select(g => new {
+            }).GroupBy(v => new { v.code }).Select(g => new
+            {
                 code = g.Key.code,
                 limit = g.Sum(p => p.limit)
             }).ToList();

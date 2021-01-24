@@ -16,6 +16,7 @@ namespace xplatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SecurityRawController : ControllerBase
     {
         private readonly XContext _context;

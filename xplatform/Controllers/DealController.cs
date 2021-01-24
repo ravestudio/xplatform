@@ -11,6 +11,7 @@ namespace xplatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DealController : ControllerBase
     {
         private readonly XContext _context;
@@ -44,7 +45,7 @@ namespace xplatform.Controllers
             {
                 deals = _context.DealSet.OrderBy(d => d.Number).ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

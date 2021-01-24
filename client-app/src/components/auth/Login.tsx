@@ -1,10 +1,10 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 import { Field, change, reduxForm, formValueSelector } from "redux-form";
-
-interface LoginProps {
-  open: boolean;
-}
+import { ApplicationState } from "../../store";
+import * as AuthStore from "../../store/Auth";
 
 interface TFProps {
   label: any;
@@ -30,12 +30,14 @@ const renderTextField: React.FC<TFProps> = (props) => {
   );
 };
 
-export default reduxForm({
+type AuthProps = AuthStore.AuthState & typeof AuthStore.actionCreators;
+
+const LoginForm = reduxForm({
   // a unique name for the form
   form: "authForm",
-})(() => {
+})((props: any) => {
   return (
-    <form>
+    <form onSubmit={props.handleSubmit}>
       <Field
         fullWidth
         name="userName"
@@ -49,6 +51,27 @@ export default reduxForm({
         component={renderTextField}
         label="Password"
       />
+
+      <div>
+        <button type="submit">Submit</button>
+      </div>
     </form>
   );
 });
+
+const Login = (props: AuthProps) => {
+  const onSubmit = (values: any) => {
+    props.Login(values.userName, values.password);
+  };
+
+  return <LoginForm onSubmit={onSubmit} />;
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return bindActionCreators(AuthStore.actionCreators, dispatch);
+};
+
+export default connect(
+  (state: ApplicationState) => state.auth,
+  mapDispatchToProps
+)(Login);

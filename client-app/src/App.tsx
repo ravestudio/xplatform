@@ -16,10 +16,26 @@ import Auth from "./components/auth/Login";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import ruLocale from "date-fns/locale/ru";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { ApplicationState } from "./store";
 
-export default () => (
+export default connect((state: ApplicationState) => ({
+  loggedIn: state.auth?.token !== undefined,
+}))((props: { loggedIn: boolean }) => (
   <Layout>
     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+      {props.loggedIn && (
+        <div>
+          <div>
+            <Link to={"/"}>Home</Link>
+          </div>
+          <div>
+            <Link to={"portfolio"}>Portfolio</Link>
+          </div>
+        </div>
+      )}
+
       <Route exact path="/" component={Shares} />
 
       <Route path="/deals" component={Deals} />
@@ -31,4 +47,4 @@ export default () => (
       <Route path="/auth" component={Auth} />
     </MuiPickersUtilsProvider>
   </Layout>
-);
+));

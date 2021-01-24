@@ -13,6 +13,7 @@ namespace xplatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PositionController : ControllerBase
     {
         private readonly XContext _context;
