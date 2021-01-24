@@ -15,7 +15,7 @@ namespace xplatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class YahooController : ControllerBase
     {
         private readonly XContext _context;
@@ -25,6 +25,7 @@ namespace xplatform.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IEnumerable<object> Get()
         {
 
@@ -80,6 +81,7 @@ namespace xplatform.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] YahooRequest request)
         {
 
