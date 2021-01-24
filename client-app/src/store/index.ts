@@ -5,6 +5,7 @@ import * as Portfolio from "./Portfolio";
 import * as Financials from "./Financials";
 import * as Shares from "./Shares";
 import * as Import from "./Import";
+import * as Auth from "./Auth";
 import * as Form from "./Form";
 
 export interface ApplicationState {
@@ -15,6 +16,7 @@ export interface ApplicationState {
   financials: Financials.FinancialsState | undefined;
   shares: Shares.SharesState | undefined;
   import: Import.ImportState | undefined;
+  auth: Auth.AuthState | undefined;
 }
 
 export const reducers = {
@@ -25,6 +27,7 @@ export const reducers = {
   financials: Financials.reducer,
   shares: Shares.reducer,
   import: Import.reducer,
+  auth: Auth.reducer,
   form: Form.reducer,
 };
 

@@ -87,8 +87,6 @@ export default (props: { children?: React.ReactNode }) => {
     <div className={styles.root}>
       <Header />
 
-      <Login open={false} />
-
       <Container maxWidth="md">
         <div className={styles.toolbar} />
         {props.children}

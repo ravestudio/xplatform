@@ -1,7 +1,5 @@
-import { DateType } from "@date-io/type";
-import { Refresh } from "@material-ui/icons";
 import { Action, Reducer } from "redux";
-import { isTemplateExpression } from "typescript";
+
 import { AppThunkAction } from "./";
 
 import { parseISO } from "date-fns";

@@ -11,6 +11,7 @@ import Financials from "./components/financials/Financials";
 import Shares from "./components/shares/2Shares";
 import ImportSecurities from "./components/import";
 import ImgViewer from "./components/imageViewer";
+import Auth from "./components/auth/Login";
 
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -27,6 +28,7 @@ export default () => (
       <Route path="/financials/:code?" component={Financials} />
       <Route path="/import" component={ImportSecurities} />
       <Route path="/img" component={ImgViewer} />
+      <Route path="/auth" component={Auth} />
     </MuiPickersUtilsProvider>
   </Layout>
 );
