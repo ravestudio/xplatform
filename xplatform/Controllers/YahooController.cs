@@ -25,7 +25,6 @@ namespace xplatform.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public IEnumerable<object> Get()
         {
 
@@ -81,7 +80,6 @@ namespace xplatform.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Post([FromBody] YahooRequest request)
         {
 

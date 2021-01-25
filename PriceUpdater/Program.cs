@@ -41,7 +41,7 @@ namespace PriceUpdater
                 services.AddSingleton<ILogger>(provider => { return Log.Logger; });
                 // Add your services with depedency injection.
                 services.AddHostedService<PriceHostedService>();
-                //services.AddHostedService<FinanceHostedService>();
+                services.AddHostedService<FinanceHostedService>();
             }).UseSerilog();
 
             await hostBuilder.RunConsoleAsync();
