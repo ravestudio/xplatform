@@ -64,9 +64,15 @@ namespace PriceUpdater
 
                 JToken[] candles = null;
 
+                if (obj["payload"]["candles"].Count() < 2)
+                {
+                    return null;
+                }
+
                 candles = obj["payload"]["candles"]
                 .OrderByDescending(t => (DateTime)t["time"])
                 .Take(2).ToArray();
+
 
                 return new Quote()
                 {
@@ -141,14 +147,18 @@ namespace PriceUpdater
                 string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-20), DateTime.UtcNow);
 
                 Quote result = GetQuoteFromCandles(candles);
-                result.Id = q.Id;
-                result.symbol = q.symbol;
-                result.Board = q.Board;
 
-                //post quote to server
-                string content = JObject.FromObject(result).ToString();
-                HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-                await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                if (result != null)
+                {
+                    result.Id = q.Id;
+                    result.symbol = q.symbol;
+                    result.Board = q.Board;
+
+                    //post quote to server
+                    string content = JObject.FromObject(result).ToString();
+                    HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                }
 
                 return result;
             }).Delay(TimeSpan.FromSeconds(5)))
