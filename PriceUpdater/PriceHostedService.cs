@@ -131,6 +131,7 @@ namespace PriceUpdater
                 var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
                 .Where(q => securityCodes.Contains(q.symbol))
                 .OrderBy(q => q.symbol);
+                //.OrderBy(q => q.lastUpdate);
 
                 foreach (Quote quote in quoteList)
                 {
@@ -158,6 +159,14 @@ namespace PriceUpdater
                     string content = JObject.FromObject(result).ToString();
                     HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
                     await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                }
+
+                if (result == null)
+                {
+                    result = new Quote()
+                    {
+                        symbol = q.symbol
+                    };
                 }
 
                 return result;
