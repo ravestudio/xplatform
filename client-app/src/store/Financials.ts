@@ -51,7 +51,7 @@ export const reducer: Reducer<FinancialsState> = (state: FinancialsState | undef
 
     switch (action.type) {
         case 'FINANCIALS_REQUEST':
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true, financials:undefined }
         case 'FINANCIALS_RECEIVE':
             return {
                 code: action.code,

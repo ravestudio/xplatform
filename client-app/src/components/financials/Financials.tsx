@@ -4,6 +4,9 @@ import { RouteComponentProps } from 'react-router';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+
 import { ApplicationState } from '../../store';
 import * as FinancialsStore from '../../store/Financials';
 
@@ -104,6 +107,41 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
     }
 
     public render() {
+
+        const options = {
+            legend: {
+              enabled: true,
+            },
+            chart: {
+              type: "column",
+            },
+            title: {
+              text: "Annual revenue and earnings",
+            },
+            xAxis: {
+                categories: this.props.financials?.years.reverse(),
+                crosshair: true
+            },
+            yAxis: {
+              title: {
+                text: "USD in thosands",
+              },
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} $</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            series: [
+              {
+                data: [],
+              },
+            ],
+          };
+
         return (
             <React.Fragment>
                 <h1>Financials</h1>
@@ -118,6 +156,20 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
 
                 <TabPanel value={this.state.activeTab} index={0}>
                     {this.renderIncomesTable()}
+
+                    <div>
+                        {this.props.financials && <HighchartsReact highcharts={Highcharts} options={{...options,
+                            series: [{
+                                name: "Revenue",
+                                color: 'rgba(66,146,40,1)',
+                                data: this.props.financials.incomeStatementHistory.reverse().map((inc: any) => inc.totalRevenue.raw / 1000)
+                            },
+                            {
+                                name: "Earnings",
+                                color: 'rgba(35,99,165,1)',
+                                data: this.props.financials.incomeStatementHistory.reverse().map((inc: any) => inc.netIncome.raw / 1000)
+                            }]}} />}
+                    </div>
                 </TabPanel>
 
                 <TabPanel value={this.state.activeTab} index={1}>
