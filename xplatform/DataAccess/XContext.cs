@@ -28,6 +28,8 @@ namespace xplatform.DataAccess
 
         public DbSet<DealRaw> DealRawSet { get; set; }
         public DbSet<SecurityRaw> SecurityRawSet { get; set; }
+        public DbSet<MarketIndex> MarketIndexSet { get; set; }
+        public DbSet<MarketIndexComponent> MarketIndexComponentSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -167,6 +169,17 @@ namespace xplatform.DataAccess
 
             modelBuilder.Entity<SecurityRaw>().HasKey(s => s.isin);
             modelBuilder.Entity<SecurityRaw>().ToTable("security_raw");
+
+            modelBuilder.Entity<MarketIndex>().HasKey(m => m.Id);
+            modelBuilder.Entity<MarketIndex>().Property(m => m.Id).HasColumnName("Id");
+            modelBuilder.Entity<MarketIndex>().Property(m => m.Name).HasColumnName("Name");
+            modelBuilder.Entity<MarketIndex>().ToTable("MarketIndexSet");
+
+            modelBuilder.Entity<MarketIndexComponent>().HasKey(mc => mc.Id);
+            modelBuilder.Entity<MarketIndexComponent>().Property(mc => mc.Id).HasColumnName("Id");
+            modelBuilder.Entity<MarketIndexComponent>().Property(mc => mc.Code).HasColumnName("Code").IsRequired();
+            modelBuilder.Entity<MarketIndexComponent>().HasOne(mc => mc.MarketIndex).WithMany(m => m.Constituents).HasForeignKey(mc => mc.MarketIndexId);
+            modelBuilder.Entity<MarketIndexComponent>().ToTable("MarketIndexComponentSet");
 
             base.OnModelCreating(modelBuilder);
         }
