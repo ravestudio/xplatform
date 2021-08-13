@@ -10,5 +10,6 @@ namespace CommonLib.Objects
         public string Name { get; set; }
 
         public ICollection<MarketIndexComponent> Constituents { get; set; }
+        public ICollection<MarketIndexChanges> Changes { get; set; }
     }
 }

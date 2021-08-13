@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using CommonLib.Objects;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
 using xplatform.Model;
 
@@ -111,6 +112,43 @@ namespace xplatform.Controllers
                     _context.SaveChanges();
                 }
 
+            }
+
+            if (requestModel.Object == "indexChanges")
+            {
+                var changes = _context.MarketIndexChangesSet.Where(i => i.Processed == false && i.Date < DateTime.Now).ToList();
+
+                foreach (MarketIndexChanges indexChanges in changes)
+                {
+                    JObject data = JObject.Parse(indexChanges.Data);
+
+                    IList<string> addition = data["addition"].Select(c => (string)c).ToList();
+                    IList<string> deletion = data["deletion"].Select(c => (string)c).ToList();
+
+                    foreach (string add in addition)
+                    {
+                        _context.MarketIndexComponentSet.Add(new MarketIndexComponent()
+                        {
+                            Id = Guid.NewGuid(),
+                            Code = add,
+                            MarketIndexId = indexChanges.MarketIndexId,
+                        });
+                    }
+
+                    foreach (string del in deletion)
+                    {
+                        var constituent = _context.MarketIndexComponentSet.SingleOrDefault(c => c.MarketIndexId == indexChanges.MarketIndexId && c.Code == del);
+
+                        if (constituent != null) {
+                            _context.MarketIndexComponentSet.Remove(constituent);
+                        }
+                    }
+
+                    indexChanges.Processed = true;
+
+                    _context.SaveChanges();
+
+                }
             }
 
             return Ok();

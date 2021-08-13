@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -9,9 +10,10 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20210813095559_addMarketChanges")]
+    partial class addMarketChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,16 +333,11 @@ namespace xplatform.Migrations
                         .HasColumnName("Date")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid?>("MarketIndexId")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("Processed")
                         .HasColumnName("Processed")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MarketIndexId");
 
                     b.ToTable("MarketIndexChangesSet");
                 });
@@ -651,13 +648,6 @@ namespace xplatform.Migrations
                         .HasForeignKey("EmitentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CommonLib.Objects.MarketIndexChanges", b =>
-                {
-                    b.HasOne("CommonLib.Objects.MarketIndex", "MarketIndex")
-                        .WithMany("Changes")
-                        .HasForeignKey("MarketIndexId");
                 });
 
             modelBuilder.Entity("CommonLib.Objects.MarketIndexComponent", b =>

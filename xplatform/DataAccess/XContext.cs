@@ -30,6 +30,7 @@ namespace xplatform.DataAccess
         public DbSet<SecurityRaw> SecurityRawSet { get; set; }
         public DbSet<MarketIndex> MarketIndexSet { get; set; }
         public DbSet<MarketIndexComponent> MarketIndexComponentSet { get; set; }
+        public DbSet<MarketIndexChanges> MarketIndexChangesSet { get; set; }
         public XContext(DbContextOptions<XContext> options) : base(options)
         {
 
@@ -180,6 +181,14 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<MarketIndexComponent>().Property(mc => mc.Code).HasColumnName("Code").IsRequired();
             modelBuilder.Entity<MarketIndexComponent>().HasOne(mc => mc.MarketIndex).WithMany(m => m.Constituents).HasForeignKey(mc => mc.MarketIndexId);
             modelBuilder.Entity<MarketIndexComponent>().ToTable("MarketIndexComponentSet");
+
+            modelBuilder.Entity<MarketIndexChanges>().HasKey(mc => mc.Id);
+            modelBuilder.Entity<MarketIndexChanges>().Property(mc => mc.Id).HasColumnName("Id");
+            modelBuilder.Entity<MarketIndexChanges>().Property(mc => mc.Date).HasColumnName("Date");
+            modelBuilder.Entity<MarketIndexChanges>().Property(mc => mc.Data).HasColumnName("Data");
+            modelBuilder.Entity<MarketIndexChanges>().HasOne(mc => mc.MarketIndex).WithMany(m => m.Changes).HasForeignKey(mc => mc.MarketIndexId);
+            modelBuilder.Entity<MarketIndexChanges>().Property(mc => mc.Processed).HasColumnName("Processed");
+            modelBuilder.Entity<MarketIndexChanges>().ToTable("MarketIndexChangesSet");
 
             base.OnModelCreating(modelBuilder);
         }
