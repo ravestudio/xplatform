@@ -36,6 +36,8 @@ namespace xplatform.Controllers
 
                     var security = _context.SecuritySet.Single(s => s.Code == rawItem.symbol);
 
+                    var market = _context.MarketRawSet.Single(m => m.symbol == rawItem.symbol && m.board == rawItem.board);
+
                     Deal deal = new Deal()
                     {
                         Number = rawItem.number,
@@ -45,7 +47,7 @@ namespace xplatform.Controllers
                         Board = rawItem.board,
                         Date = DateTime.ParseExact($"{rawItem.date} {rawItem.time}", "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                         DeliveryDate = DateTime.ParseExact(rawItem.delivery_date, "dd.MM.yyyy", CultureInfo.InvariantCulture),
-                        Count = rawItem.count,
+                        Count = rawItem.count * market.lotSize,
                         Price = rawItem.price,
                         Volume = rawItem.volume,
                         NKD = security.Market == "bonds" ? rawItem.nkd : null

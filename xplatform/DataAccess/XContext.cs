@@ -27,6 +27,7 @@ namespace xplatform.DataAccess
         public DbSet<Quote> QuoteSet { get; set; }
 
         public DbSet<DealRaw> DealRawSet { get; set; }
+        public DbSet<MarketRaw> MarketRawSet { get; set; }
         public DbSet<SecurityRaw> SecurityRawSet { get; set; }
         public DbSet<MarketIndex> MarketIndexSet { get; set; }
         public DbSet<MarketIndexComponent> MarketIndexComponentSet { get; set; }
@@ -167,6 +168,9 @@ namespace xplatform.DataAccess
 
             modelBuilder.Entity<DealRaw>().HasKey(d => new { d.number, d.board });
             modelBuilder.Entity<DealRaw>().ToTable("deal_raw");
+
+            modelBuilder.Entity<MarketRaw>().HasKey(m => new { m.symbol, m.board });
+            modelBuilder.Entity<MarketRaw>().ToTable("market_raw");
 
             modelBuilder.Entity<SecurityRaw>().HasKey(s => s.isin);
             modelBuilder.Entity<SecurityRaw>().ToTable("security_raw");
