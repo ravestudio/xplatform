@@ -170,6 +170,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<DealRaw>().ToTable("deal_raw");
 
             modelBuilder.Entity<MarketRaw>().HasKey(m => new { m.symbol, m.board });
+            modelBuilder.Entity<MarketRaw>().Property(m => m.lotSize).HasColumnName("lotsize");
             modelBuilder.Entity<MarketRaw>().ToTable("market_raw");
 
             modelBuilder.Entity<SecurityRaw>().HasKey(s => s.isin);
