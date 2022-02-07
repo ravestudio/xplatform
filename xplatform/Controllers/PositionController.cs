@@ -11,7 +11,7 @@ using xplatform.Model;
 
 namespace xplatform.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class PositionController : ControllerBase
@@ -22,7 +22,62 @@ namespace xplatform.Controllers
             _context = context;
         }
 
-        [HttpPost]
+        public IEnumerable<object> Get(int? accountId)
+        {
+            var snap = _context.SnapshootSet.OrderByDescending(s => s.ChangeDate).First();
+
+            PortfolioSnapshoot portfolioSnapshoot = new PortfolioSnapshoot();
+            portfolioSnapshoot.read(snap.Data);
+
+            var query = portfolioSnapshoot.Accounts.AsQueryable();
+
+            if (accountId.HasValue)
+            {
+                query = query.Where(a => a.Key == accountId);
+            }
+            
+
+            var ds = query.SelectMany(a => a.Value.PositionItems, (a, q) => new
+            {
+                account = a.Key,
+                code = q.Key,
+                limit = q.Value.Sum(p => p.Limit)
+            }).GroupBy(v => new { v.code }).Select(g => new
+            {
+                code = g.Key.code,
+                limit = g.Sum(p => p.limit)
+            }).ToList();
+
+            return ds;
+        }
+
+        public IEnumerable<object> GetDetails(string security, int? accountId)
+        {
+            var snap = _context.SnapshootSet.OrderByDescending(s => s.ChangeDate).First();
+
+            PortfolioSnapshoot portfolioSnapshoot = new PortfolioSnapshoot();
+            portfolioSnapshoot.read(snap.Data);
+
+            var query = portfolioSnapshoot.Accounts.AsQueryable();
+
+            if (accountId.HasValue)
+            {
+                query = query.Where(a => a.Key == accountId);
+            }
+
+            var ds = query.SelectMany(a => a.Value.PositionItems, (a, q) => q.Value.Select(t => new
+            {
+                account = a.Key,
+                code = q.Key,
+                date = t.DealDate,
+                limit = t.Limit,
+                price = t.Price
+            })).SelectMany(g => g);
+
+            return ds.Where(d => d.code == security);
+        }
+
+            [HttpPost]
         public IActionResult Post()
         {
             //calculate all
@@ -70,12 +125,12 @@ namespace xplatform.Controllers
 
             Action<PortfolioSnapshoot, Deal> increase = (snap, deal) =>
             {
-                snap.increse(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count);
+                snap.increse(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count, deal.Price);
             };
 
             Action<PortfolioSnapshoot, Deal> decrease = (snap, deal) =>
             {
-                snap.decrease(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count);
+                snap.decrease(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count, deal.Price);
             };
 
             var deals = _context.DealSet.Include(d => d.security)

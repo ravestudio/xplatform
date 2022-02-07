@@ -14,7 +14,7 @@ namespace xplatform.Model
         }
         public IDictionary<int, SnapshotAccount> Accounts { get; set; }
 
-        public void increse(int account, string security, DateTime dealDate, int limit)
+        public void increse(int account, string security, DateTime dealDate, int limit, decimal price)
         {
             if (!this.Accounts.ContainsKey(account))
             {
@@ -48,13 +48,14 @@ namespace xplatform.Model
                 this.Accounts[account].PositionItems[security].Enqueue(new PositionItem()
                 {
                     DealDate = dealDate,
-                    Limit = limit
+                    Limit = limit,
+                    Price = price
                 });
             }
 
         }
 
-        public void decrease(int account, string security, DateTime dealDate, int limit)
+        public void decrease(int account, string security, DateTime dealDate, int limit, decimal price)
         {
             if (!this.Accounts.ContainsKey(account))
             {
@@ -88,10 +89,33 @@ namespace xplatform.Model
                 this.Accounts[account].PositionItems[security].Enqueue(new PositionItem()
                 {
                     DealDate = dealDate,
-                    Limit = limit * (-1)
+                    Limit = limit * (-1),
+                    Price = price
                 });
             }
         }
+
+        private IEnumerable<IGrouping<int, PositionItem>> getGroups(IList<PositionItem> items)
+        {
+            
+            for (int i = 0; i < items.Count - 1; i++)
+            {
+                var curr = items[i];
+                var next = items[i + 1];
+
+                if (curr.DealDate == next.DealDate && curr.Price == next.Price)
+                {
+                    next.v = curr.v;
+                }
+
+                if (curr.DealDate != next.DealDate || curr.Price != next.Price)
+                {
+                    next.v = curr.v + 1;
+                }
+            }
+
+            return items.GroupBy(i => i.v);
+        } 
 
         public string toJson()
         {
@@ -105,12 +129,14 @@ namespace xplatform.Model
                 {
                     accountId,
                     positions = this.Accounts[accountId].PositionItems.Keys
-                    .SelectMany(sec => this.Accounts[accountId].PositionItems[sec].GroupBy(i => i.DealDate), (sec, gr) =>
-                        new {
-                            security = sec,
-                            date = gr.First().DealDate,
-                            limit = gr.Sum(p => p.Limit)
-                        })
+                    .SelectMany(sec => 
+                         getGroups(this.Accounts[accountId].PositionItems[sec].ToList()), (sec, gr) =>
+                            new {
+                                security = sec,
+                                date = gr.First().DealDate,
+                                limit = gr.Sum(p => p.Limit),
+                                price = gr.First().Price
+                            })
                 });
 
                 accountArr.Add(accountObj);
@@ -144,13 +170,15 @@ namespace xplatform.Model
             {
                 security = (string)i["security"],
                 date = (DateTime)i["date"],
-                limit = (int)i["limit"]
+                limit = (int)i["limit"],
+                price = (decimal)i["price"]
             }).GroupBy(p => p.security)
             .Select(g => new KeyValuePair<string, Queue<PositionItem>>(g.Key, new Queue<PositionItem>(g.Select(gi =>
             new PositionItem()
             {
                 DealDate = gi.date,
-                Limit = gi.limit
+                Limit = gi.limit,
+                Price = gi.price
             }).OrderBy(p => p.DealDate)
             ))));
         }

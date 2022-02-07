@@ -10,5 +10,9 @@ namespace xplatform.Model
         public DateTime DealDate { get; set; }
         public int Limit { get; set; }
 
+        public decimal Price { get; set; }
+
+        public int v { get; set; }
+
     }
 }

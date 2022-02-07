@@ -7,6 +7,7 @@ import Emitents from "./components/emitents/Emitents";
 import Deals from "./components/deals/Deals";
 import DealCreate from "./components/deals/DealCreate";
 import Portfolio from "./components/portfolio/Portfolio";
+import Positions from "./components/positions/Positions";
 import Financials from "./components/financials/Financials";
 import Shares from "./components/shares/2Shares";
 import ImportSecurities from "./components/import";
@@ -41,6 +42,7 @@ export default connect((state: ApplicationState) => ({
       <Route path="/deals" component={Deals} />
       <Route path="/createDeal" component={DealCreate} />
       <Route path="/portfolio" component={Portfolio} />
+      <Route path="/positions" component={Positions} />
       <Route path="/financials/:code?" component={Financials} />
       <Route path="/import" component={ImportSecurities} />
       <Route path="/img" component={ImgViewer} />

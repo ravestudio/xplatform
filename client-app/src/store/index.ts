@@ -7,12 +7,14 @@ import * as Shares from "./Shares";
 import * as Import from "./Import";
 import * as Auth from "./Auth";
 import * as Form from "./Form";
+import * as Positions from "./Positions";
 
 export interface ApplicationState {
   securities: Securities.SecuritiesState | undefined;
   deals: Deals.DealsState | undefined;
   accounts: Accounts.AccountsState | undefined;
   portfolio: Portfolio.PortfolioState | undefined;
+  positions: Positions.PositionsState | undefined;
   financials: Financials.FinancialsState | undefined;
   shares: Shares.SharesState | undefined;
   import: Import.ImportState | undefined;
@@ -24,6 +26,7 @@ export const reducers = {
   deals: Deals.reducer,
   accounts: Accounts.reducer,
   portfolio: Portfolio.reducer,
+  positions: Positions.reducer,
   financials: Financials.reducer,
   shares: Shares.reducer,
   import: Import.reducer,
