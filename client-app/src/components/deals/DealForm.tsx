@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Field, change, reduxForm, formValueSelector } from "redux-form";
 import { connect } from "react-redux";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 import {
   Button,
   TextField,
@@ -11,23 +11,23 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@material-ui/core";
-import { green, red } from "@material-ui/core/colors";
-import Radio, { RadioProps } from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
+} from "@mui/material";
+import { green, red } from "@mui/material/colors";
+import Radio, { RadioProps } from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import {
   createStyles,
   makeStyles,
   Theme,
   withStyles,
-} from "@material-ui/core/styles";
+} from "@mui/material/styles";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import { ApplicationState } from "../../store";
 import { SecuritiesState, Security, Share, Bond } from "../../store/Securities";
 
 import NumberFormat from "react-number-format";
 
-import {renderTextField} from "xplatform-controls"
+import { renderTextField } from "xplatform-controls";
 
 interface NumberFormatCustomProps {
   inputRef: (instance: NumberFormat | null) => void;
@@ -88,8 +88,6 @@ const RedRadio = withStyles({
   },
   checked: {},
 })((props: RadioProps) => <Radio color="default" {...props} />);
-
-
 
 interface SelectProps {
   label: any;

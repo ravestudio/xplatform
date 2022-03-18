@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router";
+import { Route } from "react-router";
 import logo from "./logo.svg";
 import "./App.css";
 import Layout from "./components/blocks/2Layout";
@@ -14,9 +14,8 @@ import ImportSecurities from "./components/import";
 import ImgViewer from "./components/imageViewer";
 import Auth from "./components/auth/Login";
 
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import ruLocale from "date-fns/locale/ru";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateAdapter from "@mui/lab/AdapterDateFns";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ApplicationState } from "./store";
@@ -25,7 +24,7 @@ export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
 }))((props: { loggedIn: boolean }) => (
   <Layout>
-    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
+    <LocalizationProvider dateAdapter={DateAdapter}>
       {props.loggedIn && (
         <div>
           <div>
@@ -47,6 +46,6 @@ export default connect((state: ApplicationState) => ({
       <Route path="/import" component={ImportSecurities} />
       <Route path="/img" component={ImgViewer} />
       <Route path="/auth" component={Auth} />
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   </Layout>
 ));

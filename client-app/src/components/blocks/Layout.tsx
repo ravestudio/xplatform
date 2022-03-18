@@ -1,11 +1,11 @@
 import * as React from "react";
 import Header from "./Header";
-import Container from "@material-ui/core/Container";
+import Container from "@mui/material/Container";
 
 import Login from "../auth/Login";
 import InfoBlock from "./InfoBlock";
 
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
+import { createStyles, Theme, makeStyles } from "@mui/material/styles";
 
 const drawerWidth = 240;
 

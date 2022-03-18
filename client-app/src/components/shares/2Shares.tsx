@@ -1,21 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 
 import { Link } from "react-router-dom";
 
-import {
-  createStyles,
-  Theme,
-  WithStyles,
-  withStyles,
-} from "@material-ui/core/styles";
+import { createStyles, Theme, withStyles, WithStyles } from "@mui/styles";
 
 import { ApplicationState } from "../../store";
 import * as SharesStore from "../../store/Shares";
 
-import withWidth, { WithWidthProps } from "@material-ui/core/withWidth";
+import withWidth, { WithWidthProps } from "@mui/material";
 
 import Dropdown from "../dropdown";
 

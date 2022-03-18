@@ -8,14 +8,9 @@ import {
   Theme,
   withStyles,
   WithStyles,
-} from "@material-ui/core";
+} from "@mui/material";
 
-import {
-  CellClassParams,
-  ColDef,
-  DataGrid,
-  SelectionChangeParams,
-} from "@material-ui/data-grid";
+import { CellClassParams, ColDef, DataGrid, SelectionChangeParams } from "@mui";
 
 import * as ImportStore from "../../store/Import";
 

@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -15,7 +15,7 @@ import {
   Theme,
   WithStyles,
   withStyles,
-} from "@material-ui/core/styles";
+} from "@mui/material/styles";
 
 import NumberFormat from "react-number-format";
 import { compose } from "recompose";

@@ -1,4 +1,4 @@
-import { ArrowDropDown } from "@material-ui/icons";
+import { ArrowDropDown } from "@mui/icons-material/icons";
 import React, { useState, useRef, useEffect } from "react";
 import "./dropdown.css";
 

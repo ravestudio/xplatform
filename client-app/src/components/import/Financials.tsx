@@ -8,7 +8,7 @@ import {
   Theme,
   withStyles,
   WithStyles,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import {
   CellClassParams,
