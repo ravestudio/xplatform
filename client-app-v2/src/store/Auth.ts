@@ -17,26 +17,20 @@ interface ReceiveLoginAction {
 
 type KnownAction = LoginAction | ReceiveLoginAction;
 
+export const login = (username: string, password: string) =>
+  fetch(`/api/Users/Authenticate`, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json());
+
 export const actionCreators = {
-  Login: (username: string, password: string): AppThunkAction<KnownAction> => (
-    dispatch,
-    getState
-  ) => {
-    fetch(`/api/Users/Authenticate`, {
-      method: "POST",
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((payload) => {
-        dispatch({ type: "AUTH/LOGIN_RECEIVE", payload });
-      });
-  },
+  SetToken: (payload: any) => ({ type: "AUTH/LOGIN_RECEIVE", payload }),
 };
 
 const unloadedState: AuthState = {};
