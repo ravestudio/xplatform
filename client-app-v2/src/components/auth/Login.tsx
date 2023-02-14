@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Form, ISubmitResult, IValues } from "../form";
+import { Form, ISubmitResult, IValues, minLength, required } from "../form";
 import { ApplicationState } from "../../store";
 import * as AuthStore from "../../store/Auth";
 import { login } from "../../store/Auth";
@@ -24,6 +24,10 @@ const Login: React.FC<AuthProps> = (props: AuthProps) => {
   return (
     <Form
       defaultValues={{ userName: "", password: "" }}
+      validationRules={{
+        userName: { validator: required },
+        password: [{ validator: required }],
+      }}
       onSubmit={handleSubmit}
     >
       <Form.Field name="userName" label="User Name" />

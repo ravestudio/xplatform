@@ -1,0 +1,10 @@
+[Unit]
+Description=priceupdater
+
+[Service]
+WorkingDirectory=/home/pi/srv/priceupdater
+ExecStart=/home/pi/.dotnet/dotnet /home/pi/srv/priceupdater/app/PriceUpdater.dll
+User=pi
+
+[Install]
+WantedBy=multi-user.target

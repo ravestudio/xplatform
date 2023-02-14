@@ -16,7 +16,20 @@ namespace xplatform
     {
         public static void Main(string[] args)
         {
-            string logPath = Environment.GetEnvironmentVariable("logPath");
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            Console.WriteLine(environmentName);
+
+            // build config
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false)
+                .AddJsonFile($"appsettings.{environmentName}.json", true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            string logPath = configuration.GetSection("logPath").Value;
+
             string logFile = Path.Combine(logPath, "xplatform.txt");
 
             Log.Logger = new LoggerConfiguration()

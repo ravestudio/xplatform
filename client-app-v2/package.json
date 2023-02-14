@@ -2,7 +2,7 @@
   "name": "client-app-v2",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://xplatform.net/",
+  "proxy": "http://192.168.0.10/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.7.2",
     "@testing-library/jest-dom": "^4.2.4",

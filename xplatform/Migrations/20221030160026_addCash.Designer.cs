@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -9,9 +10,10 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20221030160026_addCash")]
+    partial class addCash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -391,38 +393,6 @@ namespace xplatform.Migrations
                     b.ToTable("market_raw");
                 });
 
-            modelBuilder.Entity("CommonLib.Objects.Portfolio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnName("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PortfolioSet");
-                });
-
-            modelBuilder.Entity("CommonLib.Objects.PortfolioAccounts", b =>
-                {
-                    b.Property<int?>("AccountId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("PortfolioId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AccountId", "PortfolioId");
-
-                    b.HasIndex("PortfolioId");
-
-                    b.ToTable("PortfolioAccounts");
-                });
-
             modelBuilder.Entity("CommonLib.Objects.Position", b =>
                 {
                     b.Property<int>("Id")
@@ -721,21 +691,6 @@ namespace xplatform.Migrations
                     b.HasOne("CommonLib.Objects.MarketIndex", "MarketIndex")
                         .WithMany("Constituents")
                         .HasForeignKey("MarketIndexId");
-                });
-
-            modelBuilder.Entity("CommonLib.Objects.PortfolioAccounts", b =>
-                {
-                    b.HasOne("CommonLib.Objects.Account", "Account")
-                        .WithMany("PortfolioAccounts")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CommonLib.Objects.Portfolio", "Portfolio")
-                        .WithMany("PortfolioAccounts")
-                        .HasForeignKey("PortfolioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CommonLib.Objects.Position", b =>

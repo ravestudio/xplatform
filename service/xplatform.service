@@ -1,0 +1,10 @@
+[Unit]
+Description=xplatform
+
+[Service]
+WorkingDirectory=/home/pi/srv/xplatform
+ExecStart=/home/pi/.dotnet/dotnet /home/pi/srv/xplatform/app/xplatform.dll
+User=pi
+
+[Install]
+WantedBy=multi-user.target

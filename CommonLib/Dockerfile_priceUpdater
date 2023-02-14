@@ -1,0 +1,28 @@
+﻿FROM mcr.microsoft.com/dotnet/core/sdk:3.1.101 AS build-env
+
+WORKDIR /sln
+
+# copy solution
+COPY *.sln .
+
+
+# Copy csproj and restore as distinct layers
+COPY client/*.csproj ./client/
+COPY PriceUpdater/*.csproj ./PriceUpdater/
+COPY CommonLib/*.csproj ./CommonLib/
+COPY xplatform/*.csproj ./xplatform/
+RUN dotnet restore
+
+# Copy everything else and build
+COPY client/. ./client/
+COPY PriceUpdater/. ./PriceUpdater/
+COPY CommonLib/. ./CommonLib/
+COPY xplatform/. ./xplatform/
+WORKDIR /sln/PriceUpdater
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS runtime
+WORKDIR /app
+COPY --from=build-env /sln/PriceUpdater/out ./
+ENTRYPOINT ["dotnet", "PriceUpdater.dll"]

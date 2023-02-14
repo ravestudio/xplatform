@@ -18,6 +18,8 @@ namespace xplatform.DataAccess
         public DbSet<ETF> ETFSet { get; set; }
         public DbSet<Deal> DealSet { get; set; }
         public DbSet<Account> AccountSet { get; set; }
+
+        public DbSet<Portfolio> PortfolioSet { get; set; }
         public DbSet<SnapshootData> SnapshootSet { get; set; }
 
         public DbSet<YahooFinanceRaw> YahooFinanceRawSet { get; set; }
@@ -43,7 +45,23 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Account>().Property(a => a.Id).HasColumnName("Id");
             modelBuilder.Entity<Account>().Property(a => a.Name).HasColumnName("Name");
             modelBuilder.Entity<Account>().Property(a => a.Client).HasColumnName("Client");
+            modelBuilder.Entity<Account>().Property(a => a.Cash).HasColumnName("Cash");
             modelBuilder.Entity<Account>().ToTable("AccountSet");
+
+            modelBuilder.Entity<Portfolio>().HasKey(a => a.Id);
+            modelBuilder.Entity<Portfolio>().Property(a => a.Id).HasColumnName("Id");
+            modelBuilder.Entity<Portfolio>().Property(a => a.Name).HasColumnName("Name");
+            modelBuilder.Entity<Portfolio>().ToTable("PortfolioSet");
+
+            modelBuilder.Entity<PortfolioAccounts>().HasKey(pa => new { pa.AccountId, pa.PortfolioId });
+
+            modelBuilder.Entity<PortfolioAccounts>().HasOne(pa => pa.Account)
+                .WithMany(a => a.PortfolioAccounts)
+                .HasForeignKey(pa => pa.AccountId);
+
+            modelBuilder.Entity<PortfolioAccounts>().HasOne(pa => pa.Portfolio)
+                .WithMany(p => p.PortfolioAccounts)
+                .HasForeignKey(pa => pa.PortfolioId);
 
             modelBuilder.Entity<Emitent>().HasKey(e => e.Id);
             modelBuilder.Entity<Emitent>().Property(e => e.Id).HasColumnName("Id");

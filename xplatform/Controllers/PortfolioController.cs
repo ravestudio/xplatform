@@ -6,13 +6,14 @@ using CommonLib.ISS;
 using CommonLib.Objects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
 using xplatform.Model;
 
 namespace xplatform.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class PortfolioController : ControllerBase
@@ -23,7 +24,12 @@ namespace xplatform.Controllers
             _context = context;
         }
 
-        public PortfolioCost Get()
+        public IEnumerable<Portfolio> GetPortfolioList()
+        {
+            return _context.PortfolioSet.ToList();
+        }
+
+        public PortfolioCost Get(int portfolioId)
         {
             PortfolioCost result = new PortfolioCost();
 
@@ -31,10 +37,14 @@ namespace xplatform.Controllers
 
             var snap = _context.SnapshootSet.OrderByDescending(s => s.ChangeDate).First();
 
+            var accountIds = _context.PortfolioSet.Where(p => p.Id == portfolioId).SelectMany(p => p.PortfolioAccounts, (p, acc) => acc.AccountId);
+
+            var accounts = _context.AccountSet.Where(a => accountIds.Contains(a.Id)).ToList();
+
             PortfolioSnapshoot portfolioSnapshoot = new PortfolioSnapshoot();
             portfolioSnapshoot.read(snap.Data);
 
-            var ds = portfolioSnapshoot.Accounts.SelectMany(a => a.Value.PositionItems, (a, pos) =>
+            var ds = portfolioSnapshoot.Accounts.Where(a => accountIds.Contains(a.Key)).SelectMany(a => a.Value.PositionItems, (a, pos) =>
             new
             {
                 account = a.Key,
@@ -89,6 +99,12 @@ namespace xplatform.Controllers
 
                 result.SharesTotal += stockCost;
                 result.BondsTotal += bondCost;
+            }
+
+            foreach(Account account in accounts)
+            {
+                var cash = JObject.Parse(account.Cash);
+                result.BondsTotal += cash.Value<decimal>("RUB");
             }
 
             result.SharesPerc = Math.Round(result.SharesTotal / (result.SharesTotal + result.BondsTotal) * 100, 2);

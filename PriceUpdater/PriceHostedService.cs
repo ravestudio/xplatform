@@ -45,12 +45,13 @@ namespace PriceUpdater
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            string apiUrl = "http://dockerapi:80/api";
+            //string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
             //string apiUrl = "http://localhost:5000/api";
+            string apiUrl = "http://192.168.0.10/api";
 
             var apiClient = new CommonLib.WebApiClient();
-            apiClient.addHeader("Authorization", "Bearer t.FwRjwQy5LHo3uXE0iQ6D4VGVFRvccr1_PItEHgLIOt4sc7QkQkBzd_eDACB0TTfnBBOWi_mtg84cPbvKwD4gpQ");
+            apiClient.addHeader("Authorization", "Bearer t.hAFDFeeTzLR_tlTz9H7S406ecutXFe21HljCDGf7sm_DRIYTDesfGlkS5P5ohNcZ_0tZUwHKgdhvMXhoRO0iYw");
             CommonLib.Tinkoff.TinkoffClient _tinkoffClient = new CommonLib.Tinkoff.TinkoffClient(apiClient);
 
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
@@ -184,7 +185,8 @@ namespace PriceUpdater
                 var securityCodes = securityObj.Select(s => s.Code);
                 var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
                 .Where(q => securityCodes.Contains(q.symbol))
-                .OrderBy(q => q.symbol);
+                //.OrderBy(q => q.symbol);
+                .OrderBy(q => q.lastUpdate);
 
                 foreach (Quote quote in quoteList)
                 {
@@ -250,7 +252,7 @@ namespace PriceUpdater
                     activate(proc);
                 });
 
-            activate("usaPriceUpdater");
+            //activate("usaPriceUpdater");
             activate("moscowPriceUpdater");
 
             return Task.CompletedTask;
