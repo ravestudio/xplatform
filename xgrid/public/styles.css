@@ -1,0 +1,64 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  color: #333;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.toolbar {
+  background: #1e4762;
+  height: 56px;
+  color: beige;
+}
+
+.drawer {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.drawer-wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+}
+
+.drawer-panel {
+  background-color: #105b9d;
+  color: beige;
+  width: 100px;
+}
+
+.drawer-content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.layout-menu {
+  background-color: #26628b;
+  height: 20px;
+  color: beige;
+}
