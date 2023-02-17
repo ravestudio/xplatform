@@ -1,5 +1,4 @@
 import React from "react";
-import { ICellRendererParams } from "ag-grid-community";
 export interface WithMockCellEditorProps {
     isMockEditing: boolean;
 }

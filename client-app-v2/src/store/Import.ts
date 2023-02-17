@@ -8,8 +8,23 @@ export interface ImportState {
   isLoading: boolean;
   importType?: string;
 
+  deals: Deal[];
   securities: Security[];
   yahooFinancials: YahooFinancial[];
+}
+
+export interface Deal {
+  number: number;
+  board: string;
+  symbol: string;
+  operation: string;
+  date: string;
+  delivery_date: string;
+  price: number;
+  count: number;
+  volume: number;
+  nkd: number;
+  client: string;
 }
 
 export interface Security {
@@ -46,83 +61,130 @@ interface ReceiveDataAction {
 type KnownAction = RequestDataAction | ReceiveDataAction;
 
 export const actionCreators = {
-  RequestDataAction: (importType: string): AppThunkAction<KnownAction> => (
-    dispatch,
-    getState
-  ) => {
-    const appState = getState();
+  RequestDataAction:
+    (importType: string): AppThunkAction<KnownAction> =>
+    (dispatch, getState) => {
+      const appState = getState();
 
-    if (importType == "stock") {
-      fetch(`/api/SecurityRaw`)
-        .then((response) => response.json())
-        .then((payload) => {
-          dispatch({ type: "IMPORT/DATA_RECEIVE", importType, payload });
+      if (importType === "stock") {
+        fetch(`/api/SecurityRaw`, {
+          headers: {
+            Authorization: appState.auth?.token as string,
+          },
+        })
+          .then((response) => response.json())
+          .then((payload) => {
+            dispatch({ type: "IMPORT/DATA_RECEIVE", importType, payload });
+          });
+      }
+
+      if (importType === "deal") {
+        fetch(`/api/dealRaw`, {
+          headers: {
+            Authorization: appState.auth?.token as string,
+          },
+        })
+          .then((response) => response.json())
+          .then((payload) => {
+            dispatch({ type: "IMPORT/DATA_RECEIVE", importType, payload });
+          });
+      }
+
+      if (importType === "financial") {
+        fetch(`/api/Yahoo`)
+          .then((response) => response.json())
+          .then((payload) => {
+            dispatch({ type: "IMPORT/DATA_RECEIVE", importType, payload });
+          });
+      }
+
+      dispatch({ type: "IMPORT/DATA_REQUEST", importType });
+    },
+
+  ImportDataAction:
+    (importType: string, isin: string[]): AppThunkAction<KnownAction> =>
+    (dispatch, getState) => {
+      const appState = getState();
+
+      if (importType === "stock") {
+        fetch(`/api/Import`, {
+          method: "POST",
+          body: JSON.stringify({
+            object: "stock",
+            isin,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((response) => {
+          console.log(response.status);
         });
-    }
+      }
 
-    if (importType == "financial") {
-      fetch(`/api/Yahoo`)
-        .then((response) => response.json())
-        .then((payload) => {
-          dispatch({ type: "IMPORT/DATA_RECEIVE", importType, payload });
+      if (importType === "deal") {
+        fetch(`/api/Import`, {
+          method: "POST",
+          body: JSON.stringify({
+            object: "deal",
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: appState.auth?.token as string,
+          },
+        }).then((response) => {
+          console.log(response.status);
         });
-    }
+      }
 
-    dispatch({ type: "IMPORT/DATA_REQUEST", importType });
-  },
+      if (importType === "financial") {
+        fetch(`/api/Yahoo`, {
+          method: "POST",
+          body: JSON.stringify({
+            Type: "init",
+            Codes: isin,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((response) => {
+          console.log(response.status);
+        });
+      }
+    },
 
-  ImportDataAction: (
-    importType: string,
-    isin: string[]
-  ): AppThunkAction<KnownAction> => (dispatch, getState) => {
-    if (importType == "stock") {
-      fetch(`/api/Import`, {
-        method: "POST",
-        body: JSON.stringify({
-          object: "stock",
-          isin,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((response) => {
-        console.log(response.status);
-      });
-    }
+  ProcessData:
+    (importType: string, code: string[]): AppThunkAction<KnownAction> =>
+    (dispatch, getState) => {
+      const appState = getState();
 
-    if (importType == "financial") {
-      fetch(`/api/Yahoo`, {
-        method: "POST",
-        body: JSON.stringify({
-          Type: "init",
-          Codes: isin,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((response) => {
-        console.log(response.status);
-      });
-    }
-  },
+      if (importType === "financial") {
+        fetch(`/api/Yahoo`, {
+          method: "POST",
+          body: JSON.stringify({
+            Type: "process",
+            Codes: code,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: appState.auth?.token as string,
+          },
+        }).then((response) => {
+          console.log(response.status);
+        });
+      }
 
-  ProcessData: (code: string[]): AppThunkAction<KnownAction> => (
-    dispatch,
-    getState
-  ) => {
-    fetch(`/api/Yahoo`, {
-      method: "POST",
-      body: JSON.stringify({
-        Type: "process",
-        Codes: code,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      console.log(response.status);
-    });
-  },
+      if (importType === "deal") {
+        fetch(`/api/position/post`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: appState.auth?.token as string,
+          },
+        }).then((response) => {
+          console.log(response.status);
+        });
+      }
+    },
 
   RefreshList: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
     fetch(`/api/SecurityRaw`, {
@@ -135,6 +197,7 @@ export const actionCreators = {
 
 const unloadedState: ImportState = {
   importType: "stock",
+  deals: [],
   securities: [],
   yahooFinancials: [],
   isLoading: false,
@@ -162,11 +225,15 @@ export const reducer: Reducer<ImportState> = (
         ...state,
         importType: action.importType,
         securities:
-          action.importType == "stock"
+          action.importType === "stock"
             ? action.payload.map((item: any) => ({ ...item, id: item.isin }))
             : [],
+        deals:
+          action.importType === "deal"
+            ? action.payload.map((item: any) => ({ ...item }))
+            : [],
         yahooFinancials:
-          action.importType == "financial"
+          action.importType === "financial"
             ? action.payload.map((item: any) => ({
                 ...item,
                 id: item.code,

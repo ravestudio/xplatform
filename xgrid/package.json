@@ -1,6 +1,6 @@
 {
-  "name": "xgrid",
-  "version": "1.0.16",
+  "name": "@ravestudio/xgrid",
+  "version": "1.0.1",
   "description": "",
   "scripts": {
     "rollup": "rollup -c",
@@ -46,5 +46,8 @@
     "dist",
     "src"
   ],
-  "types": "dist/index.d.ts"
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "@ravestudio:registry": "https://npm.pkg.github.com"
+  }
 }

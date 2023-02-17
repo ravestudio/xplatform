@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import "./index.scss";
+import "./Grid.scss";
 import { createBrowserHistory } from "history";
 import configureStore from "./store/configureStore";
 import App from "./App";

@@ -13,38 +13,82 @@ function App() {
 
   const items = [
     {
-      id: 1,
-      lastName: "Ivanov",
-      firstName: "Anton",
-    },
-    {
-      id: 2,
-      lastName: "Petrov",
-      firstName: "Egor",
-    },
-    {
-      id: 3,
-      lastName: "Sidorov",
-      firstName: "Ivan",
+      number: 7307610883,
+      board: "TQTF",
+      symbol: "TMOS",
+      operation: "Купля",
+      date: "14.02.2023",
+      time: "10:08:52",
+      delivery_date: "16.02.2023",
+      price: 4.342,
+      count: 25,
+      volume: 108.55,
+      nkd: 0.0,
+      client: "1468165",
     },
   ];
 
   const gridConfig = {
     columns: [
       {
-        field: "id",
-        headerName: "id",
+        field: "number",
+        headerName: "number",
         width: 50,
       },
       {
-        field: "lastName",
-        headerName: "lastName",
+        field: "board",
+        headerName: "board",
         width: 150,
       },
       {
-        field: "firstName",
-        headerName: "firstName",
-        width: 150,
+        field: "symbol",
+        headerName: "symbol",
+        width: 50,
+      },
+      {
+        field: "operation",
+        headerName: "operation",
+        width: 50,
+      },
+      {
+        field: "date",
+        headerName: "date",
+        width: 100,
+      },
+      {
+        field: "time",
+        headerName: "time",
+        width: 100,
+      },
+      {
+        field: "delivery_date",
+        headerName: "delivery_date",
+        width: 100,
+      },
+      {
+        field: "price",
+        headerName: "price",
+        width: 100,
+      },
+      {
+        field: "count",
+        headerName: "count",
+        width: 100,
+      },
+      {
+        field: "volume",
+        headerName: "volume",
+        width: 100,
+      },
+      {
+        field: "nkd",
+        headerName: "nkd",
+        width: 100,
+      },
+      {
+        field: "client",
+        headerName: "client",
+        width: 100,
       },
     ],
   };
