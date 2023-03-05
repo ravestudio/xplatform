@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { ApplicationState } from "./store";
 import Financials from "./components/financials/Financials";
 import Positions from "./components/positions/Positions";
+import Admin from "./components/admin/admin";
 
 export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
@@ -32,6 +33,9 @@ export default connect((state: ApplicationState) => ({
           <div>
             <Link to="positions">Positions</Link>
           </div>
+          <div>
+            <Link to="admin">Admin</Link>
+          </div>
         </div>
       )}
       <Routes>
@@ -41,6 +45,7 @@ export default connect((state: ApplicationState) => ({
         <Route path="/auth" element={<Auth />} />
         <Route path="/import" element={<Import />} />
         <Route path="/positions" element={<Positions />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   </Layout>

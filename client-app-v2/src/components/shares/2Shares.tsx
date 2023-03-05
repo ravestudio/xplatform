@@ -21,6 +21,10 @@ const regions = [
     value: "United States",
     name: "United States",
   },
+  {
+    value: "China",
+    name: "China",
+  },
 ];
 
 type SharesProps = SharesStore.SharesState & typeof SharesStore.actionCreators;

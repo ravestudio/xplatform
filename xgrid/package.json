@@ -1,6 +1,6 @@
 {
   "name": "@ravestudio/xgrid",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "",
   "scripts": {
     "rollup": "rollup -c",

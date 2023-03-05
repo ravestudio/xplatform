@@ -33,6 +33,7 @@ interface GridProps extends WithMockEditingIdProps {
   selectedKeys?: any[];
 
   gridConfig: any;
+  actionButtons?: any;
 
   onSelectionChanged?: (selectedRows: any) => void;
   checkboxSelection?: boolean;
@@ -92,6 +93,17 @@ class Grid extends React.Component<GridProps, GridState> {
               commit: this.commitChanges,
               rollback: this.rollbackChanges,
               //delete: this.props.de,
+
+              actionButtons: this.props.actionButtons
+                ? this.props.actionButtons.actions
+                : [
+                    {
+                      name: "edit",
+                    },
+                    {
+                      name: "delete",
+                    },
+                  ],
             },
             width: 190,
             pinned: "right",

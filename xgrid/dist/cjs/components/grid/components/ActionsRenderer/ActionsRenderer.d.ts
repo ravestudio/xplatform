@@ -5,6 +5,7 @@ interface ActionsRendererProps extends ICellRendererParams, WithMockCellRenderer
     commit: () => null;
     rollback: () => null;
     delete: (item: any) => void;
+    actionButtons: any[];
 }
 declare const _default: React.ComponentClass<ActionsRendererProps, any>;
 export default _default;

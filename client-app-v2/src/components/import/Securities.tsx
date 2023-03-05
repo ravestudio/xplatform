@@ -5,6 +5,7 @@ import { Grid } from "@ravestudio/xgrid";
 interface IProps {
   keyField: string;
   items: any;
+  onSelectionChanged: (selectedRows: any) => void;
 }
 
 const deals = React.forwardRef((props: IProps, ref: any) => {
@@ -21,63 +22,48 @@ const deals = React.forwardRef((props: IProps, ref: any) => {
   const config = {
     columns: [
       {
-        field: "number",
-        headerName: "number",
+        field: "ticker",
+        headerName: "ticker",
         width: 50,
+      },
+      {
+        field: "name",
+        headerName: "name",
+        width: 250,
+      },
+      {
+        field: "isin",
+        headerName: "isin",
+        width: 100,
+      },
+      {
+        field: "figi",
+        headerName: "figi",
+        width: 100,
+      },
+      {
+        field: "currency",
+        headerName: "currency",
+        width: 70,
+      },
+      {
+        field: "emitent",
+        headerName: "emitent",
+        width: 100,
+      },
+      {
+        field: "processed",
+        headerName: "processed",
+        width: 100,
       },
       {
         field: "board",
         headerName: "board",
-        width: 150,
-      },
-      {
-        field: "symbol",
-        headerName: "symbol",
-        width: 50,
-      },
-      {
-        field: "operation",
-        headerName: "operation",
-        width: 50,
-      },
-      {
-        field: "date",
-        headerName: "date",
         width: 100,
       },
       {
-        field: "time",
-        headerName: "time",
-        width: 100,
-      },
-      {
-        field: "delivery_date",
-        headerName: "delivery_date",
-        width: 100,
-      },
-      {
-        field: "price",
-        headerName: "price",
-        width: 100,
-      },
-      {
-        field: "count",
-        headerName: "count",
-        width: 100,
-      },
-      {
-        field: "volume",
-        headerName: "volume",
-        width: 100,
-      },
-      {
-        field: "nkd",
-        headerName: "nkd",
-        width: 100,
-      },
-      {
-        field: "client",
-        headerName: "client",
+        field: "type",
+        headerName: "type",
         width: 100,
       },
     ],
@@ -90,10 +76,16 @@ const deals = React.forwardRef((props: IProps, ref: any) => {
       ref={refGrid}
       data={props.items}
       gridConfig={config}
+      agGridProps={{
+        rowSelection: "multiple",
+      }}
+      onSelectionChanged={props.onSelectionChanged}
+      checkboxSelection={true}
+      //selectedKeys={selectedKeys}
     />
   );
 });
 
-deals.displayName = "x-import-deals";
+deals.displayName = "x-import-stock";
 
 export default deals;

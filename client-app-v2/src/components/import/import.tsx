@@ -8,6 +8,8 @@ import * as ImportStore from "../../store/Import";
 
 import { bindActionCreators, compose } from "redux";
 import Deals from "./Deals";
+import Financials from "./Financials";
+import Securities from "./Securities";
 
 interface IState {
   selected: string[];
@@ -44,6 +46,7 @@ class Import extends React.Component<ImportProps, IState> {
     this.ProcessSelected = this.ProcessSelected.bind(this);
 
     this.handleImportTypeChange = this.handleImportTypeChange.bind(this);
+    //this.onSelectionChanged = this.onSelectionChanged.bind(this);
   }
 
   public componentDidMount() {
@@ -68,76 +71,32 @@ class Import extends React.Component<ImportProps, IState> {
     this.props.RequestDataAction(option.value as string);
   }
 
-  public render() {
-    const dealConfig = {
-      columns: [
-        {
-          field: "number",
-          headerName: "number",
-          width: 50,
-        },
-        {
-          field: "board",
-          headerName: "board",
-          width: 150,
-        },
-        {
-          field: "symbol",
-          headerName: "symbol",
-          width: 50,
-        },
-        {
-          field: "operation",
-          headerName: "operation",
-          width: 50,
-        },
-        {
-          field: "date",
-          headerName: "date",
-          width: 100,
-        },
-        {
-          field: "time",
-          headerName: "time",
-          width: 100,
-        },
-        {
-          field: "delivery_date",
-          headerName: "delivery_date",
-          width: 100,
-        },
-        {
-          field: "price",
-          headerName: "price",
-          width: 100,
-        },
-        {
-          field: "count",
-          headerName: "count",
-          width: 100,
-        },
-        {
-          field: "volume",
-          headerName: "volume",
-          width: 100,
-        },
-        {
-          field: "nkd",
-          headerName: "nkd",
-          width: 100,
-        },
-        {
-          field: "client",
-          headerName: "client",
-          width: 100,
-        },
-      ],
-    };
+  onSelectionChanged(selectedRows: string[]) {
+    this.setState({
+      selected: selectedRows,
+    });
+  }
 
+  public render() {
     const dealProps = {
       keyField: "number",
-      gridConfig: dealConfig,
       items: this.props.deals,
+    };
+
+    const financialProps = {
+      keyField: "id",
+      items: this.props.yahooFinancials,
+      onSelectionChanged: (rows: any[]) => {
+        this.onSelectionChanged(rows.map((row: any) => row.id));
+      },
+    };
+
+    const securitiesProps = {
+      keyField: "id",
+      items: this.props.securities,
+      onSelectionChanged: (rows: any[]) => {
+        this.onSelectionChanged(rows.map((row: any) => row.id));
+      },
     };
 
     return (
@@ -162,6 +121,16 @@ class Import extends React.Component<ImportProps, IState> {
         <div style={{ height: 500 }}>
           {this.props.isLoading === false &&
             this.props.importType === "deal" && <Deals {...dealProps} />}
+
+          {this.props.isLoading === false &&
+            this.props.importType === "financial" && (
+              <Financials {...financialProps} />
+            )}
+
+          {this.props.isLoading === false &&
+            this.props.importType === "stock" && (
+              <Securities {...securitiesProps} />
+            )}
         </div>
 
         <div>

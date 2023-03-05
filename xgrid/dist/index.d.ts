@@ -15,6 +15,7 @@ interface GridProps extends WithMockEditingIdProps {
     data: any[];
     selectedKeys?: any[];
     gridConfig: any;
+    actionButtons?: any;
     onSelectionChanged?: (selectedRows: any) => void;
     checkboxSelection?: boolean;
     agGridProps?: any;

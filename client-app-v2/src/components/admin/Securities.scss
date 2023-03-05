@@ -1,0 +1,20 @@
+.admin-securities {
+    //display: flex;
+
+    .upd-form {
+        padding-top: 10px;
+        .upd-param {
+            display: flex;
+            //flex-direction: column;
+        }
+
+        .current-value {
+            width: 200px;
+        }
+
+        .check-newv-alue{
+            padding-top: 25px;
+            width: 30px;
+        }
+    }
+}

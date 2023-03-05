@@ -2,9 +2,9 @@
   "name": "client-app-v2",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://192.168.0.17/",
+  "proxy": "http://localhost:9500/",
   "dependencies": {
-    "@ravestudio/xgrid": "^1.0.1",
+    "@ravestudio/xgrid": "^1.0.3",
     "ag-grid-community": "^27.3.0",
     "ag-grid-react": "^27.3.0",
     "clsx": "^1.1.1",

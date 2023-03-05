@@ -24,6 +24,8 @@ interface ActionsRendererProps
   rollback: () => null;
 
   delete: (item: any) => void;
+
+  actionButtons: any[];
 }
 
 interface ActionsRendererState {
@@ -78,6 +80,14 @@ class ActionsRenderer extends React.Component<
       return null;
     }
 
+    const getActionSettings = (actionName: string) => {
+      const btn = this.props.actionButtons?.filter(
+        (btn: any) => btn.name === actionName
+      );
+
+      return btn && btn.length > 0 ? btn[0] : undefined;
+    };
+
     const mockEditingIcons = (
       <>
         <button className="save-icon" onClick={this.saveChanges}>
@@ -90,14 +100,37 @@ class ActionsRenderer extends React.Component<
       </>
     );
 
+    const editBtnSettings = getActionSettings("edit");
+
     const nonMockEditingIcons = (
       <>
-        <button className="edit-icon" onClick={this.enterMockEditMode}>
-          edit
-        </button>
-        <button className="delete-icon" onClick={this.deleteItem}>
-          delete
-        </button>
+        {this.props.actionButtons.map((btn: any, index: number) => {
+          if (btn.name === "edit") {
+            return (
+              <button
+                className="edit-icon"
+                onClick={
+                  editBtnSettings && editBtnSettings.onClick
+                    ? () =>
+                        editBtnSettings.onClick({
+                          item: this.props.data,
+                        })
+                    : this.enterMockEditMode
+                }
+              >
+                edit
+              </button>
+            );
+          }
+
+          if (btn.name === "delete") {
+            return (
+              <button className="delete-icon" onClick={this.deleteItem}>
+                delete
+              </button>
+            );
+          }
+        })}
       </>
     );
 

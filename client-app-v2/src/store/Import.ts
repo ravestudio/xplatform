@@ -115,6 +115,7 @@ export const actionCreators = {
           }),
           headers: {
             "Content-Type": "application/json",
+            Authorization: appState.auth?.token as string,
           },
         }).then((response) => {
           console.log(response.status);
@@ -237,10 +238,10 @@ export const reducer: Reducer<ImportState> = (
             ? action.payload.map((item: any) => ({
                 ...item,
                 id: item.code,
-                loadDate:
+                /*loadDate:
                   item.loadDate !== null ? parseISO(item.loadDate) : null,
                 lastFinance:
-                  item.lastFinance !== null ? parseISO(item.lastFinance) : null,
+                  item.lastFinance !== null ? parseISO(item.lastFinance) : null,*/
               }))
             : [],
         isLoading: false,

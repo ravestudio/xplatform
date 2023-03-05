@@ -22,6 +22,7 @@ interface IFieldProps {
   label: string;
   type?: "Text" | "Email" | "Select" | "TextArea";
   options?: string[];
+  disabled?: boolean;
 }
 
 export interface ISubmitResult {
@@ -82,7 +83,7 @@ interface IState {
 
 export class Form extends React.Component<IFormProps, IState> {
   public static Field: React.FC<IFieldProps> = (props) => {
-    const { name, label, type, options } = props;
+    const { name, label, type, options, disabled } = props;
 
     const handleChange = (
       e:
@@ -120,6 +121,7 @@ export class Form extends React.Component<IFormProps, IState> {
                 value={context.values[name]}
                 onChange={(e) => handleChange(e, context)}
                 onBlur={(e) => handleBlur(e, context)}
+                disabled={disabled}
               />
             )}
 

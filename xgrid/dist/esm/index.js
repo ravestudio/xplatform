@@ -197,15 +197,33 @@ var ActionsRenderer = /** @class */ (function (_super) {
         return _this;
     }
     ActionsRenderer.prototype.render = function () {
+        var _this = this;
         if (!this.state.visible) {
             return null;
         }
+        var getActionSettings = function (actionName) {
+            var _a;
+            var btn = (_a = _this.props.actionButtons) === null || _a === void 0 ? void 0 : _a.filter(function (btn) { return btn.name === actionName; });
+            return btn && btn.length > 0 ? btn[0] : undefined;
+        };
         var mockEditingIcons = (React.createElement(React.Fragment, null,
             React.createElement("button", { className: "save-icon", onClick: this.saveChanges }, "save"),
             React.createElement("button", { className: "cancel-icon", onClick: this.undoChanges }, "cancel")));
-        var nonMockEditingIcons = (React.createElement(React.Fragment, null,
-            React.createElement("button", { className: "edit-icon", onClick: this.enterMockEditMode }, "edit"),
-            React.createElement("button", { className: "delete-icon", onClick: this.deleteItem }, "delete")));
+        var editBtnSettings = getActionSettings("edit");
+        var nonMockEditingIcons = (React.createElement(React.Fragment, null, this.props.actionButtons.map(function (btn, index) {
+            if (btn.name === "edit") {
+                return (React.createElement("button", { className: "edit-icon", onClick: editBtnSettings && editBtnSettings.onClick
+                        ? function () {
+                            return editBtnSettings.onClick({
+                                item: _this.props.data,
+                            });
+                        }
+                        : _this.enterMockEditMode }, "edit"));
+            }
+            if (btn.name === "delete") {
+                return (React.createElement("button", { className: "delete-icon", onClick: _this.deleteItem }, "delete"));
+            }
+        })));
         return (React.createElement("div", { className: "actions-wrapper" }, this.props.isMockEditing ? mockEditingIcons : nonMockEditingIcons));
     };
     ActionsRenderer.contextType = MockEditingContext;
@@ -328,6 +346,16 @@ var Grid = /** @class */ (function (_super) {
                             commit: _this.commitChanges,
                             rollback: _this.rollbackChanges,
                             //delete: this.props.de,
+                            actionButtons: _this.props.actionButtons
+                                ? _this.props.actionButtons.actions
+                                : [
+                                    {
+                                        name: "edit",
+                                    },
+                                    {
+                                        name: "delete",
+                                    },
+                                ],
                         },
                         width: 190,
                         pinned: "right",
