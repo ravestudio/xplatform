@@ -17,5 +17,7 @@ namespace CommonLib.Objects
 
         public ICollection<Financial> Financials { get; set; }
         public ICollection<Security> Securities { get; set; }
+
+        public EmitentProfile EmitentProfile { get; set; }
     }
 }

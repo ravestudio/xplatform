@@ -50,9 +50,10 @@ namespace PriceUpdater
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            string apiUrl = "http://dockerapi:80/api";
+            //string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
-            //string apiUrl = "http://localhost:5000/api";
+            string apiUrl = "http://localhost:5000/api";
+            //string apiUrl = "http://192.168.0.17/api";
 
 
             var xClient = new CommonLib.WebApiClient();
@@ -68,7 +69,11 @@ namespace PriceUpdater
 
                 string financials = await xClient.GetData($"{apiUrl}/Yahoo");
 
-                var y = JsonConvert.DeserializeObject<List<YahooFinancial>>(financials).Where(s => !string.IsNullOrEmpty(s.status) && !s.status.Equals("Processed")).FirstOrDefault();
+                var y = JsonConvert.DeserializeObject<List<YahooFinancial>>(financials).Where(s =>
+                !string.IsNullOrEmpty(s.status) &&
+                !s.status.Equals("Processed") &&
+                !(s.status.Equals("Init") && s.loadDate.HasValue)
+                ).FirstOrDefault();
 
                 return y;
             })

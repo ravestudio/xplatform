@@ -167,6 +167,13 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
       <React.Fragment>
         <h1>Financials</h1>
 
+        {this.props.financials?.assetProfile && (
+          <div className="emitent-profile">
+            <h2>Description</h2>
+            <div>{this.props.financials.assetProfile.longBusinessSummary}</div>
+          </div>
+        )}
+
         <Tabs value={this.state.activeTab} onSelect={this.handleChange}>
           <Tab
             label="Incomes"

@@ -15,7 +15,10 @@ namespace CommonLib.Yahoo
 
         public async Task<string> GetFinancial(string Code)
         {
-            string url = $"https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-financials?symbol={Code}";
+            //private
+            //string url = $"https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-financials?symbol={Code}";
+
+            string url = $"https://yahoo-finance15.p.rapidapi.com/api/yahoo/mo/module/{Code}?module=asset-profile,income-statement,cashflow-statement,balance-sheet";
 
             string response = await _apiClient.GetData(url);
 
