@@ -64,6 +64,29 @@ namespace xplatform.Controllers
 
             if (requestModel.Object == "stock")
             {
+                Func<string, string, string> getFinPage = (board, ticker) =>
+                {
+                    if (board == "SPBHKEX")
+                    {
+                        int t = int.Parse(ticker);
+                        return $"{t:0000}.HK";
+
+                    }
+
+                    if (board == "RUB") return $"{ticker}.ME";
+
+                    return ticker;
+                };
+
+                Func<string, string> getRegion = (board) =>
+                {
+                    if (board == "SPBHKEX")return "China";
+
+                    if (board == "RUB") return "Moscow";
+
+                    return "United States";
+                };
+
                 foreach (string isin in requestModel.ISIN)
                 {
                     Emitent emitent = null;
@@ -76,7 +99,7 @@ namespace xplatform.Controllers
                         {
                             Code = rawItem.ticker,
                             Name = rawItem.name,
-                            FinancialPage = rawItem.Board == "SPBMX" ? rawItem.ticker : $"{rawItem.ticker}.ME"
+                            FinancialPage = getFinPage(rawItem.Board, rawItem.ticker),
                         };
                     }
                     else emitent = _context.EmitentSet.Single(e => e.Code == rawItem.Emitent);
@@ -87,7 +110,7 @@ namespace xplatform.Controllers
                         ISIN = rawItem.isin,
                         Code = rawItem.ticker,
                         Name = rawItem.name,
-                        Region = rawItem.Board == "SPBMX" ? "United States" : "Moscow",
+                        Region = getRegion(rawItem.Board),
                         Currency = rawItem.currency,
                         Market = "shares",
                         Board = rawItem.Board

@@ -34,34 +34,41 @@ namespace xplatform.Controllers
         [HttpPost]
         public async Task<IActionResult> Post()
         {
+            Func<string, string> getBoard = currency =>
+            {
+                if (currency == "HKD") return "SPBHKEX";
+
+                if (currency == "RUB") return "TQBR";
+
+                return "SPBXM";
+            };
 
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
 
             var apiClient = new CommonLib.WebApiClient();
             TinkoffClient tinkoffClient = new TinkoffClient(apiClient);
 
-            apiClient.addHeader("Authorization", "Bearer t.FwRjwQy5LHo3uXE0iQ6D4VGVFRvccr1_PItEHgLIOt4sc7QkQkBzd_eDACB0TTfnBBOWi_mtg84cPbvKwD4gpQ");
+            apiClient.addHeader("Authorization", "Bearer t.hAFDFeeTzLR_tlTz9H7S406ecutXFe21HljCDGf7sm_DRIYTDesfGlkS5P5ohNcZ_0tZUwHKgdhvMXhoRO0iYw");
 
             string tinkoff_stocks = await tinkoffClient.GetStocks();
 
-            string moex_json = await micexClient.GetSecurityList("shares", "TQBR");
-
             JObject obj = JObject.Parse(tinkoff_stocks);
-            JObject moexObj = JObject.Parse(moex_json);
 
             JArray instruments = (JArray)obj["payload"]["instruments"];
-            JArray moex_data = (JArray)moexObj["securities"]["data"];
 
-            IList<string> moex_columns = moexObj["securities"]["columns"].Select(c => (string)c).ToList();
-
-            int isin_column = moex_columns.IndexOf("ISIN");
-            IList<string> moex_isin = moex_data.Select(t => (string)t[isin_column]).ToList();
+            string[] supportedCurrencies = { "HKD", "RUB", "USD" };
 
 
             foreach (var jtoken in instruments)
             {
                 SecurityRaw raw = jtoken.ToObject<SecurityRaw>();
-                raw.Board = moex_isin.Contains(raw.isin) ? "TQBR" : "SPBMX";
+
+                if (raw.isin == raw.ticker) continue;
+
+                if (!supportedCurrencies.Contains(raw.currency)) continue;
+               
+
+                raw.Board = getBoard(raw.currency);
 
                 Security sec = _context.SecuritySet.Include(s => s.Emitent).SingleOrDefault(c => c.ISIN == raw.isin);
                 if (sec != null)
@@ -73,6 +80,8 @@ namespace xplatform.Controllers
                 if (!_context.SecurityRawSet.Any(r => r.isin == raw.isin))
                 {
                     _context.SecurityRawSet.Add(raw);
+
+                    
                 }
 
             }

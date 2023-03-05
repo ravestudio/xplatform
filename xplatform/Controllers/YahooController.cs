@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
 using xplatform.Model;
+//using Serilog;
 
 namespace xplatform.Controllers
 {
@@ -19,6 +20,7 @@ namespace xplatform.Controllers
     public class YahooController : ControllerBase
     {
         private readonly XContext _context;
+        //private readonly ILogger _logger = null;
         public YahooController(XContext context)
         {
             _context = context;
@@ -55,10 +57,16 @@ namespace xplatform.Controllers
         [HttpGet("{Code}")]
         public IActionResult Get(string Code)
         {
+
+            var emitent = _context.EmitentSet.Include(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == Code);
+
             var financials = _context.FinanceAnnualSet.Where(f => f.Code == Code)
                 .OrderByDescending(f => f.Year).Take(5).ToList();
 
             JObject report = new JObject(
+
+                new JProperty("assetProfile", emitent.EmitentProfile != null? JObject.Parse(emitent.EmitentProfile.Data): null),
+
                 new JProperty("incomeStatementHistory",
                     new JArray(financials.Select(f => JObject.Parse(f.Data)["incomeStatement"]))),
                 new JProperty("balanceSheetHistory",
@@ -85,6 +93,12 @@ namespace xplatform.Controllers
 
             if (request.Type == "process")
             {
+                Func<DateTime, int> getFinYear = (endDate) =>
+                {
+                    //финансовый год считаем завершенным до 15 января следующего года
+                    return endDate.Month > 1 || endDate.Day > 15 ? endDate.Year : endDate.Year -1;
+                };
+
                 foreach (string code in request.Codes)
                 {
                     var raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Loaded);
@@ -93,14 +107,14 @@ namespace xplatform.Controllers
 
                     System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
 
-                    IList<CommonLib.Objects.FinanceAnnual> _reports = obj["timeSeries"]["timestamp"]
+                    IList<CommonLib.Objects.FinanceAnnual> _reports = obj["incomeStatementHistory"]["incomeStatementHistory"]
                         .Select(s => new CommonLib.Objects.FinanceAnnual()
                         {
                             Id = Guid.NewGuid(),
                             Code = code,
                             CreateDate = DateTime.Now,
                             Data = "",
-                            Year = dateTime.AddSeconds((int)s).Year
+                            Year = getFinYear(dateTime.AddSeconds((int)s["endDate"]["raw"]))
                         })
                         .OrderByDescending(r => r.Year)
                         .ToList();
@@ -108,12 +122,24 @@ namespace xplatform.Controllers
                     for (int i = 0; i < _reports.Count; i++)
                     {
                         JObject report = new JObject();
-                        report["financialsTemplate"] = obj["financialsTemplate"];
+                        //report["financialsTemplate"] = obj["financialsTemplate"];
                         report["incomeStatement"] = obj["incomeStatementHistory"]["incomeStatementHistory"][i];
                         report["balanceSheet"] = obj["balanceSheetHistory"]["balanceSheetStatements"][i];
                         report["cashflowStatement"] = obj["cashflowStatementHistory"]["cashflowStatements"][i];
                         _reports[i].Data = report.ToString();
                     }
+
+                    var emitent = _context.EmitentSet.Include(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == code);
+
+
+                    if (emitent.EmitentProfile == null)
+                    {
+                        emitent.EmitentProfile = new EmitentProfile();
+                    }
+
+                    emitent.EmitentProfile.Data = obj["assetProfile"].ToString();
+                    emitent.EmitentProfile.CreateDate = DateTime.Now;
+
 
                     foreach (var rep in _reports)
                     {
@@ -135,26 +161,52 @@ namespace xplatform.Controllers
                 var apiClient = new CommonLib.WebApiClient();
                 YahooClient yahooClient = new YahooClient(apiClient);
 
-                apiClient.addHeader("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
+                //private
+                //apiClient.addHeader("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
+
+                apiClient.addHeader("x-rapidapi-host", "yahoo-finance15.p.rapidapi.com");
                 apiClient.addHeader("x-rapidapi-key", "d8c3e2c892msh13cac0704b75eb0p115a47jsn5be47ce5097d");
+                //apiClient.addHeader("x-rapidapi-key", "b8d1c121d0msh69fd766be55dc0dp14f915jsn18df02435e1a");
+
 
                 foreach (string code in request.Codes)
                 {
+                    /*YahooFinanceRaw raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Init);
 
-                    string resp = await yahooClient.GetFinancial(code);
+                    if (raw.LoadDate.HasValue)
+                    {
+                        continue;
+                    }*/
 
-                    JObject obj = JObject.Parse(resp);
 
-                    int max_timestamp = obj["timeSeries"]["timestamp"].Select(s => (int)s).Max();
+                    //raw.LoadDate = DateTime.Now;
+                    //_context.SaveChanges();
 
-                    System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
 
-                    var raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Init);
+                    try
+                    {
+                        //_logger.Information($"financial request: {code}");
 
-                    raw.Data = resp;
-                    raw.LoadDate = DateTime.Now;
-                    raw.Status = FinanceProcessEnum.Loaded;
-                    raw.LastFinance = dateTime.AddSeconds(max_timestamp);
+                        string resp = await yahooClient.GetFinancial(code);
+
+                        JObject obj = JObject.Parse(resp);
+
+                        int max_timestamp = obj["incomeStatementHistory"]["incomeStatementHistory"].Select(s => (int)s["endDate"]["raw"]).Max();
+
+                        System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+
+                        YahooFinanceRaw raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Init);
+                        raw.Data = resp;
+                        raw.LoadDate = DateTime.Now;
+                        raw.Status = FinanceProcessEnum.Loaded;
+                        raw.LastFinance = dateTime.AddSeconds(max_timestamp);
+
+                    }
+                    catch(Exception ex)
+                    {
+                        YahooFinanceRaw raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Init);
+                        raw.LoadDate = DateTime.Now;
+                    }
 
                     _context.SaveChanges();
                 }

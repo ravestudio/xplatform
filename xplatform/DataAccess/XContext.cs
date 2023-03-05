@@ -72,6 +72,15 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Emitent>().Property(e => e.FinancialPage).HasColumnName("FinancialPage");
             modelBuilder.Entity<Emitent>().ToTable("EmitentSet");
 
+            /*modelBuilder.Entity<EmitentProfile>().HasKey(y => y.Id);
+            modelBuilder.Entity<EmitentProfile>().Property(y => y.Id).HasColumnName("Id");*/
+            modelBuilder.Entity<EmitentProfile>().HasKey(y => y.EmitentId);
+            modelBuilder.Entity<EmitentProfile>().Property(y => y.EmitentId).HasColumnName("EmitentId");
+            modelBuilder.Entity<EmitentProfile>().HasOne(s => s.Emitent).WithOne(e => e.EmitentProfile).HasForeignKey<EmitentProfile>(p => p.EmitentId);
+            modelBuilder.Entity<EmitentProfile>().Property(y => y.Data).HasColumnName("Data").IsRequired();
+            modelBuilder.Entity<EmitentProfile>().Property(y => y.CreateDate).HasColumnName("CreateDate").IsRequired();
+            modelBuilder.Entity<EmitentProfile>().ToTable("EmitentProfileSet");
+
             modelBuilder.Entity<Security>().HasDiscriminator(s => s.Type)
                 .HasValue<Share>("stock")
                 .HasValue<Bond>("bond")

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using xplatform.DataAccess;
 using xplatform.Helpers;
 using xplatform.Services;
+using Serilog;
 
 namespace xplatform
 {
@@ -50,6 +51,8 @@ namespace xplatform
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+
+            //services.AddSingleton<ILogger>(provider => { return Log.Logger; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
