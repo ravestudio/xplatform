@@ -38,6 +38,8 @@ interface GridProps extends WithMockEditingIdProps {
   onSelectionChanged?: (selectedRows: any) => void;
   checkboxSelection?: boolean;
 
+  onSaving?: (data: any) => void;
+
   agGridProps?: any;
 }
 
@@ -92,7 +94,7 @@ class Grid extends React.Component<GridProps, GridState> {
               editing: { ...this.props.gridConfig.editing },
               commit: this.commitChanges,
               rollback: this.rollbackChanges,
-              //delete: this.props.de,
+              delete: this.deleteItem,
 
               actionButtons: this.props.actionButtons
                 ? this.props.actionButtons.actions
@@ -150,6 +152,27 @@ class Grid extends React.Component<GridProps, GridState> {
     if (this.props.onSelectionChanged) {
       this.props.onSelectionChanged(selectedRows);
     }
+  };
+
+  private deleteItem = (item: any): void => {
+    const { [this.props.keyField]: id, ...data } = item;
+
+    const e = {
+      cancel: false,
+      type: "remove",
+      key: id,
+      data,
+    };
+
+    if (this.props.onSaving) {
+      const { [this.props.keyField]: id, ...data } = item;
+
+      this.props.onSaving(e);
+    }
+
+    if (e.cancel) return;
+
+    const res = this.gridApi.applyTransaction({ remove: [item] });
   };
 
   private commitChanges = (): void => {

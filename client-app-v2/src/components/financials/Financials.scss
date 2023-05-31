@@ -10,3 +10,23 @@
 .emitent-profile {
     padding: 10px 0 10px 0;
 }
+
+.emitent-website {
+    padding: 0 0 10px 0;
+}
+
+.share-statistics {
+    padding: 10px 0 10px 0;
+    &-item {
+        display: flex;
+
+        &-name {
+            width: 200px;
+
+        }
+
+        &-value {
+            font-weight: bold;
+        }
+    }
+}

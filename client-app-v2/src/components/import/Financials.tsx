@@ -32,6 +32,11 @@ const deals = React.forwardRef((props: IProps, ref: any) => {
         flex: 1,
       },
       {
+        field: "region",
+        headerName: "region",
+        width: 100,
+      },
+      {
         field: "loadDate",
         headerName: "loadDate",
         width: 150,

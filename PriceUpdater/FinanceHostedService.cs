@@ -53,7 +53,7 @@ namespace PriceUpdater
             //string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
             string apiUrl = "http://localhost:5000/api";
-            //string apiUrl = "http://192.168.0.17/api";
+            //string apiUrl = "http://localhost:9500/api";
 
 
             var xClient = new CommonLib.WebApiClient();

@@ -55,6 +55,10 @@ const Securities: React.FC<AuthProps> = (props: AuthProps) => {
     }
   };
 
+  const onSaving = (changes: any) => {
+    const promise = props.actions.saveChanges(changes);
+  };
+
   const gridProps = {
     keyField: "code",
     gridConfig: {
@@ -107,6 +111,7 @@ const Securities: React.FC<AuthProps> = (props: AuthProps) => {
             ],
             width: 225,
           }}
+          onSaving={onSaving}
         />
       </div>
       <div className="upd-form">

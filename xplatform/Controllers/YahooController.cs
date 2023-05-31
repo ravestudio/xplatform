@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using CommonLib.Objects;
 using CommonLib.Yahoo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
 using xplatform.Model;
@@ -30,15 +32,16 @@ namespace xplatform.Controllers
         public IEnumerable<object> Get()
         {
 
-            var first = from emitent in _context.EmitentSet.Where(r => !string.IsNullOrEmpty(r.FinancialPage))
+            var first = from security in _context.SecuritySet.Where(r => !string.IsNullOrEmpty(r.FinancialPage))
 
-                        join finRaw in _context.YahooFinanceRawSet on emitent.FinancialPage equals finRaw.Code into grouping
+                        join finRaw in _context.YahooFinanceRawSet on security.FinancialPage equals finRaw.Code into grouping
                         from p in grouping.DefaultIfEmpty()
-                        orderby emitent.FinancialPage, p.LoadDate descending
+                        orderby security.FinancialPage, p.LoadDate descending
                         select new
                         {
-                            code = emitent.FinancialPage,
-                            name = emitent.Name,
+                            code = security.FinancialPage,
+                            name = security.Name,
+                            region = security.Region,
                             loadDate = p.LoadDate,
                             lastFinance = p.LastFinance,
                             status = p.Status
@@ -47,7 +50,7 @@ namespace xplatform.Controllers
 
             var list = first.ToList().GroupBy(x => x.code)
                .SelectMany(g =>
-                   g.Select((j, i) => new { j.code, j.name, j.loadDate, j.lastFinance, status = j.status > 0 ? j.status.ToString() : null, rn = i + 1 })
+                   g.Select((j, i) => new { j.code, j.name, j.region, j.loadDate, j.lastFinance, status = j.status > 0 ? j.status.ToString() : null, rn = i + 1 })
                ).Where(r => r.rn == 1);
 
 
@@ -58,14 +61,24 @@ namespace xplatform.Controllers
         public IActionResult Get(string Code)
         {
 
-            var emitent = _context.EmitentSet.Include(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == Code);
+            var security = _context.SecuritySet
+                .Include(s => s.SecurityStatistics)
+                .Include(s => s.Emitent)
+                .ThenInclude(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == Code);
 
-            var financials = _context.FinanceAnnualSet.Where(f => f.Code == Code)
+            Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code && q.Board == security.Board);
+
+            var financials = _context.FinanceAnnualSet.Where(f => f.Code == security.Emitent.FinancialPage)
                 .OrderByDescending(f => f.Year).Take(5).ToList();
 
             JObject report = new JObject(
 
-                new JProperty("assetProfile", emitent.EmitentProfile != null? JObject.Parse(emitent.EmitentProfile.Data): null),
+                new JProperty("emitent", security.Name),
+                new JProperty("quote", JObject.FromObject(quote)),
+                new JProperty("financialPage", security.FinancialPage),
+
+                new JProperty("assetProfile", security.Emitent.EmitentProfile != null? JObject.Parse(security.Emitent.EmitentProfile.Data): null),
+                new JProperty("defaultKeyStatistics", security.SecurityStatistics != null ? JObject.Parse(security.SecurityStatistics.Data) : null),
 
                 new JProperty("incomeStatementHistory",
                     new JArray(financials.Select(f => JObject.Parse(f.Data)["incomeStatement"]))),
@@ -103,6 +116,10 @@ namespace xplatform.Controllers
                 {
                     var raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Loaded);
 
+                    var security = _context.SecuritySet
+                        .Include(s => s.SecurityStatistics)
+                        .Include(s => s.Emitent).ThenInclude(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == code);
+
                     JObject obj = JObject.Parse(raw.Data);
 
                     System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
@@ -111,7 +128,7 @@ namespace xplatform.Controllers
                         .Select(s => new CommonLib.Objects.FinanceAnnual()
                         {
                             Id = Guid.NewGuid(),
-                            Code = code,
+                            Code = security.Emitent.FinancialPage,
                             CreateDate = DateTime.Now,
                             Data = "",
                             Year = getFinYear(dateTime.AddSeconds((int)s["endDate"]["raw"]))
@@ -129,24 +146,45 @@ namespace xplatform.Controllers
                         _reports[i].Data = report.ToString();
                     }
 
-                    var emitent = _context.EmitentSet.Include(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == code);
 
-
-                    if (emitent.EmitentProfile == null)
+                    if (obj["assetProfile"] != null)
                     {
-                        emitent.EmitentProfile = new EmitentProfile();
+                        if (security.Emitent.EmitentProfile == null)
+                        {
+                            security.Emitent.EmitentProfile = new EmitentProfile();
+                        }
+
+                        security.Emitent.EmitentProfile.Data = obj["assetProfile"].ToString();
+                        security.Emitent.EmitentProfile.CreateDate = DateTime.Now;
                     }
 
-                    emitent.EmitentProfile.Data = obj["assetProfile"].ToString();
-                    emitent.EmitentProfile.CreateDate = DateTime.Now;
+                    if (obj["defaultKeyStatistics"] != null)
+                    {
+                        if (security.SecurityStatistics == null)
+                        {
+                            security.SecurityStatistics = new SecurityStatistics();
+                        }
+
+                        security.SecurityStatistics.Data = obj["defaultKeyStatistics"].ToString();
+                        security.SecurityStatistics.CreateDate = DateTime.Now;
+                    }
 
 
                     foreach (var rep in _reports)
                     {
-                        if (_context.FinanceAnnualSet.Count(f => f.Code == rep.Code && f.Year == rep.Year) == 0)
+                        var annual = _context.FinanceAnnualSet.SingleOrDefault(f => f.Code == rep.Code && f.Year == rep.Year);
+
+                        //удалить старый отчет
+                        if (annual != null)
+                        {
+                            _context.FinanceAnnualSet.Remove(annual);
+                        }
+
+                        /*if (_context.FinanceAnnualSet.Count(f => f.Code == rep.Code && f.Year == rep.Year) == 0)
                         {
                             _context.FinanceAnnualSet.Add(rep);
-                        }
+                        }*/
+                        _context.FinanceAnnualSet.Add(rep);
                     }
 
                     raw.Status = FinanceProcessEnum.Processed;

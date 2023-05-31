@@ -117,6 +117,7 @@ class Shares extends React.PureComponent<SharesProps> {
             <th align="right">Price</th>
             <th>Currency</th>
             <th align="right">Change (%)</th>
+            <th>Sector</th>
           </tr>
         </thead>
         <tbody>
@@ -140,6 +141,7 @@ class Shares extends React.PureComponent<SharesProps> {
               >
                 {sh.priceChange}
               </td>
+              <td align="right">{sh.sector}</td>
             </tr>
           ))}
         </tbody>

@@ -120,6 +120,16 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
     );
   }
 
+  private getCapitalization(
+    sharesOutstanding: number,
+    float: number,
+    price: number
+  ) {
+    let formatter = Intl.NumberFormat("en", { notation: "compact" });
+
+    return formatter.format((sharesOutstanding + float) * price);
+  }
+
   public render() {
     const options = {
       legend: {
@@ -165,12 +175,50 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
 
     return (
       <React.Fragment>
-        <h1>Financials</h1>
+        {this.props.financials && (
+          <h1>{`${this.props.financials.emitent}(${this.props.financials.financialPage})`}</h1>
+        )}
 
         {this.props.financials?.assetProfile && (
-          <div className="emitent-profile">
-            <h2>Description</h2>
-            <div>{this.props.financials.assetProfile.longBusinessSummary}</div>
+          <div className="emitent-website">
+            <a href={this.props.financials.assetProfile.website}>
+              {this.props.financials.assetProfile.website}
+            </a>
+          </div>
+        )}
+
+        {this.props.financials?.defaultKeyStatistics && (
+          <div className="share-statistics">
+            <div className="share-statistics-item">
+              <div className="share-statistics-item-name">
+                Shares Outstanding
+              </div>
+              <div className="share-statistics-item-value">
+                {
+                  this.props.financials.defaultKeyStatistics.sharesOutstanding
+                    .fmt
+                }
+              </div>
+            </div>
+
+            <div className="share-statistics-item">
+              <div className="share-statistics-item-name">Float</div>
+              <div className="share-statistics-item-value">
+                {this.props.financials.defaultKeyStatistics.floatShares.fmt}
+              </div>
+            </div>
+
+            <div className="share-statistics-item">
+              <div className="share-statistics-item-name">Capitalization</div>
+              <div className="share-statistics-item-value">
+                {this.getCapitalization(
+                  this.props.financials.defaultKeyStatistics.sharesOutstanding
+                    .raw,
+                  this.props.financials.defaultKeyStatistics.floatShares.raw,
+                  this.props.financials.quote.price
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -237,6 +285,13 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
         <TabPanel value={this.state.activeTab} index="balance">
           {this.renderBalanceSheet()}
         </TabPanel>
+
+        {this.props.financials?.assetProfile && (
+          <div className="emitent-profile">
+            <h2>Description</h2>
+            <div>{this.props.financials.assetProfile.longBusinessSummary}</div>
+          </div>
+        )}
       </React.Fragment>
     );
   }

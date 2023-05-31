@@ -23,6 +23,9 @@ namespace PriceUpdater
         private IObservable<Quote> usaQuoteSeq = null;
         private IDisposable usaSubscription = null;
 
+        private IObservable<Quote> chinaQuoteSeq = null;
+        private IDisposable chinaSubscription = null;
+
         private IObservable<Quote> moscowQuoteSeq = null;
         private IDisposable moscowSubscription = null;
 
@@ -38,6 +41,9 @@ namespace PriceUpdater
             //throw new NotImplementedException();
             usaSubscription.Dispose();
             usaSubscription = null;
+
+            chinaSubscription.Dispose();
+            chinaSubscription = null;
 
             moscowSubscription.Dispose();
             moscowSubscription = null;
@@ -104,6 +110,19 @@ namespace PriceUpdater
                     });
                 }
 
+                if (arg == "chinaPriceUpdater")
+                {
+                    chinaSubscription = chinaQuoteSeq.Subscribe(q =>
+                    {
+                        Log.Information($"update price {q.symbol}");
+                    },
+                    ex =>
+                    {
+                        _logger.Error(ex, "chinaPriceUpdater error");
+                        restartStream.OnNext("chinaPriceUpdater");
+                    });
+                }
+
                 if (arg == "moscowPriceUpdater")
                 {
                     moscowSubscription = moscowQuoteSeq.Subscribe(q =>
@@ -119,6 +138,59 @@ namespace PriceUpdater
             });
 
 
+            chinaQuoteSeq = Observable.Create<Quote>(async observer =>
+            {
+
+                string securities = await xClient.GetData($"{apiUrl}/security");
+                string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
+
+                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => s.Market == "shares" && s.Region == "China").Select(s => s.Code);
+
+                var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
+                .Where(q => securityCodes.Contains(q.symbol))
+                .OrderBy(q => q.symbol);
+                //.OrderBy(q => q.lastUpdate);
+
+                foreach (Quote quote in quoteList)
+                {
+                    observer.OnNext(quote);
+                }
+
+                observer.OnCompleted();
+                return Disposable.Empty;
+
+            })
+            .Select(q => Observable.FromAsync(async () =>
+            {
+                //throw new Exception();
+                string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-20), DateTime.UtcNow);
+
+                Quote result = GetQuoteFromCandles(candles);
+
+                if (result != null)
+                {
+                    result.Id = q.Id;
+                    result.symbol = q.symbol;
+                    result.Board = q.Board;
+
+                    //post quote to server
+                    string content = JObject.FromObject(result).ToString();
+                    HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                }
+
+                if (result == null)
+                {
+                    result = new Quote()
+                    {
+                        symbol = q.symbol
+                    };
+                }
+
+                return result;
+            }).Delay(TimeSpan.FromSeconds(5)))
+            .Concat()
+            .Repeat();
 
 
             usaQuoteSeq = Observable.Create<Quote>(async observer =>
@@ -243,6 +315,12 @@ namespace PriceUpdater
                         usaSubscription = null;
                     }
 
+                    if (proc == "chinaPriceUpdater")
+                    {
+                        chinaSubscription.Dispose();
+                        chinaSubscription = null;
+                    }
+
                     if (proc == "moscowPriceUpdater")
                     {
                         moscowSubscription.Dispose();
@@ -252,7 +330,8 @@ namespace PriceUpdater
                     activate(proc);
                 });
 
-            //activate("usaPriceUpdater");
+            activate("usaPriceUpdater");
+            activate("chinaPriceUpdater");
             activate("moscowPriceUpdater");
 
             return Task.CompletedTask;

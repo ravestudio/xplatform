@@ -8,6 +8,7 @@ interface GridProps extends WithMockEditingIdProps {
     actionButtons?: any;
     onSelectionChanged?: (selectedRows: any) => void;
     checkboxSelection?: boolean;
+    onSaving?: (data: any) => void;
     agGridProps?: any;
 }
 export declare function prepareColumns(cl: any): any;

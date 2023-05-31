@@ -14,5 +14,7 @@ namespace xplatform.Model
         public decimal PriceChange { get; set; }
 
         public string FinancialPage { get; set; }
+
+        public string Sector { get; set; }
     }
 }

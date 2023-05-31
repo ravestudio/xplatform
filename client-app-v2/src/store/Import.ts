@@ -41,6 +41,7 @@ export interface Security {
 export interface YahooFinancial {
   id: string;
   code: string;
+  region: string;
   name: string;
   loadDate?: Date;
   lastFinance?: Date;

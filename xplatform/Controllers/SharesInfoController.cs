@@ -6,6 +6,8 @@ using CommonLib.ISS;
 using CommonLib.Objects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
 using xplatform.Model;
 
@@ -40,14 +42,18 @@ namespace xplatform.Controllers
                 return priceChange != 0 ? Math.Round(priceChange / quote.previousClose * 100, 2) : 0;
             });
 
-            return _context.SecuritySet.Where(s => s.Market == "shares" && s.Region == region).Select(s => new ShareInfo()
+            return _context.SecuritySet
+                .Include(s => s.Emitent)
+                .ThenInclude(e => e.EmitentProfile)
+                .Where(s => s.Market == "shares" && s.Region == region).Select(s => new ShareInfo()
             {
                 Code = s.Code,
                 Emitent = s.Emitent.Name,
-                FinancialPage = s.Emitent.FinancialPage,
+                FinancialPage = s.FinancialPage,
                 Currency = s.Currency,
                 Price = getPrice(quotes, s.Board, s.Code),
-                PriceChange = getPriceChange(quotes, s.Board, s.Code)
+                PriceChange = getPriceChange(quotes, s.Board, s.Code),
+                Sector = s.Emitent.EmitentProfile != null ? (string)JObject.Parse(s.Emitent.EmitentProfile.Data)["sector"] : null
             }).ToArray();
         }
 

@@ -1,83 +1,93 @@
-import { Action, Reducer } from 'redux'
-import { AppThunkAction } from './';
+import { Action, Reducer } from "redux";
+import { AppThunkAction } from "./";
 
 export interface SharesState {
-    isLoading: boolean,
-    region?: string,
-    shares: ShareInfo[]
+  isLoading: boolean;
+  region?: string;
+  shares: ShareInfo[];
 }
 
 export interface ShareInfo {
-    code: string,
-    emitent: string,
-    currency: string,
-    price?: number,
-    priceChange?: number,
-    financialPage?: string
+  code: string;
+  emitent: string;
+  currency: string;
+  price?: number;
+  priceChange?: number;
+  financialPage?: string;
+  sector?: string;
 }
 
 export interface PriceValues {
-    code: string;
-    lastPrice: number;
-    change: number
+  code: string;
+  lastPrice: number;
+  change: number;
 }
 
 interface RequestShareInfoAction {
-    type: 'SHARESINFO_REQUEST',
-    region: string
+  type: "SHARESINFO_REQUEST";
+  region: string;
 }
 
 interface ReceiveShareInfoAction {
-    type: 'SHARESINFO_RECEIVE',
-    region: string,
-    shares: ShareInfo[]
+  type: "SHARESINFO_RECEIVE";
+  region: string;
+  shares: ShareInfo[];
 }
-
 
 type KnownAction = RequestShareInfoAction | ReceiveShareInfoAction;
 
 export const actionCreators = {
-    requestShareInfo: (region: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        const appState = getState();
+  requestShareInfo:
+    (region: string): AppThunkAction<KnownAction> =>
+    (dispatch, getState) => {
+      const appState = getState();
 
-        //const region = 'United States'
+      //const region = 'United States'
 
-        fetch(`/api/sharesInfo?region=${region}`)
-            .then(response => response.json() as Promise<ShareInfo[]>)
-            .then(data => {
-                dispatch({ type: 'SHARESINFO_RECEIVE', region: region, shares: data });
-            });
+      fetch(`/api/sharesInfo?region=${region}`)
+        .then((response) => response.json() as Promise<ShareInfo[]>)
+        .then((data) => {
+          dispatch({
+            type: "SHARESINFO_RECEIVE",
+            region: region,
+            shares: data,
+          });
+        });
 
-        dispatch({ type: 'SHARESINFO_REQUEST', region: region });
-    }
+      dispatch({ type: "SHARESINFO_REQUEST", region: region });
+    },
 };
 
 const unloadedState: SharesState = {
-    region: 'Moscow',
-    shares: [],
-    isLoading: false
+  region: "Moscow",
+  shares: [],
+  isLoading: false,
 };
 
-export const reducer: Reducer<SharesState> = (state: SharesState | undefined, incomingAction: Action): SharesState => {
-    if (state === undefined) {
-        return unloadedState;
-    }
+export const reducer: Reducer<SharesState> = (
+  state: SharesState | undefined,
+  incomingAction: Action
+): SharesState => {
+  if (state === undefined) {
+    return unloadedState;
+  }
 
-    const action = incomingAction as KnownAction
+  const action = incomingAction as KnownAction;
 
-    switch (action.type) {
-        case 'SHARESINFO_REQUEST':
-            return {
-                ...state,
-                region: action.region,
-                isLoading: true
-            }
-        case 'SHARESINFO_RECEIVE':
-            return {
-                region: action.region,
-                shares: action.shares,
-                isLoading: false
-            }
-        default: return state
-    }
-}
+  switch (action.type) {
+    case "SHARESINFO_REQUEST":
+      return {
+        ...state,
+        region: action.region,
+        isLoading: true,
+      };
+    case "SHARESINFO_RECEIVE":
+      return {
+        region: action.region,
+        shares: action.shares,
+        isLoading: false,
+      };
+    default:
+      return state;
+  }
+};

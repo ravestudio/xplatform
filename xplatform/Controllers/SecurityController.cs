@@ -50,6 +50,13 @@ namespace xplatform.Controllers
             return sec.FirstOrDefault();
         }
 
+        [HttpDelete]
+        public IActionResult Delete([FromBody]Security security)
+        {
+            return Ok();
+
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] UpdateModel requestModel)
         {

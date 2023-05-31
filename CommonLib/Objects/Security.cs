@@ -8,10 +8,9 @@ namespace CommonLib.Objects
     {
         public int Id { get; set; }
         public string ISIN { get; set; }
-
         public string Name { get; set; }
         public string Code { get; set; }
-
+        public string FinancialPage { get; set; }
         public string Region { get; set; }
         public string Currency { get; set; }
 
@@ -20,6 +19,8 @@ namespace CommonLib.Objects
 
         public ICollection<Deal> Deals { get; set; }
         public ICollection<Position> Positions { get; set; }
+
+        public SecurityStatistics SecurityStatistics { get; set; }
 
         public string Type { get; set; }
 

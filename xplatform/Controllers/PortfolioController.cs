@@ -84,6 +84,12 @@ namespace xplatform.Controllers
                     cost = cost * usdrub.price;
                 }
 
+                if (security.Currency == "HKD")
+                {
+                    Quote hkdrub = _context.QuoteSet.Single(q => q.symbol == "HKDRUB_TOM");
+                    cost = cost * hkdrub.price;
+                }
+
                 result.AddItem(el.code, security.Name, el.limit, cost, security.Type);
             }
 

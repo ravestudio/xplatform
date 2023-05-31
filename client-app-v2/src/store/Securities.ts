@@ -88,6 +88,21 @@ export const actionCreators = {
         .then((response) => response.json() as Promise<any>)
         .then((model) => dispatch({ type: "EDIT_MODEL_RECEIVE", model }));
     },
+
+  saveChanges:
+    (changes: any): AppThunkAction<KnownAction> =>
+    (dispatch, getState) => {
+      const appState = getState();
+
+      return fetch(`/api/security`, {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: appState.auth?.token as string,
+        },
+        body: JSON.stringify(changes.data),
+      });
+    },
 };
 
 const unloadedState: SecuritiesState = {

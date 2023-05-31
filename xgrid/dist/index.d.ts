@@ -18,6 +18,7 @@ interface GridProps extends WithMockEditingIdProps {
     actionButtons?: any;
     onSelectionChanged?: (selectedRows: any) => void;
     checkboxSelection?: boolean;
+    onSaving?: (data: any) => void;
     agGridProps?: any;
 }
 declare const _default: React.ComponentClass<GridProps, any>;

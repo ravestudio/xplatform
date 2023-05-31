@@ -57,6 +57,18 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
 function __spreadArray(to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -304,6 +316,22 @@ var Grid = /** @class */ (function (_super) {
                 _this.props.onSelectionChanged(selectedRows);
             }
         };
+        _this.deleteItem = function (item) {
+            var _a = item, _b = _this.props.keyField, id = _a[_b], data = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
+            var e = {
+                cancel: false,
+                type: "remove",
+                key: id,
+                data: data,
+            };
+            if (_this.props.onSaving) {
+                var _c = item, _d = _this.props.keyField; _c[_d]; __rest(_c, [typeof _d === "symbol" ? _d : _d + ""]);
+                _this.props.onSaving(e);
+            }
+            if (e.cancel)
+                return;
+            _this.gridApi.applyTransaction({ remove: [item] });
+        };
         _this.commitChanges = function () {
             var mockEditingNode = _this.gridApi.getRowNode(_this.context.mockEditingId);
             var updatedData = __assign({}, mockEditingNode.data);
@@ -354,7 +382,7 @@ var Grid = /** @class */ (function (_super) {
                             editing: __assign({}, _this.props.gridConfig.editing),
                             commit: _this.commitChanges,
                             rollback: _this.rollbackChanges,
-                            //delete: this.props.de,
+                            delete: _this.deleteItem,
                             actionButtons: _this.props.actionButtons
                                 ? _this.props.actionButtons.actions
                                 : [

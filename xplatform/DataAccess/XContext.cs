@@ -92,13 +92,22 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().Property(s => s.ISIN).HasColumnName("ISIN");
             modelBuilder.Entity<Security>().Property(s => s.Name).HasColumnName("Name");
             modelBuilder.Entity<Security>().Property(s => s.Code).HasColumnName("Code");
+            modelBuilder.Entity<Security>().Property(s => s.FinancialPage).HasColumnName("FinancialPage");
             modelBuilder.Entity<Security>().Property(s => s.Region).HasColumnName("Region");
             modelBuilder.Entity<Security>().Property(s => s.Currency).HasColumnName("Currency");
             modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
             modelBuilder.Entity<Security>().Property(s => s.Market).HasColumnName("Market");
             modelBuilder.Entity<Security>().Property(s => s.Board).HasColumnName("Board");
             modelBuilder.Entity<Security>().Property(s => s.Type).HasColumnName("Type");
+            modelBuilder.Entity<Security>().Property(s => s.FinancialPage).HasColumnName("FinancialPage");
             modelBuilder.Entity<Security>().ToTable("SecuritySet");
+
+            modelBuilder.Entity<SecurityStatistics>().HasKey(s => s.SecurityId);
+            modelBuilder.Entity<SecurityStatistics>().Property(y => y.SecurityId).HasColumnName("SecurityId");
+            modelBuilder.Entity<SecurityStatistics>().HasOne(s => s.Security).WithOne(e => e.SecurityStatistics).HasForeignKey<SecurityStatistics>(p => p.SecurityId);
+            modelBuilder.Entity<SecurityStatistics>().Property(y => y.Data).HasColumnName("Data").IsRequired();
+            modelBuilder.Entity<SecurityStatistics>().Property(y => y.CreateDate).HasColumnName("CreateDate").IsRequired();
+            modelBuilder.Entity<SecurityStatistics>().ToTable("SecurityKeyStatisticsSet");
 
             modelBuilder.Entity<Bond>().Property(s => s.NominalPrice).HasColumnName("NominalPrice");
             modelBuilder.Entity<ETF>().Property(s => s.Structure).HasColumnName("Structure").IsRequired();

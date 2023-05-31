@@ -8,7 +8,11 @@ export interface FinancialsState {
 }
 
 export interface Financials {
+  emitent: string;
+  financialPage: string;
   assetProfile: any | null;
+  defaultKeyStatistics: any | null;
+  quote: any;
   incomeStatementHistory: any;
   cashflowStatementHistory: any;
   balanceSheetHistory: any;
