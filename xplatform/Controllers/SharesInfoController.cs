@@ -28,14 +28,14 @@ namespace xplatform.Controllers
         {
             var quotes = _context.QuoteSet.ToList();
 
-            Func<IList<Quote>, string, string, decimal> getPrice = new Func<IList<Quote>, string, string, decimal>((quotes, board, symbol) =>
+            Func<IList<Quote>, string, decimal> getPrice = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
             {
-                return quotes.Single(q => q.Board == board && q.symbol == symbol).price;
+                return quotes.Single(q => q.symbol == symbol).price;
             });
 
-            Func<IList<Quote>, string, string, decimal> getPriceChange = new Func<IList<Quote>, string, string, decimal>((quotes, board, symbol) =>
+            Func<IList<Quote>, string, decimal> getPriceChange = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
             {
-                Quote quote = quotes.Single(q => q.Board == board && q.symbol == symbol);
+                Quote quote = quotes.Single(q => q.symbol == symbol);
 
                 decimal priceChange = quote.price - quote.previousClose;
 
@@ -45,14 +45,14 @@ namespace xplatform.Controllers
             return _context.SecuritySet
                 .Include(s => s.Emitent)
                 .ThenInclude(e => e.EmitentProfile)
-                .Where(s => s.Market == "shares" && s.Region == region).Select(s => new ShareInfo()
+                .Where(s => new string[] { "stock", "etf" }.Contains(s.Type) && s.Region == region).Select(s => new ShareInfo()
             {
                 Code = s.Code,
                 Emitent = s.Emitent.Name,
                 FinancialPage = s.FinancialPage,
                 Currency = s.Currency,
-                Price = getPrice(quotes, s.Board, s.Code),
-                PriceChange = getPriceChange(quotes, s.Board, s.Code),
+                Price = getPrice(quotes, s.Code),
+                PriceChange = getPriceChange(quotes, s.Code),
                 Sector = s.Emitent.EmitentProfile != null ? (string)JObject.Parse(s.Emitent.EmitentProfile.Data)["sector"] : null
             }).ToArray();
         }

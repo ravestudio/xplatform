@@ -144,7 +144,7 @@ namespace PriceUpdater
                 string securities = await xClient.GetData($"{apiUrl}/security");
                 string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
 
-                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => s.Market == "shares" && s.Region == "China").Select(s => s.Code);
+                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => new string[]{ "stock", "etf"}.Contains(s.Type) && s.Region == "China").Select(s => s.Code);
 
                 var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
                 .Where(q => securityCodes.Contains(q.symbol))
@@ -199,7 +199,7 @@ namespace PriceUpdater
                 string securities = await xClient.GetData($"{apiUrl}/security");
                 string currentQuotes = await xClient.GetData($"{apiUrl}/Quote");
 
-                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => s.Market == "shares" && s.Region == "United States").Select(s => s.Code);
+                var securityCodes = JsonConvert.DeserializeObject<List<Security>>(securities).Where(s => new string[] { "stock", "etf" }.Contains(s.Type) && s.Region == "United States").Select(s => s.Code);
 
                 var quoteList = JsonConvert.DeserializeObject<List<Quote>>(currentQuotes)
                 .Where(q => securityCodes.Contains(q.symbol))
@@ -260,6 +260,15 @@ namespace PriceUpdater
                 //.OrderBy(q => q.symbol);
                 .OrderBy(q => q.lastUpdate);
 
+                Func<string, string> getMarket = (type) =>
+                {
+                    if (type == "bond") return "bonds";
+
+                    if (type == "currency") return "selt";
+
+                    return "shares";
+                };
+
                 foreach (Quote quote in quoteList)
                 {
                     MarketData md = null;
@@ -268,7 +277,7 @@ namespace PriceUpdater
                     {
                         quote = quote,
                         board = quote.Board,
-                        market = securityObj.First(s => s.Code == quote.symbol).Market,
+                        market = getMarket(securityObj.First(s => s.Code == quote.symbol).Type),
                         ticker = quote.symbol
                     };
 

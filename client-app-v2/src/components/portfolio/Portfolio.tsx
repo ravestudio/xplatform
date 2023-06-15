@@ -74,7 +74,15 @@ class Portfolio extends React.PureComponent<PortfolioProps> {
     );
   }
 
+  private RenderPrc(total: number, cost: number) {
+    return ((cost / total) * 100).toFixed(2);
+  }
+
   private renderPortfolioTable() {
+    const total = this.props.portfolio
+      ? this.props.portfolio?.sharesTotal + this.props.portfolio?.bondsTotal
+      : 0;
+
     return (
       <table>
         <thead>
@@ -83,6 +91,7 @@ class Portfolio extends React.PureComponent<PortfolioProps> {
             <th>Name</th>
             <th>Limit</th>
             <th>Cost</th>
+            <th>Prc</th>
           </tr>
         </thead>
         <tbody>
@@ -92,7 +101,8 @@ class Portfolio extends React.PureComponent<PortfolioProps> {
                 <td>{item.code}</td>
                 <td>{item.name}</td>
                 <td>{item.limit}</td>
-                <td>{item.cost}</td>
+                <td>{item.cost.toFixed(2)}</td>
+                <td>{this.RenderPrc(total, item.cost)}</td>
               </tr>
             )
           )}
@@ -100,11 +110,7 @@ class Portfolio extends React.PureComponent<PortfolioProps> {
             <td>Total</td>
             <td></td>
             <td></td>
-            <td>
-              {this.props.portfolio &&
-                this.props.portfolio?.sharesTotal +
-                  this.props.portfolio?.bondsTotal}
-            </td>
+            <td>{total.toFixed(2)}</td>
           </tr>
         </tbody>
       </table>

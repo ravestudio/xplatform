@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommonLib.ISS;
+using CommonLib.Objects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using xplatform.DataAccess;
@@ -25,7 +26,7 @@ namespace xplatform.Controllers
         {
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
 
-            var values = _context.SecuritySet.Where(s => s.Market == "shares" && s.Region == "Moscow")
+            var values = _context.SecuritySet.Where(s => new string[] { "stock", "etf" }.Contains(s.Type) && s.Region == "Moscow")
                 .Select(s => s.Code).ToArray();
 
             IList<PriceInfo> results = new List<PriceInfo>();

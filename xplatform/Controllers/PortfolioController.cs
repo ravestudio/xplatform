@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,18 +61,19 @@ namespace xplatform.Controllers
             {
                 Security security = _context.SecuritySet.Single(s => s.Code == el.code);
 
-                Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code && q.Board == security.Board);
+                //todo нужна фильтрация по board
+                Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code);
 
                 //ISSResponse issResp = await micexClient.GetSecurityInfo(security.Market, security.Board, el.code);
 
                 decimal cost = 0m;
 
-                if (security.Market == "shares")
+                if (new string[] { "stock", "etf" }.Contains(security.Type))
                 {
                     cost = quote.price * el.limit;
                 }
 
-                if (security.Market == "bonds")
+                if (security.Type == "bond")
                 {
                     cost = (quote.price / 100) *
                         ((Bond)security).NominalPrice * el.limit +
@@ -109,8 +111,11 @@ namespace xplatform.Controllers
 
             foreach(Account account in accounts)
             {
+                Quote gldrub = _context.QuoteSet.Single(q => q.symbol == "GLDRUB_TOM");
+                
                 var cash = JObject.Parse(account.Cash);
                 result.BondsTotal += cash.Value<decimal>("RUB");
+                result.BondsTotal += cash.Value<decimal>("GLD")* gldrub.price;
             }
 
             result.SharesPerc = Math.Round(result.SharesTotal / (result.SharesTotal + result.BondsTotal) * 100, 2);

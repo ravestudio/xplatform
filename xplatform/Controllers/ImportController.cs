@@ -50,7 +50,7 @@ namespace xplatform.Controllers
                         Count = rawItem.count * market.lotSize,
                         Price = rawItem.price,
                         Volume = rawItem.volume,
-                        NKD = security.Market == "bonds" ? rawItem.nkd : null
+                        NKD = security.Type == "bond" ? rawItem.nkd : null
                     };
 
                     _context.DealSet.Add(deal);
@@ -111,10 +111,7 @@ namespace xplatform.Controllers
                         Code = rawItem.ticker,
                         Name = rawItem.name,
                         Region = getRegion(rawItem.Board),
-                        Currency = rawItem.currency,
-                        Market = "shares",
-                        Board = rawItem.Board
-
+                        Currency = rawItem.currency
                     };
 
                     Quote quote = new Quote()

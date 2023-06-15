@@ -24,8 +24,6 @@ namespace CommonLib.Objects
 
         public string Type { get; set; }
 
-        public string Market { get; set; }
-        public string Board { get; set; }
     }
 
     public class Share : Security

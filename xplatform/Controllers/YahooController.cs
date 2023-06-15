@@ -66,7 +66,7 @@ namespace xplatform.Controllers
                 .Include(s => s.Emitent)
                 .ThenInclude(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == Code);
 
-            Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code && q.Board == security.Board);
+            Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code);
 
             var financials = _context.FinanceAnnualSet.Where(f => f.Code == security.Emitent.FinancialPage)
                 .OrderByDescending(f => f.Year).Take(5).ToList();

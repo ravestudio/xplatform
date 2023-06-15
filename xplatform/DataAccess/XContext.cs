@@ -96,8 +96,6 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<Security>().Property(s => s.Region).HasColumnName("Region");
             modelBuilder.Entity<Security>().Property(s => s.Currency).HasColumnName("Currency");
             modelBuilder.Entity<Security>().HasOne(s => s.Emitent).WithMany(e => e.Securities).HasForeignKey(s => s.EmitentId);
-            modelBuilder.Entity<Security>().Property(s => s.Market).HasColumnName("Market");
-            modelBuilder.Entity<Security>().Property(s => s.Board).HasColumnName("Board");
             modelBuilder.Entity<Security>().Property(s => s.Type).HasColumnName("Type");
             modelBuilder.Entity<Security>().Property(s => s.FinancialPage).HasColumnName("FinancialPage");
             modelBuilder.Entity<Security>().ToTable("SecuritySet");
