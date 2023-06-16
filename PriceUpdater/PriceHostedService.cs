@@ -14,6 +14,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CommonLib.ISS;
 using Serilog;
+using Tinkoff.InvestApi;
+using Google.Protobuf.WellKnownTypes;
+using Tinkoff.InvestApi.V1;
 
 namespace PriceUpdater
 {
@@ -49,12 +52,28 @@ namespace PriceUpdater
             moscowSubscription = null;
         }
 
+        public DateTime UnixTimeToDateTime(long unixtime)
+        {
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixtime);
+            return dtDateTime;
+        }
+
+        private string CandlesToJson(IList<HistoricCandle> historic)
+        {
+            var candles = historic.Select(c => new { o = (decimal)c.Open, c = (decimal)c.Close, time = UnixTimeToDateTime(c.Time.Seconds) }).ToList();
+
+            return JsonConvert.SerializeObject(new { payload = new { candles = candles } });
+        }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             //string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
             string apiUrl = "http://localhost:5000/api";
             //string apiUrl = "http://192.168.0.17/api";
+
+            var client = InvestApiClientFactory.Create("t.hAFDFeeTzLR_tlTz9H7S406ecutXFe21HljCDGf7sm_DRIYTDesfGlkS5P5ohNcZ_0tZUwHKgdhvMXhoRO0iYw");
 
             var apiClient = new CommonLib.WebApiClient();
             apiClient.addHeader("Authorization", "Bearer t.hAFDFeeTzLR_tlTz9H7S406ecutXFe21HljCDGf7sm_DRIYTDesfGlkS5P5ohNcZ_0tZUwHKgdhvMXhoRO0iYw");
@@ -83,7 +102,6 @@ namespace PriceUpdater
 
                 return new Quote()
                 {
-                    figi = (string)candles[0]["figi"],
                     open = decimal.Parse((string)candles[0]["o"], CultureInfo.InvariantCulture),
                     price = decimal.Parse((string)candles[0]["c"], CultureInfo.InvariantCulture),
                     previousClose = decimal.Parse((string)candles[1]["c"], CultureInfo.InvariantCulture)
@@ -163,7 +181,14 @@ namespace PriceUpdater
             .Select(q => Observable.FromAsync(async () =>
             {
                 //throw new Exception();
-                string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-20), DateTime.UtcNow);
+                //string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-20), DateTime.UtcNow);
+
+                //Quote result = GetQuoteFromCandles(candles);
+
+                var request = new GetCandlesRequest { Figi = q.figi, From = DateTime.UtcNow.AddDays(-20).ToTimestamp(), To = DateTime.UtcNow.ToTimestamp(), Interval = CandleInterval.Day };
+
+                var resp = client.MarketData.GetCandles(request);
+                var candles = CandlesToJson(resp.Candles);
 
                 Quote result = GetQuoteFromCandles(candles);
 
@@ -172,6 +197,7 @@ namespace PriceUpdater
                     result.Id = q.Id;
                     result.symbol = q.symbol;
                     result.Board = q.Board;
+                    result.figi = q.figi;
 
                     //post quote to server
                     string content = JObject.FromObject(result).ToString();
@@ -218,13 +244,18 @@ namespace PriceUpdater
             .Select(q => Observable.FromAsync(async () =>
             {
                 //throw new Exception();
-                string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-20), DateTime.UtcNow);
+                //string candles = await _tinkoffClient.GetCandles(q.figi, "day", DateTime.UtcNow.AddDays(-20), DateTime.UtcNow);
+
+                var request = new GetCandlesRequest { Figi = q.figi, From = DateTime.UtcNow.AddDays(-20).ToTimestamp(), To = DateTime.UtcNow.ToTimestamp(), Interval = CandleInterval.Day };
+                var resp = client.MarketData.GetCandles(request);
+                var candles = CandlesToJson(resp.Candles);
 
                 Quote result = GetQuoteFromCandles(candles);
 
                 if (result != null)
                 {
                     result.Id = q.Id;
+                    result.figi = q.figi;
                     result.symbol = q.symbol;
                     result.Board = q.Board;
 
