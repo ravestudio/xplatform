@@ -33,6 +33,7 @@ namespace CommonLib.Objects
 
     public class Bond : Security
     {
+        public string NKDCurrency { get; set; }
         public decimal NominalPrice { get; set; }
     }
 

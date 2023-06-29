@@ -67,6 +67,7 @@ namespace xplatform.Controllers
                 //ISSResponse issResp = await micexClient.GetSecurityInfo(security.Market, security.Board, el.code);
 
                 decimal cost = 0m;
+                decimal nkdcost = 0m;
 
                 if (new string[] { "stock", "etf" }.Contains(security.Type))
                 {
@@ -76,8 +77,15 @@ namespace xplatform.Controllers
                 if (security.Type == "bond")
                 {
                     cost = (quote.price / 100) *
-                        ((Bond)security).NominalPrice * el.limit +
-                        el.limit * quote.NKD.Value;
+                        ((Bond)security).NominalPrice * el.limit;
+                    nkdcost = el.limit * quote.NKD.Value;
+
+                    //купонный доход если в usd
+                    if (((Bond)security).NKDCurrency == "USD")
+                    {
+                        Quote usdrub = _context.QuoteSet.Single(q => q.symbol == "USD000UTSTOM");
+                        nkdcost = nkdcost * usdrub.price;
+                    }
                 }
 
                 if (security.Currency == "USD")
@@ -92,7 +100,7 @@ namespace xplatform.Controllers
                     cost = cost * hkdrub.price;
                 }
 
-                result.AddItem(el.code, security.Name, el.limit, cost, security.Type);
+                result.AddItem(el.code, security.Name, el.limit, cost + nkdcost, security.Type);
             }
 
             result.SharesTotal = result.Items.Where(i => i.Type == "stock").Sum(s => s.Cost);

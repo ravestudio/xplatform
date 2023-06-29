@@ -108,6 +108,7 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<SecurityStatistics>().ToTable("SecurityKeyStatisticsSet");
 
             modelBuilder.Entity<Bond>().Property(s => s.NominalPrice).HasColumnName("NominalPrice");
+            modelBuilder.Entity<Bond>().Property(s => s.NKDCurrency).HasColumnName("NKDCurrency");
             modelBuilder.Entity<ETF>().Property(s => s.Structure).HasColumnName("Structure").IsRequired();
 
             modelBuilder.Entity<Deal>().HasKey(d => d.Id);
