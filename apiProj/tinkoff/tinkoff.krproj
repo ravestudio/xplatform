@@ -1,0 +1,26 @@
+{
+  "id": "55b687a5-0db2-4dd6-9b85-69fdb1a2e4aa",
+  "importStreams": [
+    {
+      "id": "91dde1e1-5d23-4487-b2c2-5c79a0ada252",
+      "name": "TINKOFF INVEST API",
+      "importerName": "ProtoFile",
+      "createMissingOperations": true,
+      "options": {
+        "files": [
+          "../contracts/common.proto",
+          "../contracts/instruments.proto",
+          "../contracts/marketdata.proto",
+          "../contracts/operations.proto",
+          "../contracts/orders.proto",
+          "../contracts/sandbox.proto",
+          "../contracts/stoporders.proto",
+          "../contracts/users.proto"
+        ],
+        "importPaths": []
+      }
+    }
+  ],
+  "authConfigs": [],
+  "certificates": []
+}
