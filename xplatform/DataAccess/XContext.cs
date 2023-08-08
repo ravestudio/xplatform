@@ -107,6 +107,13 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<SecurityStatistics>().Property(y => y.CreateDate).HasColumnName("CreateDate").IsRequired();
             modelBuilder.Entity<SecurityStatistics>().ToTable("SecurityKeyStatisticsSet");
 
+            modelBuilder.Entity<FinancialData>().HasKey(y => y.SecurityId);
+            modelBuilder.Entity<FinancialData>().Property(y => y.SecurityId).HasColumnName("SecurityId");
+            modelBuilder.Entity<FinancialData>().HasOne(s => s.Security).WithOne(e => e.FinancialData).HasForeignKey<FinancialData>(p => p.SecurityId);
+            modelBuilder.Entity<FinancialData>().Property(y => y.Data).HasColumnName("Data").IsRequired();
+            modelBuilder.Entity<FinancialData>().Property(y => y.CreateDate).HasColumnName("CreateDate").IsRequired();
+            modelBuilder.Entity<FinancialData>().ToTable("FinancialDataSet");
+
             modelBuilder.Entity<Bond>().Property(s => s.NominalPrice).HasColumnName("NominalPrice");
             modelBuilder.Entity<Bond>().Property(s => s.NKDCurrency).HasColumnName("NKDCurrency");
             modelBuilder.Entity<ETF>().Property(s => s.Structure).HasColumnName("Structure").IsRequired();

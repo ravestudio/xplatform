@@ -9,10 +9,13 @@ export interface FinancialsState {
 
 export interface Financials {
   emitent: string;
+  isin: string;
   financialPage: string;
   assetProfile: any | null;
-  defaultKeyStatistics: any | null;
+  defaultKeyStatistics: any[];
+  financialData: any | null;
   quote: any;
+  currencies: any[];
   incomeStatementHistory: any;
   cashflowStatementHistory: any;
   balanceSheetHistory: any;

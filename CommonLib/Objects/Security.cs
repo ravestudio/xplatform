@@ -21,6 +21,7 @@ namespace CommonLib.Objects
         public ICollection<Position> Positions { get; set; }
 
         public SecurityStatistics SecurityStatistics { get; set; }
+        public FinancialData FinancialData { get; set; }
 
         public string Type { get; set; }
 

@@ -30,14 +30,17 @@ namespace xplatform.Controllers
 
             Func<IList<Quote>, string, decimal> getPrice = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
             {
-                return quotes.Single(q => q.symbol == symbol).price;
+                var quote = quotes.SingleOrDefault(q => q.symbol == symbol);
+                return quote.price == 0 && quote.previousClose > 0? quote.previousClose : quote.price;
             });
 
             Func<IList<Quote>, string, decimal> getPriceChange = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
             {
                 Quote quote = quotes.Single(q => q.symbol == symbol);
 
-                decimal priceChange = quote.price - quote.previousClose;
+                var price = quote.price == 0 && quote.previousClose > 0 ? quote.previousClose : quote.price;
+
+                decimal priceChange = price - quote.previousClose;
 
                 return priceChange != 0 ? Math.Round(priceChange / quote.previousClose * 100, 2) : 0;
             });

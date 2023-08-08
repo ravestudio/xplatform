@@ -36,6 +36,11 @@ namespace xplatform.Controllers
 
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
 
+            Func<Quote, decimal> getPrice = new Func<Quote, decimal>((quote) =>
+            {
+                return quote.price == 0 && quote.previousClose > 0 ? quote.previousClose : quote.price;
+            });
+
             var snap = _context.SnapshootSet.OrderByDescending(s => s.ChangeDate).First();
 
             var accountIds = _context.PortfolioSet.Where(p => p.Id == portfolioId).SelectMany(p => p.PortfolioAccounts, (p, acc) => acc.AccountId);
@@ -71,12 +76,12 @@ namespace xplatform.Controllers
 
                 if (new string[] { "stock", "etf" }.Contains(security.Type))
                 {
-                    cost = quote.price * el.limit;
+                    cost = getPrice(quote) * el.limit;
                 }
 
                 if (security.Type == "bond")
                 {
-                    cost = (quote.price / 100) *
+                    cost = (getPrice(quote) / 100) *
                         ((Bond)security).NominalPrice * el.limit;
                     nkdcost = el.limit * quote.NKD.Value;
 
@@ -84,20 +89,20 @@ namespace xplatform.Controllers
                     if (((Bond)security).NKDCurrency == "USD")
                     {
                         Quote usdrub = _context.QuoteSet.Single(q => q.symbol == "USD000UTSTOM");
-                        nkdcost = nkdcost * usdrub.price;
+                        nkdcost = nkdcost * getPrice(usdrub);
                     }
                 }
 
                 if (security.Currency == "USD")
                 {
                     Quote usdrub = _context.QuoteSet.Single(q => q.symbol == "USD000UTSTOM");
-                    cost = cost * usdrub.price;
+                    cost = cost * getPrice(usdrub);
                 }
 
                 if (security.Currency == "HKD")
                 {
                     Quote hkdrub = _context.QuoteSet.Single(q => q.symbol == "HKDRUB_TOM");
-                    cost = cost * hkdrub.price;
+                    cost = cost * getPrice(hkdrub);
                 }
 
                 result.AddItem(el.code, security.Name, el.limit, cost + nkdcost, security.Type);
@@ -123,7 +128,7 @@ namespace xplatform.Controllers
                 
                 var cash = JObject.Parse(account.Cash);
                 result.BondsTotal += cash.Value<decimal>("RUB");
-                result.BondsTotal += cash.Value<decimal>("GLD")* gldrub.price;
+                result.BondsTotal += cash.Value<decimal>("GLD")* getPrice(gldrub);
             }
 
             result.SharesPerc = Math.Round(result.SharesTotal / (result.SharesTotal + result.BondsTotal) * 100, 2);

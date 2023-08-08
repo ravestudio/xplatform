@@ -61,12 +61,16 @@ namespace xplatform.Controllers
         public IActionResult Get(string Code)
         {
 
-            var security = _context.SecuritySet
-                .Include(s => s.SecurityStatistics)
-                .Include(s => s.Emitent)
-                .ThenInclude(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == Code);
+            //все акции по эмитенту
+            var q_security = from sec in _context.SecuritySet join sec2 in _context.SecuritySet on sec.EmitentId equals sec2.EmitentId where sec2.FinancialPage == Code && sec.Type == "stock" select sec;
+
+            var securityList = q_security.Include(s => s.SecurityStatistics).Include(s => s.FinancialData).Include(s=> s.Emitent).ThenInclude(e => e.EmitentProfile).ToList();
+
+            var security = securityList.Single(s => s.FinancialPage == Code);
 
             Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code);
+
+            IList<Quote> currencies = _context.QuoteSet.Where(q => q.Board == "CETS").ToList();
 
             var financials = _context.FinanceAnnualSet.Where(f => f.Code == security.Emitent.FinancialPage)
                 .OrderByDescending(f => f.Year).Take(5).ToList();
@@ -74,11 +78,25 @@ namespace xplatform.Controllers
             JObject report = new JObject(
 
                 new JProperty("emitent", security.Name),
+                new JProperty("isin", security.ISIN),
                 new JProperty("quote", JObject.FromObject(quote)),
+                new JProperty("currencies", JArray.FromObject(currencies)),
                 new JProperty("financialPage", security.FinancialPage),
 
                 new JProperty("assetProfile", security.Emitent.EmitentProfile != null? JObject.Parse(security.Emitent.EmitentProfile.Data): null),
-                new JProperty("defaultKeyStatistics", security.SecurityStatistics != null ? JObject.Parse(security.SecurityStatistics.Data) : null),
+                //new JProperty("defaultKeyStatistics", security.SecurityStatistics != null ? JObject.Parse(security.SecurityStatistics.Data) : null),
+
+                new JProperty("defaultKeyStatistics", new JArray(
+                    securityList.Where(s => s.SecurityStatistics != null)
+                    .Select(s => {
+                        var jobj = JObject.Parse(s.SecurityStatistics.Data);
+                        jobj["code"] = s.FinancialPage;
+                        return jobj;
+                        })
+                    )
+                ),
+
+                new JProperty("financialData", security.FinancialData != null ? JObject.Parse(security.FinancialData.Data) : null),
 
                 new JProperty("incomeStatementHistory",
                     new JArray(financials.Select(f => JObject.Parse(f.Data)["incomeStatement"]))),
@@ -156,6 +174,17 @@ namespace xplatform.Controllers
 
                         security.Emitent.EmitentProfile.Data = obj["assetProfile"].ToString();
                         security.Emitent.EmitentProfile.CreateDate = DateTime.Now;
+                    }
+
+                    if (obj["financialData"] != null)
+                    {
+                        if (security.FinancialData == null)
+                        {
+                            security.FinancialData = new FinancialData();
+                        }
+
+                        security.FinancialData.Data = obj["financialData"].ToString();
+                        security.FinancialData.CreateDate = DateTime.Now;
                     }
 
                     if (obj["defaultKeyStatistics"] != null)

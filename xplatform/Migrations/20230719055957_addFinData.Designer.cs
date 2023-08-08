@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -9,9 +10,10 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20230719055957_addFinData")]
+    partial class addFinData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,8 +328,8 @@ namespace xplatform.Migrations
 
             modelBuilder.Entity("CommonLib.Objects.FinancialData", b =>
                 {
-                    b.Property<int?>("SecurityId")
-                        .HasColumnName("SecurityId")
+                    b.Property<int?>("EmitentId")
+                        .HasColumnName("EmitentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreateDate")
@@ -339,7 +341,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Data")
                         .HasColumnType("text");
 
-                    b.HasKey("SecurityId");
+                    b.HasKey("EmitentId");
 
                     b.ToTable("FinancialDataSet");
                 });
@@ -780,9 +782,9 @@ namespace xplatform.Migrations
 
             modelBuilder.Entity("CommonLib.Objects.FinancialData", b =>
                 {
-                    b.HasOne("CommonLib.Objects.Security", "Security")
+                    b.HasOne("CommonLib.Objects.Emitent", "Emitent")
                         .WithOne("FinancialData")
-                        .HasForeignKey("CommonLib.Objects.FinancialData", "SecurityId")
+                        .HasForeignKey("CommonLib.Objects.FinancialData", "EmitentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
