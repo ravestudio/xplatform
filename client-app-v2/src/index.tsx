@@ -7,8 +7,6 @@ import { createBrowserHistory } from "history";
 import configureStore from "./store/configureStore";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import Shares from "./components/shares/2Shares";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // Create browser history to use in the Redux store
 const baseUrl = document

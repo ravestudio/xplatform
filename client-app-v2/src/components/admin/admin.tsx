@@ -2,13 +2,20 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { ApplicationState } from "../../store";
 import * as SecuritiesStore from "../../store/Securities";
+import * as SystemStore from "../../store/System";
 import Tabs, { Tab } from "../tabs";
 import Securities from "./Securities";
+import System from "./System";
 
-type AdminProps = SecuritiesStore.SecuritiesState &
-  typeof SecuritiesStore.actionCreators;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    secActions: bindActionCreators(SecuritiesStore.actionCreators, dispatch),
+    sysActions: bindActionCreators(SystemStore.actionCreators, dispatch),
+  };
+};
+
+type AdminProps = ReturnType<typeof mapDispatchToProps>;
 
 interface IState {
   activeTab: string;
@@ -45,7 +52,8 @@ class Admin extends React.PureComponent<AdminProps, IState> {
   }
 
   public componentDidMount() {
-    this.props.requestSecurities();
+    this.props.secActions.requestSecurities();
+    this.props.sysActions.requestData();
   }
 
   private handleChange(newValue: string) {
@@ -65,8 +73,8 @@ class Admin extends React.PureComponent<AdminProps, IState> {
             //onSelect={this.handleChange}
           />
           <Tab
-            label="Profile"
-            value="profile"
+            label="System"
+            value="system"
             icon="fa-code"
             //onSelect={this.handleChange}
           />
@@ -75,16 +83,12 @@ class Admin extends React.PureComponent<AdminProps, IState> {
         <TabPanel value={this.state.activeTab} index="securities">
           <Securities />
         </TabPanel>
+        <TabPanel value={this.state.activeTab} index="system">
+          <System />
+        </TabPanel>
       </React.Fragment>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return bindActionCreators(SecuritiesStore.actionCreators, dispatch);
-};
-
-export default connect(
-  (state: ApplicationState) => state.securities,
-  mapDispatchToProps
-)(Admin);
+export default connect(null, mapDispatchToProps)(Admin);

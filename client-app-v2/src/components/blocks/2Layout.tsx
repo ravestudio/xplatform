@@ -7,7 +7,9 @@ const drawerWidth = 240;
 export default (props: { children?: React.ReactNode }) => {
   return (
     <div className="root">
-      <div className="container">{props.children}</div>
+      <div className="container container_main container_column">
+        {props.children}
+      </div>
     </div>
   );
 };

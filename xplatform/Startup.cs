@@ -51,6 +51,7 @@ namespace xplatform
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITemperatureProvider, RaspiTemperatureProvider>();
 
             //services.AddSingleton<ILogger>(provider => { return Log.Logger; });
         }

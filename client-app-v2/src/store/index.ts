@@ -7,9 +7,11 @@ import * as Shares from "./Shares";
 import * as Import from "./Import";
 import * as Auth from "./Auth";
 import * as Positions from "./Positions";
+import * as System from "./System";
 
 export interface ApplicationState {
   securities: Securities.SecuritiesState | undefined;
+  system: System.SystemState | undefined;
   deals: Deals.DealsState | undefined;
   accounts: Accounts.AccountsState | undefined;
   portfolio: Portfolio.PortfolioState | undefined;
@@ -22,6 +24,7 @@ export interface ApplicationState {
 
 export const reducers = {
   securities: Securities.reducer,
+  system: System.reducer,
   deals: Deals.reducer,
   accounts: Accounts.reducer,
   portfolio: Portfolio.reducer,

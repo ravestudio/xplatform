@@ -30,3 +30,13 @@
         }
     }
 }
+
+.chart {
+    width: 300px;
+    flex-shrink: 0;
+}
+
+.common_data{
+    flex-grow: 1;
+    overflow: hidden;
+}

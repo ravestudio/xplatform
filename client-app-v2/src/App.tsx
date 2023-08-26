@@ -7,12 +7,13 @@ import Auth from "./components/auth/Login";
 import Portfolio from "./components/portfolio/Portfolio";
 import Import from "./components/import/import";
 
-import { BrowserRouter, Link, Route, Routes, useMatch } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import { ApplicationState } from "./store";
 import Financials from "./components/financials/Financials";
 import Positions from "./components/positions/Positions";
 import Admin from "./components/admin/admin";
+import "./app.scss";
 
 export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
@@ -20,22 +21,16 @@ export default connect((state: ApplicationState) => ({
   <Layout>
     <BrowserRouter>
       {props.loggedIn && (
-        <div>
-          <div>
-            <Link to="/">Home</Link>
-          </div>
-          <div>
-            <Link to="portfolio">Portfolio</Link>
-          </div>
-          <div>
-            <Link to="import">Import</Link>
-          </div>
-          <div>
-            <Link to="positions">Positions</Link>
-          </div>
-          <div>
-            <Link to="admin">Admin</Link>
-          </div>
+        <div className="mainMenu">
+          <Link to="/">Home</Link>
+
+          <Link to="portfolio">Portfolio</Link>
+
+          <Link to="import">Import</Link>
+
+          <Link to="positions">Positions</Link>
+
+          <Link to="admin">Admin</Link>
         </div>
       )}
       <Routes>
