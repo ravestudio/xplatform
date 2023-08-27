@@ -1,23 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xplatform", "xplatform\xplatform.csproj", "{CAA27957-FF34-4807-A59C-22D244BDFFB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xplatform", "xplatform\xplatform.csproj", "{736545FD-6DE0-4085-973E-FF0F860E0232}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib", "CommonLib\CommonLib.csproj", "{CEF992CB-A0B5-4218-8D3D-11E2FE2322E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib", "CommonLib\CommonLib.csproj", "{E82AC312-D557-43FC-89D9-928F0D14737B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client\client.csproj", "{F0ADA3D1-1B20-4CF1-ACCD-F21619307AB1}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E79A6D08-70BC-4134-A14B-AF0DDAC2E36C}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose-linux.yml = docker-compose-linux.yml
-		docker-compose.yml = docker-compose.yml
-		Dockerfile = Dockerfile
-		Dockerfile_priceUpdater = Dockerfile_priceUpdater
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PriceUpdater", "PriceUpdater\PriceUpdater.csproj", "{16761303-C127-4255-98AC-15B060FDF95C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PriceUpdater", "PriceUpdater\PriceUpdater.csproj", "{C3C182D5-44C3-4E2E-A94F-26EC5DB2C0C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,27 +15,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CAA27957-FF34-4807-A59C-22D244BDFFB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAA27957-FF34-4807-A59C-22D244BDFFB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAA27957-FF34-4807-A59C-22D244BDFFB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAA27957-FF34-4807-A59C-22D244BDFFB8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEF992CB-A0B5-4218-8D3D-11E2FE2322E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEF992CB-A0B5-4218-8D3D-11E2FE2322E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEF992CB-A0B5-4218-8D3D-11E2FE2322E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEF992CB-A0B5-4218-8D3D-11E2FE2322E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0ADA3D1-1B20-4CF1-ACCD-F21619307AB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0ADA3D1-1B20-4CF1-ACCD-F21619307AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0ADA3D1-1B20-4CF1-ACCD-F21619307AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0ADA3D1-1B20-4CF1-ACCD-F21619307AB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16761303-C127-4255-98AC-15B060FDF95C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16761303-C127-4255-98AC-15B060FDF95C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16761303-C127-4255-98AC-15B060FDF95C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16761303-C127-4255-98AC-15B060FDF95C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{736545FD-6DE0-4085-973E-FF0F860E0232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736545FD-6DE0-4085-973E-FF0F860E0232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{736545FD-6DE0-4085-973E-FF0F860E0232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736545FD-6DE0-4085-973E-FF0F860E0232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82AC312-D557-43FC-89D9-928F0D14737B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82AC312-D557-43FC-89D9-928F0D14737B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82AC312-D557-43FC-89D9-928F0D14737B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82AC312-D557-43FC-89D9-928F0D14737B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3C182D5-44C3-4E2E-A94F-26EC5DB2C0C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3C182D5-44C3-4E2E-A94F-26EC5DB2C0C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3C182D5-44C3-4E2E-A94F-26EC5DB2C0C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3C182D5-44C3-4E2E-A94F-26EC5DB2C0C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9150DF03-3672-4244-A772-D481583D808F}
+		SolutionGuid = {D1265A4A-88DD-4EDE-861C-2B4CCA99FB46}
 	EndGlobalSection
 EndGlobal

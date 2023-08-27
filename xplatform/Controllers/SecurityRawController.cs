@@ -25,6 +25,7 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+        [HttpGet]
         public IEnumerable<SecurityRaw> Get()
         {
             return _context.SecurityRawSet.ToList();

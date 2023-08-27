@@ -20,6 +20,7 @@ namespace xplatform.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IEnumerable<Quote> Get()
         {
             return _context.QuoteSet.ToArray();

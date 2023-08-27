@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using xplatform.DataAccess;
 using xplatform.Helpers;
 using xplatform.Services;
-using Serilog;
 
 namespace xplatform
 {
@@ -45,6 +34,9 @@ namespace xplatform
             });
 
             services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
 
             // configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
@@ -62,17 +54,14 @@ namespace xplatform
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
-            app.UseCors("MyPolicy");
-
-            app.UseHttpsRedirection();
-
+            //app.UseCors("MyPolicy");
+            //app.UseHttpsRedirection();
             app.UseRouting();
-
-            //app.UseAuthorization();
-
-            app.UseMiddleware<JwtMiddleware>();
+            //app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

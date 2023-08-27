@@ -19,6 +19,7 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+        [HttpGet]
         public IEnumerable<Share> Get()
         {
             return _context.ShareSet.ToList();

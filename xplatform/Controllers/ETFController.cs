@@ -19,6 +19,7 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+        [HttpGet]
         public IEnumerable<ETF> Get()
         {
             return _context.ETFSet.ToList();

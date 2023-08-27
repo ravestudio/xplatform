@@ -17,6 +17,7 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+        [HttpGet]
         public IEnumerable<DealRaw> Get()
         {
             return _context.DealRawSet.ToList();

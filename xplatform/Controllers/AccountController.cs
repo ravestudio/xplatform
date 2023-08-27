@@ -19,6 +19,8 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+        // GET api/account
+        [HttpGet]
         public IEnumerable<Account> Get()
         {
             return _context.AccountSet.ToList();

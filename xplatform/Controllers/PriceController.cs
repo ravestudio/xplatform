@@ -22,6 +22,7 @@ namespace xplatform.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IEnumerable<PriceInfo> Get()
         {
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
@@ -39,6 +40,7 @@ namespace xplatform.Controllers
             return results;
         }
 
+        [HttpGet]
         private PriceInfo GetPrice(string security, MicexISSClient micexClient)
         {
             var quote = _context.QuoteSet.Single(q => q.symbol == security);

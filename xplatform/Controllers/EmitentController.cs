@@ -19,7 +19,7 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
-
+        [HttpGet]
         public IEnumerable<Emitent> Get()
         {
             return _context.EmitentSet.ToList();

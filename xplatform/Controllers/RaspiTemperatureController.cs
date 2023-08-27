@@ -15,6 +15,8 @@ namespace xplatform.Controllers
         {
             _temperatureProvider = temperatureProvider;
         }
+
+        [HttpGet]
         public TemperatureInfo GetTemperature()
         {
             var values = _temperatureProvider.GetTemperature();

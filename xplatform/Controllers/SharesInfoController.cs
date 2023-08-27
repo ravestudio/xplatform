@@ -24,6 +24,7 @@ namespace xplatform.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IEnumerable<ShareInfo> Get(string region)
         {
             var quotes = _context.QuoteSet.ToList();

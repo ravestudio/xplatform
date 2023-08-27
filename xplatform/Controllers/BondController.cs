@@ -19,6 +19,8 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+
+        [HttpGet]
         public IEnumerable<Bond> Get()
         {
             return _context.BondSet.ToList();

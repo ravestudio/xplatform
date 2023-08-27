@@ -37,6 +37,7 @@ namespace xplatform.Controllers
             return Ok();
         }
 
+        [HttpGet]
         public IEnumerable<Deal> Get()
         {
             List<Deal> deals = null;

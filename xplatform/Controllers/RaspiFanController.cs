@@ -18,6 +18,7 @@ namespace xplatform.Controllers
             _appSettings = appSettings.Value;
         }
 
+        [HttpGet]
         public bool Get()
         {
             int GpioPin = _appSettings.GpioPin;

@@ -22,6 +22,7 @@ namespace xplatform.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IEnumerable<object> Get(int? accountId)
         {
             var snap = _context.SnapshootSet.OrderByDescending(s => s.ChangeDate).First();
@@ -50,7 +51,7 @@ namespace xplatform.Controllers
 
             return ds;
         }
-
+        [HttpGet]
         public IEnumerable<object> GetDetails(string security, int? accountId)
         {
             var snap = _context.SnapshootSet.OrderByDescending(s => s.ChangeDate).First();
@@ -77,12 +78,12 @@ namespace xplatform.Controllers
             return ds.Where(d => d.code == security);
         }
 
-            [HttpPost]
+        [HttpPost]
         public IActionResult Post()
         {
             //calculate all
 
-            _context.Database.ExecuteSqlCommand("TRUNCATE TABLE \"SnapshootSet\"");
+            //_context.Database.ExecuteSqlCommand("TRUNCATE TABLE \"SnapshootSet\"");
             _context.SaveChanges();
 
             List<PortfolioSnapshoot> snapshoots = new List<PortfolioSnapshoot>();

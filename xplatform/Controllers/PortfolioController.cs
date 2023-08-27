@@ -25,11 +25,13 @@ namespace xplatform.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IEnumerable<Portfolio> GetPortfolioList()
         {
             return _context.PortfolioSet.ToList();
         }
 
+        [HttpGet("{portfolioId}")]
         public PortfolioCost Get(int portfolioId)
         {
             PortfolioCost result = new PortfolioCost();

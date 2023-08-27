@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CommonLib.Objects;
-using Microsoft.AspNetCore.Http;
+﻿using CommonLib.Objects;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.EntityFrameworkCore;
 using xplatform.DataAccess;
 using xplatform.Model;
@@ -22,6 +16,7 @@ namespace xplatform.Controllers
         {
             _context = context;
         }
+        [HttpGet]
         public IEnumerable<Security> Get()
         {
             return _context.SecuritySet.ToList();
