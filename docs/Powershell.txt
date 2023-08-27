@@ -1,0 +1,9 @@
+Powershell delete images
+docker images -aq | foreach {docker rmi $_}
+
+
+docker login --username=yakovlevdev
+docker-compose up --build
+
+docker tag priceupdater yakovlevdev/priceupdater:latest
+docker push yakovlevdev/priceupdater:latest

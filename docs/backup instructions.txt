@@ -1,0 +1,16 @@
+backup
+
+docker container exec -it t_postgres_image_1 bash
+pg_dump -U xuser --format=c --file=/var/lib/postgresql/data/dump3.sqlc xpl_db
+
+restore
+
+docker cp dump3.sqlc t_postgres_image_1:/var/lib/postgresql/data
+docker container exec -it t_postgres_image_1 bash
+pg_restore -U xuser -d xpl_db /var/lib/postgresql/data/dump3.sqlc
+
+
+
+
+
+
