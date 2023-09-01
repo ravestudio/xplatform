@@ -17,6 +17,7 @@ using Serilog;
 using Tinkoff.InvestApi;
 using Google.Protobuf.WellKnownTypes;
 using Tinkoff.InvestApi.V1;
+using System.Reflection.Metadata;
 
 namespace PriceUpdater
 {
@@ -70,8 +71,8 @@ namespace PriceUpdater
         {
             //string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
-            string apiUrl = "http://localhost:5000/api";
-            //string apiUrl = "http://192.168.0.17/api";
+            //string apiUrl = "http://localhost:5000/api";
+            string apiUrl = "http://192.168.0.17/api";
 
             var client = InvestApiClientFactory.Create("t.hAFDFeeTzLR_tlTz9H7S406ecutXFe21HljCDGf7sm_DRIYTDesfGlkS5P5ohNcZ_0tZUwHKgdhvMXhoRO0iYw");
 
@@ -107,6 +108,24 @@ namespace PriceUpdater
                     previousClose = decimal.Parse((string)candles[1]["c"], CultureInfo.InvariantCulture)
                 };
 
+            });
+
+            Func<ISSResponse, Quote> GetQuoteFromISSResponse = new Func<ISSResponse, Quote>(issResp =>
+            {
+                if (issResp.MarketData.Count > 0 && issResp.SecurityInfo.Count > 0)
+                {
+                    return new Quote()
+                    {
+
+                        open = issResp.MarketData.First().OPEN,
+                        price = issResp.MarketData.First().LAST,
+                        NKD = issResp.SecurityInfo.First().NKD,
+                        previousClose = issResp.SecurityInfo.First().PREVPRICE,
+
+                    };
+                }
+
+                return null;
             });
 
 
@@ -322,22 +341,29 @@ namespace PriceUpdater
 
                 ISSResponse issResp = await micexClient.GetSecurityInfo(md.market, md.board, md.ticker);
 
-                var result = new Quote()
-                {
-                    Id = md.quote.Id,
-                    symbol = md.quote.symbol,
-                    figi = md.quote.figi,
-                    open = issResp.MarketData.First().OPEN,
-                    price = issResp.MarketData.First().LAST,
-                    NKD = issResp.SecurityInfo.First().NKD,
-                    previousClose = issResp.SecurityInfo.First().PREVPRICE,
-                    Board = md.quote.Board
-                };
 
-                //post quote to server
-                string content = JObject.FromObject(result).ToString();
-                HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-                await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                Quote result = GetQuoteFromISSResponse(issResp);
+
+                if (result != null)
+                {
+                    result.Id = md.quote.Id;
+                    result.figi = md.quote.figi;
+                    result.symbol = md.quote.symbol;
+                    result.Board = md.quote.Board;
+
+                    //post quote to server
+                    string content = JObject.FromObject(result).ToString();
+                    HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                }
+
+                if (result == null)
+                {
+                    result = new Quote()
+                    {
+                        symbol = md.quote.symbol
+                    };
+                }
 
                 return result;
             }).Delay(TimeSpan.FromSeconds(10)))

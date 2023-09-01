@@ -22,6 +22,8 @@ namespace xplatform
 
             string logPath = configuration.GetSection("logPath").Value;
 
+            Console.WriteLine(logPath);
+
             string logFile = Path.Combine(logPath, "xplatform.txt");
 
             Log.Logger = new LoggerConfiguration()

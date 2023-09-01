@@ -11,10 +11,12 @@ namespace xplatform.Controllers
     public class SecurityController : ControllerBase
     {
         private readonly XContext _context;
+        private readonly Serilog.ILogger _logger = null;
 
-        public SecurityController(XContext context)
+        public SecurityController(XContext context, Serilog.ILogger logger)
         {
             _context = context;
+            _logger = logger;
         }
         [HttpGet]
         public IEnumerable<Security> Get()
@@ -26,6 +28,7 @@ namespace xplatform.Controllers
         [HttpGet("{code}")]
         public object Get(string code)
         {
+            _logger.Information(code);
             var sec = from security in _context.SecuritySet
                       join emitent in _context.EmitentSet on security.EmitentId equals emitent.Id
                       join quote in _context.QuoteSet on security.Code equals quote.symbol

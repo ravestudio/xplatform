@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using xplatform.DataAccess;
 using xplatform.Helpers;
 using xplatform.Services;
@@ -45,7 +46,7 @@ namespace xplatform
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITemperatureProvider, RaspiTemperatureProvider>();
 
-            //services.AddSingleton<ILogger>(provider => { return Log.Logger; });
+            services.AddSingleton<Serilog.ILogger>(provider => { return Log.Logger; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

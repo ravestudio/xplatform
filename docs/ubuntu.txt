@@ -1,0 +1,4 @@
+$ su
+$ nano /etc/sudoers
+добавляем пользователя в Allow members of group
+#exit
