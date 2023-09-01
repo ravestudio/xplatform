@@ -1,13 +1,17 @@
-﻿FROM node:13.12.0-alpine AS builder
+﻿FROM node:12-alpine AS builder
 WORKDIR /app
-COPY /client-app/package.json ./
+COPY /client-app-v2/package.json ./
+
+RUN npm config set @ravestudio:registry=https://npm.pkg.github.com
+RUN npm config set //npm.pkg.github.com/:_authToken="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"
+
 
 RUN npm install
 
 COPY /xplatform-controls/build ./node_modules/xplatform-controls/
 COPY /xplatform-controls/package.json ./node_modules/xplatform-controls/
 
-COPY /client-app/. .
+COPY /client-app-v2/. .
 
 RUN npm run build
 
