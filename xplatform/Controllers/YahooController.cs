@@ -18,7 +18,6 @@ namespace xplatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
     public class YahooController : ControllerBase
     {
         private readonly XContext _context;

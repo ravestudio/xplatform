@@ -92,7 +92,11 @@ export const actionCreators = {
       }
 
       if (importType === "financial") {
-        fetch(`/api/Yahoo`)
+        fetch(`/api/Yahoo`, {
+          headers: {
+            Authorization: appState.auth?.token as string,
+          },
+        })
           .then((response) => response.json())
           .then((payload) => {
             dispatch({ type: "IMPORT/DATA_RECEIVE", importType, payload });
