@@ -29,7 +29,7 @@ namespace xplatform.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Quote quote)
         {
-            quote.lastUpdate = DateTime.Now;
+            quote.lastUpdate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
 
             _context.QuoteSet.Update(quote);
 
