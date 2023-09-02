@@ -50,9 +50,9 @@ namespace PriceUpdater
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            //string apiUrl = "http://dockerapi:80/api";
+            string apiUrl = "http://dockerapi:80/api";
             //string apiUrl = "http://xplatform.net/api";
-            string apiUrl = "http://localhost:5000/api";
+            //string apiUrl = "http://localhost:5000/api";
             //string apiUrl = "http://localhost:9500/api";
 
 

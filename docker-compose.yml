@@ -23,7 +23,19 @@ services:
     ports:
       - 8000:80
     volumes:
-      - /home/xuser/logpath:/var/log/xplatform/xplatform
+      - /home/xuser/log/xplatform/xplatform:/var/log/xplatform/xplatform
+    networks:
+      - dockerapi-dev
+  priceupdater:
+    image: yakovlevdev/priceupdater:latest
+    depends_on:
+      - "dockerapi"
+    build:
+      context: .
+      dockerfile: Dockerfile_priceUpdater
+    container_name: priceupdater
+    volumes:
+      - /home/xuser/log/xplatform/priceupdater:/var/log/xplatform/priceupdater
     networks:
       - dockerapi-dev
   postgres:

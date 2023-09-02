@@ -3,7 +3,7 @@ WORKDIR /app
 COPY /client-app-v2/package.json ./
 
 RUN npm config set @ravestudio:registry=https://npm.pkg.github.com
-RUN npm config set //npm.pkg.github.com/:_authToken="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"
+RUN npm config set //npm.pkg.github.com/:_authToken="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"
 
 
 RUN npm install
