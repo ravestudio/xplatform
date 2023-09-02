@@ -31,7 +31,7 @@ namespace xplatform.Controllers
             return _context.PortfolioSet.ToList();
         }
 
-        [HttpGet("{portfolioId}")]
+        [HttpGet]
         public PortfolioCost Get(int portfolioId)
         {
             PortfolioCost result = new PortfolioCost();

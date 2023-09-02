@@ -59,10 +59,11 @@ namespace xplatform
                 app.UseSwaggerUI();
             }
 
-            //app.UseCors("MyPolicy");
-            //app.UseHttpsRedirection();
+            app.UseCors("MyPolicy");
+            app.UseHttpsRedirection();
             app.UseRouting();
-            //app.UseMiddleware<JwtMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
+
 
             app.UseEndpoints(endpoints =>
             {
