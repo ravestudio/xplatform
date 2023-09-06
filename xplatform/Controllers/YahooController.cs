@@ -30,7 +30,6 @@ namespace xplatform.Controllers
         [HttpGet]
         public IEnumerable<object> Get()
         {
-
             var first = from security in _context.SecuritySet.Where(r => !string.IsNullOrEmpty(r.FinancialPage))
 
                         join finRaw in _context.YahooFinanceRawSet on security.FinancialPage equals finRaw.Code into grouping
@@ -43,9 +42,8 @@ namespace xplatform.Controllers
                             region = security.Region,
                             loadDate = p.LoadDate,
                             lastFinance = p.LastFinance,
-                            status = p.Status
+                            status = (FinanceProcessEnum?)p.Status
                         };
-
 
             var list = first.ToList().GroupBy(x => x.code)
                .SelectMany(g =>
