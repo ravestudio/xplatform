@@ -133,6 +133,7 @@ namespace xplatform.Controllers
 
                     var security = _context.SecuritySet
                         .Include(s => s.SecurityStatistics)
+                        .Include(s => s.FinancialData)
                         .Include(s => s.Emitent).ThenInclude(e => e.EmitentProfile).SingleOrDefault(x => x.FinancialPage == code);
 
                     JObject obj = JObject.Parse(raw.Data);
@@ -144,7 +145,7 @@ namespace xplatform.Controllers
                         {
                             Id = Guid.NewGuid(),
                             Code = security.Emitent.FinancialPage,
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
                             Data = "",
                             Year = getFinYear(dateTime.AddSeconds((int)s["endDate"]["raw"]))
                         })
@@ -170,7 +171,7 @@ namespace xplatform.Controllers
                         }
 
                         security.Emitent.EmitentProfile.Data = obj["assetProfile"].ToString();
-                        security.Emitent.EmitentProfile.CreateDate = DateTime.Now;
+                        security.Emitent.EmitentProfile.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                     }
 
                     if (obj["financialData"] != null)
@@ -181,7 +182,7 @@ namespace xplatform.Controllers
                         }
 
                         security.FinancialData.Data = obj["financialData"].ToString();
-                        security.FinancialData.CreateDate = DateTime.Now;
+                        security.FinancialData.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                     }
 
                     if (obj["defaultKeyStatistics"] != null)
@@ -192,7 +193,7 @@ namespace xplatform.Controllers
                         }
 
                         security.SecurityStatistics.Data = obj["defaultKeyStatistics"].ToString();
-                        security.SecurityStatistics.CreateDate = DateTime.Now;
+                        security.SecurityStatistics.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                     }
 
 
@@ -257,11 +258,11 @@ namespace xplatform.Controllers
 
                         int max_timestamp = obj["incomeStatementHistory"]["incomeStatementHistory"].Select(s => (int)s["endDate"]["raw"]).Max();
 
-                        System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+                        System.DateTime dateTime = DateTime.SpecifyKind(new System.DateTime(1970, 1, 1, 0, 0, 0, 0), DateTimeKind.Utc);
 
                         YahooFinanceRaw raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Init);
                         raw.Data = resp;
-                        raw.LoadDate = DateTime.Now;
+                        raw.LoadDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                         raw.Status = FinanceProcessEnum.Loaded;
                         raw.LastFinance = dateTime.AddSeconds(max_timestamp);
 
@@ -269,7 +270,7 @@ namespace xplatform.Controllers
                     catch(Exception ex)
                     {
                         YahooFinanceRaw raw = _context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == code && y.Status == FinanceProcessEnum.Init);
-                        raw.LoadDate = DateTime.Now;
+                        raw.LoadDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                     }
 
                     _context.SaveChanges();
