@@ -36,9 +36,11 @@ namespace PriceUpdater
         private System.Reactive.Subjects.Subject<string> restartStream = new System.Reactive.Subjects.Subject<string>();
 
         private readonly ILogger _logger = null;
-        public PriceHostedService(ILogger logger)
+        private readonly RabbitSender _rabbitSender = null;
+        public PriceHostedService(ILogger logger, RabbitSender rabbitSender)
         {
             _logger = logger;
+            _rabbitSender = rabbitSender;
         }
         public void Dispose()
         {
@@ -355,6 +357,8 @@ namespace PriceUpdater
                     string content = JObject.FromObject(result).ToString();
                     HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
                     await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+
+                    _rabbitSender.PublishMessage<Quote>(result, "quote.update");
                 }
 
                 if (result == null)

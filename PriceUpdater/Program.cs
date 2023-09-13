@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Messaging;
 
 namespace PriceUpdater
 {
@@ -39,7 +40,10 @@ namespace PriceUpdater
             {
                 string env = hostContext.HostingEnvironment.EnvironmentName;
                 services.AddSingleton<ILogger>(provider => { return Log.Logger; });
+
+                services.SetUpRabbitMq(configuration);
                 // Add your services with depedency injection.
+                services.AddSingleton<RabbitSender>();
                 services.AddHostedService<PriceHostedService>();
                 services.AddHostedService<FinanceHostedService>();
             }).UseSerilog();
