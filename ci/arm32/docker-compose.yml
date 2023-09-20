@@ -30,12 +30,23 @@ services:
     image: yakovlevdev/priceupdater-arm32:latest
     depends_on:
       - "dockerapi"
+      - "rabbitmq"
     build:
       context: .
       dockerfile: Dockerfile_priceUpdater
     container_name: priceupdater
     volumes:
       - /home/xuser/log/xplatform/priceupdater:/var/log/xplatform/priceupdater
+    networks:
+      - dockerapi-dev
+  xcub:
+    image: yakovlevdev/xcub-arm32:latest
+    depends_on:
+      - "rabbitmq"
+    build:
+      context: .
+      dockerfile: Dockerfile_xcub
+    container_name: xcub
     networks:
       - dockerapi-dev
   postgres:
