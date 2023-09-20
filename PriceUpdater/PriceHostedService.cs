@@ -221,9 +221,10 @@ namespace PriceUpdater
                     result.figi = q.figi;
 
                     //post quote to server
-                    string content = JObject.FromObject(result).ToString();
+                    /*string content = JObject.FromObject(result).ToString();
                     HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);*/
+                    _rabbitSender.PublishMessage<Quote>(result, "quote.update");
                 }
 
                 if (result == null)
@@ -281,9 +282,10 @@ namespace PriceUpdater
                     result.Board = q.Board;
 
                     //post quote to server
-                    string content = JObject.FromObject(result).ToString();
+                    /*string content = JObject.FromObject(result).ToString();
                     HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);*/
+                    _rabbitSender.PublishMessage<Quote>(result, "quote.update");
                 }
 
                 if (result == null)
@@ -354,9 +356,9 @@ namespace PriceUpdater
                     result.Board = md.quote.Board;
 
                     //post quote to server
-                    string content = JObject.FromObject(result).ToString();
+                    /*string content = JObject.FromObject(result).ToString();
                     HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);
+                    await xClient.PostDataAsync($"{apiUrl}/Quote", stringContent);*/
 
                     _rabbitSender.PublishMessage<Quote>(result, "quote.update");
                 }

@@ -1,0 +1,23 @@
+﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+
+WORKDIR /sln
+
+# copy solution
+COPY *.sln .
+
+# Copy csproj and restore as distinct layers
+COPY CommonLib/*.csproj ./CommonLib/
+COPY Messaging/*.csproj ./Messaging/
+RUN dotnet restore
+
+# Copy everything else and build
+COPY CommonLib/. ./CommonLib/
+COPY Messaging/. ./Messaging/
+WORKDIR /sln/XCub
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/runtime:7.0 AS runtime
+WORKDIR /app
+COPY --from=build-env /sln/XCub/out ./
+ENTRYPOINT ["dotnet", "XCub.dll"]

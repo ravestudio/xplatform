@@ -65,6 +65,14 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     networks:
       - dockerapi-dev
+  rabbitmq:
+    image: arm32v7/rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - dockerapi-dev
   #Nginx Service
   webserver:
     image: nginx:alpine
