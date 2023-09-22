@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CommonLib.ISS;
 using Serilog;
+using Messaging.Messages;
 
 namespace PriceUpdater
 {
@@ -31,14 +32,16 @@ namespace PriceUpdater
     public class FinanceHostedService : IHostedService, IDisposable
     {
 
-        private IObservable<YahooFinancial> financeSeq = null;
+        private IObservable<YahooFinancial?> financeSeq = null;
         private IDisposable financeSubscription = null;
 
 
         private readonly ILogger _logger = null;
-        public FinanceHostedService(ILogger logger)
+        private readonly RabbitSender _rabbitSender = null;
+        public FinanceHostedService(ILogger logger, RabbitSender rabbitSender)
         {
             _logger = logger;
+            _rabbitSender = rabbitSender;
         }
         public void Dispose()
         {
@@ -65,8 +68,6 @@ namespace PriceUpdater
 
             financeSeq = Observable.FromAsync(async () =>
             {
-                //throw new Exception();
-
                 string financials = await xClient.GetData($"{apiUrl}/Yahoo");
 
                 var y = JsonConvert.DeserializeObject<List<YahooFinancial>>(financials).Where(s =>
@@ -76,19 +77,24 @@ namespace PriceUpdater
                 ).FirstOrDefault();
 
                 return y;
-            })
-            .Where(y => y != null)
+            }).Where(y => y != null)
             .Select(async y =>
             {
                 if (y != null)
                 {
-                    string content = JObject.FromObject(new
+                    /*string content = JObject.FromObject(new
                     {
                         Type = newStatus[y.status],
                         Codes = new[] { y.code }
                     }).ToString();
                     HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-                    await xClient.PostDataAsync($"{apiUrl}/Yahoo", stringContent);
+                    await xClient.PostDataAsync($"{apiUrl}/Yahoo", stringContent);*/
+                    Yahoo msg = new Yahoo()
+                    {
+                        Codes = new[] { y.code }
+                    };
+
+                    _rabbitSender.PublishMessage<Yahoo>(msg, string.Format("yahoo.{0}", newStatus[y.status]));
                 }
 
                 return y;
@@ -96,6 +102,7 @@ namespace PriceUpdater
             .Delay(TimeSpan.FromSeconds(60))
             .Concat()
             .Repeat();
+
 
             financeSubscription = financeSeq.Subscribe(q =>
                     {

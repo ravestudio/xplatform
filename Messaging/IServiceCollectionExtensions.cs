@@ -18,7 +18,7 @@ namespace Messaging
             services.AddSingleton<IConnectionFactory>(sp => new ConnectionFactory
             {
                 HostName = settings.HostName,
-                //DispatchConsumersAsync = true,
+                DispatchConsumersAsync = true,
             });
 
             services.AddSingleton<ModelFactory>();
