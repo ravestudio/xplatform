@@ -83,7 +83,7 @@ namespace xplatform.Controllers
         {
             //calculate all
 
-            //_context.Database.ExecuteSqlCommand("TRUNCATE TABLE \"SnapshootSet\"");
+            _context.Database.ExecuteSqlRaw("TRUNCATE TABLE \"SnapshootSet\"");
             _context.SaveChanges();
 
             List<PortfolioSnapshoot> snapshoots = new List<PortfolioSnapshoot>();
@@ -164,7 +164,7 @@ namespace xplatform.Controllers
                 SnapshootData snapshootData = new SnapshootData()
                 {
                     Id = Guid.NewGuid(),
-                    ChangeDate = snapshootIndex.Single(kv => kv.Value == index).Key,
+                    ChangeDate = DateTime.SpecifyKind(snapshootIndex.Single(kv => kv.Value == index).Key, DateTimeKind.Utc),
                     Data = snapshoots[index].toJson()
                 };
 
