@@ -97,6 +97,8 @@ namespace PriceUpdater
                 {
                     _logger.Error(ex, "quote load error");
                 }
+
+                _channel.BasicAck(ea.DeliveryTag, false);
             };
 
             _channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumerAsync);
