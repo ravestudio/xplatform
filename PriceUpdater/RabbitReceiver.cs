@@ -117,7 +117,7 @@ namespace PriceUpdater
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
-                if (ea.RoutingKey == "quote.china.load" || ea.RoutingKey == "qote.usa.load")
+                if (ea.RoutingKey == "quote.china.load" || ea.RoutingKey == "quote.usa.load")
                 {
                     var command = new QuoteSPBLoad(client, _rabbitSender);
 
