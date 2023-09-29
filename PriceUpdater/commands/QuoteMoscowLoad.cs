@@ -19,7 +19,7 @@ namespace PriceUpdater.commands
             this._client = client;
             this._rabbitSender = rabbitSender;
         }
-        public async void Exec(string message)
+        public async Task<string> Exec(string message)
         {
             var md = System.Text.Json.JsonSerializer.Deserialize<MarketData>(message);
 
@@ -36,6 +36,8 @@ namespace PriceUpdater.commands
 
                 _rabbitSender.PublishMessage<Quote>(result, "quote.update");
             }
+
+            return "ok";
         }
     }
 }

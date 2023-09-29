@@ -129,7 +129,7 @@ namespace PriceUpdater
 
                     var command = new QuoteMoscowLoad(micexClient, _rabbitSender);
 
-                    command.Exec(message);
+                    var res = await command.Exec(message);
                 }
             };
 
