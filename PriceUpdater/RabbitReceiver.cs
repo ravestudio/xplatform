@@ -13,12 +13,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
+using Serilog;
 
 namespace PriceUpdater
 {
@@ -27,9 +29,11 @@ namespace PriceUpdater
         private readonly RabbitMQSettings _rabbitSettings;
         private readonly IModel _channel;
         private readonly RabbitSender _rabbitSender = null;
+        private readonly ILogger _logger = null;
 
-        public RabbitReceiver(RabbitMQSettings rabbitSettings, IModel channel, RabbitSender rabbitSender)
+        public RabbitReceiver(ILogger logger, RabbitMQSettings rabbitSettings, IModel channel, RabbitSender rabbitSender)
         {
+            _logger = logger;
             _rabbitSettings = rabbitSettings;
             _rabbitSender = rabbitSender;
             _channel = channel;
@@ -58,51 +62,6 @@ namespace PriceUpdater
 
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
 
-            Func<string, Quote> GetQuoteFromCandles = new Func<string, Quote>(data =>
-            {
-
-                JObject obj = JObject.Parse(data);
-
-                JToken[] candles = null;
-
-                if (obj["payload"]["candles"].Count() < 2)
-                {
-                    return null;
-                }
-
-                candles = obj["payload"]["candles"]
-                .OrderByDescending(t => (DateTime)t["time"])
-                .Take(2).ToArray();
-
-
-                return new Quote()
-                {
-                    open = decimal.Parse((string)candles[0]["o"], CultureInfo.InvariantCulture),
-                    price = decimal.Parse((string)candles[0]["c"], CultureInfo.InvariantCulture),
-                    previousClose = decimal.Parse((string)candles[1]["c"], CultureInfo.InvariantCulture)
-                };
-
-            });
-
-            Func<ISSResponse, Quote> GetQuoteFromISSResponse = new Func<ISSResponse, Quote>(issResp =>
-            {
-                if (issResp.MarketData.Count > 0 && issResp.SecurityInfo.Count > 0)
-                {
-                    return new Quote()
-                    {
-
-                        open = issResp.MarketData.First().OPEN,
-                        price = issResp.MarketData.First().LAST,
-                        NKD = issResp.SecurityInfo.First().NKD,
-                        previousClose = issResp.SecurityInfo.First().PREVPRICE,
-
-                    };
-                }
-
-                return null;
-            });
-
-
             _channel.ExchangeDeclare(exchange: _rabbitSettings.ExchangeName,
                         type: _rabbitSettings.ExchangeType);
 
@@ -117,19 +76,26 @@ namespace PriceUpdater
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
-                if (ea.RoutingKey == "quote.china.load" || ea.RoutingKey == "quote.usa.load")
+                try
                 {
-                    var command = new QuoteSPBLoad(client, _rabbitSender);
+                    if (ea.RoutingKey == "quote.china.load" || ea.RoutingKey == "quote.usa.load")
+                    {
+                        var command = new QuoteSPBLoad(client, _rabbitSender);
 
-                    command.Exec(message);
+                        command.Exec(message);
+                    }
+
+                    if (ea.RoutingKey == "quote.moscow.load")
+                    {
+
+                        var command = new QuoteMoscowLoad(micexClient, _rabbitSender);
+
+                        var res = await command.Exec(message);
+                    }
                 }
-
-                if (ea.RoutingKey == "quote.moscow.load")
+                catch (Exception ex)
                 {
-
-                    var command = new QuoteMoscowLoad(micexClient, _rabbitSender);
-
-                    var res = await command.Exec(message);
+                    _logger.Error(ex, "quote load error");
                 }
             };
 
