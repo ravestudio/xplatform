@@ -29,13 +29,15 @@ namespace PriceUpdater
         private readonly RabbitMQSettings _rabbitSettings;
         private readonly IModel _channel;
         private readonly RabbitSender _rabbitSender = null;
+        private readonly UpdaterStorage _updaterStorage = null;
         private readonly ILogger _logger = null;
 
-        public RabbitReceiver(ILogger logger, RabbitMQSettings rabbitSettings, IModel channel, RabbitSender rabbitSender)
+        public RabbitReceiver(ILogger logger, RabbitMQSettings rabbitSettings, IModel channel, RabbitSender rabbitSender, UpdaterStorage storage)
         {
             _logger = logger;
             _rabbitSettings = rabbitSettings;
             _rabbitSender = rabbitSender;
+            _updaterStorage = storage;
             _channel = channel;
         }
         public DateTime UnixTimeToDateTime(long unixtime)
@@ -68,6 +70,7 @@ namespace PriceUpdater
             var queueName = _channel.QueueDeclare().QueueName;
 
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "quote.#.load");
+            _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "state.#.update");
 
             var consumerAsync = new AsyncEventingBasicConsumer(_channel);
 
@@ -91,6 +94,18 @@ namespace PriceUpdater
                         var command = new QuoteMoscowLoad(micexClient, _rabbitSender);
 
                         var res = await command.Exec(message);
+                    }
+
+                    if (ea.RoutingKey == "state.quote.update")
+                    {
+                        var command = new StateQuoteUpdate(_updaterStorage);
+                        var res = command.Exec(message);
+                    }
+
+                    if (ea.RoutingKey == "state.security.update")
+                    {
+                        var command = new StateSecurityUpdate(_updaterStorage);
+                        var res = command.Exec(message);
                     }
                 }
                 catch (Exception ex)

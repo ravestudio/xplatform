@@ -39,14 +39,17 @@ namespace PriceUpdater
             .ConfigureServices((hostContext, services) =>
             {
                 string env = hostContext.HostingEnvironment.EnvironmentName;
+
+                services.AddSingleton<UpdaterStorage>();
+
                 services.AddSingleton<ILogger>(provider => { return Log.Logger; });
 
                 services.SetUpRabbitMq(configuration);
                 // Add your services with depedency injection.
                 services.AddHostedService<RabbitReceiver>();
                 services.AddSingleton<RabbitSender>();
-                //services.AddHostedService<PriceHostedService>();
-                services.AddHostedService<FinanceHostedService>();
+                services.AddHostedService<PriceHostedService>();
+                //services.AddHostedService<FinanceHostedService>();
             }).UseSerilog();
 
             await hostBuilder.RunConsoleAsync();
