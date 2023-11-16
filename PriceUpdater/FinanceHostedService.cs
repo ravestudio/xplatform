@@ -15,20 +15,11 @@ using Newtonsoft.Json.Linq;
 using CommonLib.ISS;
 using Serilog;
 using Messaging.Messages;
+using System.Reactive;
 
 namespace PriceUpdater
 {
 
-    class YahooFinancial
-    {
-        public string code { get; set; }
-        public string name { get; set; }
-        public DateTime? loadDate { get; set; }
-        public DateTime? lastFinance { get; set; }
-
-        public string status { get; set; }
-
-    }
     public class FinanceHostedService : IHostedService, IDisposable
     {
 
@@ -38,10 +29,12 @@ namespace PriceUpdater
 
         private readonly ILogger _logger = null;
         private readonly RabbitSender _rabbitSender = null;
-        public FinanceHostedService(ILogger logger, RabbitSender rabbitSender)
+        private readonly UpdaterStorage _storage = null;
+        public FinanceHostedService(ILogger logger, RabbitSender rabbitSender, UpdaterStorage storage)
         {
             _logger = logger;
             _rabbitSender = rabbitSender;
+            _storage = storage;
         }
         public void Dispose()
         {
@@ -66,41 +59,34 @@ namespace PriceUpdater
             newStatus.Add("Init", "financial");
             newStatus.Add("Loaded", "process");
 
-            financeSeq = Observable.FromAsync(async () =>
+            financeSeq = Observable.Create<YahooFinancial>(observer =>
             {
-                string financials = await xClient.GetData($"{apiUrl}/Yahoo");
+                //IList<YahooFinancial> financials = _storage.GetYahooFinancials();
 
-                var y = JsonConvert.DeserializeObject<List<YahooFinancial>>(financials).Where(s =>
-                !string.IsNullOrEmpty(s.status) &&
-                !s.status.Equals("Processed") &&
-                !(s.status.Equals("Init") && s.loadDate.HasValue)
-                ).FirstOrDefault();
+                var y = _storage.GetYahooFinancialRequest();
 
-                return y;
+                observer.OnNext(y);
+                observer.OnCompleted();
+                return Disposable.Empty;
             }).Where(y => y != null)
-            .Select(async y =>
+            .Select(y =>
             {
                 if (y != null)
                 {
-                    /*string content = JObject.FromObject(new
-                    {
-                        Type = newStatus[y.status],
-                        Codes = new[] { y.code }
-                    }).ToString();
-                    HttpContent stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-                    await xClient.PostDataAsync($"{apiUrl}/Yahoo", stringContent);*/
                     Yahoo msg = new Yahoo()
                     {
                         Codes = new[] { y.code }
                     };
 
                     _rabbitSender.PublishMessage<Yahoo>(msg, string.Format("yahoo.{0}", newStatus[y.status]));
+
+                    _storage.UpdateFinancialStatus(y.code, "Processed");
                 }
 
                 return y;
             })
             .Delay(TimeSpan.FromSeconds(60))
-            .Concat()
+            //.Concat()
             .Repeat();
 
 

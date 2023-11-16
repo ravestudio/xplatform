@@ -40,8 +40,9 @@ namespace XCub
             var queueName = _channel.QueueDeclare().QueueName;
 
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "quote.update");
-            _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.financial");
+            //_channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.financial");
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.process");
+            _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.update");
 
             var consumerAsync = new AsyncEventingBasicConsumer(_channel);
 
@@ -51,7 +52,7 @@ namespace XCub
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
-                if (ea.RoutingKey == "yahoo.financial")
+                /*if (ea.RoutingKey == "yahoo.financial")
                 {
                     var msg = JsonSerializer.Deserialize<Yahoo>(message);
 
@@ -98,7 +99,7 @@ namespace XCub
                         }
                     }
 
-                }
+                }*/
 
                 if (ea.RoutingKey == "yahoo.process")
                 {
@@ -219,6 +220,42 @@ namespace XCub
 
                             quote.lastUpdate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                             context.QuoteSet.Update(quote);
+                            context.SaveChanges();
+                        }
+                    }
+                }
+
+                if (ea.RoutingKey == "yahoo.update")
+                {
+                    var received = JsonSerializer.Deserialize<YahooReceived>(message);
+
+                    if (received != null)
+                    {
+                        using (var scope = _scopeFactory.CreateScope())
+                        {
+                            var context = scope.ServiceProvider.GetRequiredService<XContext>();
+
+                            try
+                            {
+                                JObject obj = JObject.Parse(received.Response);
+
+                                int max_timestamp = obj["incomeStatementHistory"]["incomeStatementHistory"].Select(s => (int)s["endDate"]["raw"]).Max();
+
+                                System.DateTime dateTime = DateTime.SpecifyKind(new System.DateTime(1970, 1, 1, 0, 0, 0, 0), DateTimeKind.Utc);
+
+                                YahooFinanceRaw raw = context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == received.Code && y.Status == FinanceProcessEnum.Init);
+                                raw.Data = received.Response;
+                                raw.LoadDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+                                raw.Status = FinanceProcessEnum.Loaded;
+                                raw.LastFinance = dateTime.AddSeconds(max_timestamp);
+                            }
+                            catch(Exception ex)
+                            {
+                                YahooFinanceRaw raw = context.YahooFinanceRawSet.FirstOrDefault(y => y.Code == received.Code && y.Status == FinanceProcessEnum.Init);
+                                raw.LoadDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+
+                            }
+
                             context.SaveChanges();
                         }
                     }

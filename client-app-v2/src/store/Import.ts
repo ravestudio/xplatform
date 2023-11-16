@@ -132,6 +132,7 @@ export const actionCreators = {
           method: "POST",
           body: JSON.stringify({
             object: "deal",
+            isin: [],
           }),
           headers: {
             "Content-Type": "application/json",

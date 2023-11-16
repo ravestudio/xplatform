@@ -134,7 +134,8 @@ namespace xplatform.Controllers
                 snap.decrease(deal.accountId, deal.security.Code, deal.Date.Date, deal.Count, deal.Price);
             };
 
-            var deals = _context.DealSet.Include(d => d.security)
+            var deals = _context.DealSet.Where(d => d.Locked == false)
+                .Include(d => d.security)
                  //.Where(d => (d.Date > new DateTime(2017, 01, 18)) && (d.security.Code == "LKOH"))
                  //.OrderBy(d => d.Number).ToList();
                  .OrderBy(d => d.Date).ThenBy(d => d.security.Region).ThenBy(d => d.Number);

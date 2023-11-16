@@ -14,6 +14,7 @@ import Financials from "./components/financials/Financials";
 import Positions from "./components/positions/Positions";
 import Admin from "./components/admin/admin";
 import "./app.scss";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
@@ -34,13 +35,55 @@ export default connect((state: ApplicationState) => ({
         </div>
       )}
       <Routes>
-        <Route path="/" element={<Shares />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/financials/:code" element={<Financials />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <Shares />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/portfolio"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <Portfolio />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/financials/:code"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <Financials />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/import" element={<Import />} />
-        <Route path="/positions" element={<Positions />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/import"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <Import />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/positions"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <Positions />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   </Layout>

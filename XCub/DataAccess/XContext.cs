@@ -130,6 +130,7 @@ namespace XCub.DataAccess
             modelBuilder.Entity<Deal>().Property(d => d.Volume).HasColumnName("Volume");
             modelBuilder.Entity<Deal>().HasOne(d => d.security).WithMany(s => s.Deals).HasForeignKey(d => d.securityId);
             modelBuilder.Entity<Deal>().Property(d => d.Board).HasColumnName("Board");
+            modelBuilder.Entity<Deal>().Property(d => d.Locked).HasColumnName("Locked");
             modelBuilder.Entity<Deal>().ToTable("DealSet");
 
             modelBuilder.Entity<Position>().HasKey(p => p.Id);
