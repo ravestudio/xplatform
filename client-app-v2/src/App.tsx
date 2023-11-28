@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import { ApplicationState } from "./store";
 import Financials from "./components/financials/Financials";
 import Positions from "./components/positions/Positions";
+import Products from "./components/products/Products";
 import Admin from "./components/admin/admin";
 import "./app.scss";
 import ProtectedRoute from "./ProtectedRoute";
@@ -26,6 +27,8 @@ export default connect((state: ApplicationState) => ({
           <Link to="/">Home</Link>
 
           <Link to="portfolio">Portfolio</Link>
+
+          <Link to="products">Products</Link>
 
           <Link to="import">Import</Link>
 
@@ -73,6 +76,14 @@ export default connect((state: ApplicationState) => ({
           element={
             <ProtectedRoute isLoggedIn={props.loggedIn}>
               <Positions />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <Products />
             </ProtectedRoute>
           }
         />

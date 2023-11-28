@@ -507,6 +507,26 @@ namespace xplatform.Migrations
                     b.ToTable("PositionSet", (string)null);
                 });
 
+            modelBuilder.Entity("CommonLib.Objects.ProductData", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("ChangeDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ChangeDate");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("text")
+                        .HasColumnName("Data");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductSet", (string)null);
+                });
+
             modelBuilder.Entity("CommonLib.Objects.Quote", b =>
                 {
                     b.Property<Guid>("Id")

@@ -12,6 +12,8 @@ namespace xplatform.Model
 
         public decimal Price { get; set; }
 
+        public decimal? Close { get; set; }
+
         public int v { get; set; }
 
     }

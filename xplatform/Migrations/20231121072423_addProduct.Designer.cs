@@ -12,8 +12,8 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    [Migration("20231116103004_addLocked")]
-    partial class addLocked
+    [Migration("20231121072423_addProduct")]
+    partial class addProduct
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -508,6 +508,26 @@ namespace xplatform.Migrations
                     b.HasIndex("securityId");
 
                     b.ToTable("PositionSet", (string)null);
+                });
+
+            modelBuilder.Entity("CommonLib.Objects.ProductData", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("ChangeDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("ChangeDate");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("text")
+                        .HasColumnName("Data");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductSet", (string)null);
                 });
 
             modelBuilder.Entity("CommonLib.Objects.Quote", b =>

@@ -21,6 +21,7 @@ namespace xplatform.DataAccess
 
         public DbSet<Portfolio> PortfolioSet { get; set; }
         public DbSet<SnapshootData> SnapshootSet { get; set; }
+        public DbSet<ProductData> ProductSet { get; set; }
 
         public DbSet<YahooFinanceRaw> YahooFinanceRawSet { get; set; }
 
@@ -178,6 +179,12 @@ namespace xplatform.DataAccess
             modelBuilder.Entity<SnapshootData>().Property(p => p.ChangeDate).HasColumnName("ChangeDate");
             modelBuilder.Entity<SnapshootData>().Property(p => p.Data).HasColumnName("Data");
             modelBuilder.Entity<SnapshootData>().ToTable("SnapshootSet");
+
+            modelBuilder.Entity<ProductData>().HasKey(p => p.Id);
+            modelBuilder.Entity<ProductData>().Property(p => p.Id).HasColumnName("Id");
+            modelBuilder.Entity<ProductData>().Property(p => p.ChangeDate).HasColumnName("ChangeDate");
+            modelBuilder.Entity<ProductData>().Property(p => p.Data).HasColumnName("Data");
+            modelBuilder.Entity<ProductData>().ToTable("ProductSet");
 
             modelBuilder.Entity<YahooFinanceRaw>().HasKey(y => y.Id);
             modelBuilder.Entity<YahooFinanceRaw>().Property(y => y.Id).HasColumnName("Id");
