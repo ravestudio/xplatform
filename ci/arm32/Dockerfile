@@ -6,15 +6,19 @@ COPY *.sln .
 
 
 # Copy csproj and restore as distinct layers
-COPY ./PriceUpdater/*.csproj ./PriceUpdater/
-COPY ./CommonLib/*.csproj ./CommonLib/
-COPY ./xplatform/*.csproj ./xplatform/
+COPY Messaging/*.csproj ./Messaging/
+COPY CommonLib/*.csproj ./CommonLib/
+COPY PriceUpdater/*.csproj ./PriceUpdater/
+COPY XCub/*.csproj ./XCub/
+COPY xplatform/*.csproj ./xplatform/
 RUN dotnet restore
 
 # Copy everything else and build
-COPY ./PriceUpdater/. ./PriceUpdater/
-COPY ./CommonLib/. ./CommonLib/
-COPY ./xplatform/. ./xplatform/
+COPY CommonLib/. ./CommonLib/
+COPY Messaging/. ./Messaging/
+COPY PriceUpdater/. ./PriceUpdater/
+COPY XCub/. ./XCub/
+COPY xplatform/. ./xplatform/
 WORKDIR /sln/xplatform
 RUN dotnet publish -c Release -o out
 
