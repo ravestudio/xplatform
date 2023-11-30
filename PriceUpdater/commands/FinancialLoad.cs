@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using CommonLib.Yahoo;
 using Messaging.Messages;
+using Newtonsoft.Json.Linq;
 
 namespace PriceUpdater.commands
 {
@@ -31,11 +32,20 @@ namespace PriceUpdater.commands
                     try
                     {
                         string resp = await yahooClient.GetFinancial(code);
+                        string respStat = await yahooClient.SetStatistic(code);
+
+                        JObject obj = JObject.Parse(resp);
+                        JObject objStat = JObject.Parse(respStat);
+
+                        if (objStat["quoteSummary"] != null)
+                        {
+                            obj["defaultKeyStatistics"] = objStat["quoteSummary"]["result"][0]["defaultKeyStatistics"];
+                        }
 
                         var respMsg = new YahooReceived()
                         {
                             Code = code,
-                            Response = resp
+                            Response = obj.ToString()
                         };
 
                         _rabbitSender.PublishMessage<YahooReceived>(respMsg, "yahoo.update");

@@ -25,5 +25,14 @@ namespace CommonLib.Yahoo
 
             return response;
         }
+
+        public async Task<string> SetStatistic(string Code)
+        {
+            string url = $"https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v4/get-statistics?symbol={Code}";
+
+            string response = await _apiClient.GetData(url);
+
+            return response;
+        }
     }
 }
