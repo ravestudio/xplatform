@@ -26,9 +26,27 @@ namespace CommonLib.Yahoo
             return response;
         }
 
-        public async Task<string> SetStatistic(string Code)
+        public async Task<string> GetStatistic(string Code)
         {
             string url = $"https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v4/get-statistics?symbol={Code}";
+
+            string response = await _apiClient.GetData(url);
+
+            return response;
+        }
+
+        public async Task<string> GetProfile(string Code)
+        {
+            string url = $"https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v3/get-profile?symbol={Code}";
+
+            string response = await _apiClient.GetData(url);
+
+            return response;
+        }
+
+        public async Task<string> GetSummary(string Code)
+        {
+            string url = $"https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?symbol={Code}";
 
             string response = await _apiClient.GetData(url);
 

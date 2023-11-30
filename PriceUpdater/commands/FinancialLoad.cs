@@ -32,14 +32,24 @@ namespace PriceUpdater.commands
                     try
                     {
                         string resp = await yahooClient.GetFinancial(code);
-                        string respStat = await yahooClient.SetStatistic(code);
+                        string summary = await yahooClient.GetSummary(code);
 
                         JObject obj = JObject.Parse(resp);
-                        JObject objStat = JObject.Parse(respStat);
+                        JObject objSummary = JObject.Parse(summary);
 
-                        if (objStat["quoteSummary"] != null)
+                        if (objSummary["defaultKeyStatistics"] != null)
                         {
-                            obj["defaultKeyStatistics"] = objStat["quoteSummary"]["result"][0]["defaultKeyStatistics"];
+                            obj["defaultKeyStatistics"] = objSummary["defaultKeyStatistics"];
+                        }
+
+                        if (objSummary["summaryProfile"] != null)
+                        {
+                            obj["assetProfile"] = objSummary["summaryProfile"];
+                        }
+
+                        if (objSummary["financialData"] != null)
+                        {
+                            obj["financialData"] = objSummary["financialData"];
                         }
 
                         var respMsg = new YahooReceived()
