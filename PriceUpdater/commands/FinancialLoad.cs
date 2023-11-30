@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using CommonLib.ISS;
 using CommonLib.Yahoo;
 using Messaging.Messages;
 using Newtonsoft.Json.Linq;
@@ -7,10 +8,12 @@ using Newtonsoft.Json.Linq;
 namespace PriceUpdater.commands
 {
     public class FinancialLoad {
-        
-        private readonly RabbitSender _rabbitSender = null;
-        public FinancialLoad(RabbitSender rabbitSender) {
 
+        private readonly YahooClient _client = null;
+        private readonly RabbitSender _rabbitSender = null;
+        public FinancialLoad(YahooClient client, RabbitSender rabbitSender) {
+
+            this._client = client;
             this._rabbitSender = rabbitSender;
         }
 
@@ -21,18 +24,12 @@ namespace PriceUpdater.commands
             if (msg != null)
             {
 
-                var apiClient = new CommonLib.WebApiClient();
-                YahooClient yahooClient = new YahooClient(apiClient);
-
-                apiClient.addHeader("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
-                apiClient.addHeader("x-rapidapi-key", "d8c3e2c892msh13cac0704b75eb0p115a47jsn5be47ce5097d");
-
                 foreach (string code in msg.Codes)
                 {
                     try
                     {
-                        string resp = await yahooClient.GetFinancial(code);
-                        string summary = await yahooClient.GetSummary(code);
+                        string resp = await this._client.GetFinancial(code);
+                        string summary = await this._client.GetSummary(code);
 
                         JObject obj = JObject.Parse(resp);
                         JObject objSummary = JObject.Parse(summary);

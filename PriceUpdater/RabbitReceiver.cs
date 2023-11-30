@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
 using Serilog;
+using CommonLib.Yahoo;
 
 namespace PriceUpdater
 {
@@ -58,11 +59,18 @@ namespace PriceUpdater
 
             var client = InvestApiClientFactory.Create("t.hAFDFeeTzLR_tlTz9H7S406ecutXFe21HljCDGf7sm_DRIYTDesfGlkS5P5ohNcZ_0tZUwHKgdhvMXhoRO0iYw");
 
-            var apiClient = new CommonLib.WebApiClient();
+            /*var apiClient = new CommonLib.WebApiClient();
             apiClient.addHeader("Authorization", "Bearer t.hAFDFeeTzLR_tlTz9H7S406ecutXFe21HljCDGf7sm_DRIYTDesfGlkS5P5ohNcZ_0tZUwHKgdhvMXhoRO0iYw");
-            CommonLib.Tinkoff.TinkoffClient _tinkoffClient = new CommonLib.Tinkoff.TinkoffClient(apiClient);
+            CommonLib.Tinkoff.TinkoffClient _tinkoffClient = new CommonLib.Tinkoff.TinkoffClient(apiClient);*/
 
             MicexISSClient micexClient = new MicexISSClient(new CommonLib.WebApiClient());
+
+
+            var apiYahooClient = new CommonLib.WebApiClient();
+            apiYahooClient.addHeader("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
+            apiYahooClient.addHeader("x-rapidapi-key", "d8c3e2c892msh13cac0704b75eb0p115a47jsn5be47ce5097d");
+            YahooClient yahooClient = new YahooClient(apiYahooClient);
+
 
             _channel.ExchangeDeclare(exchange: _rabbitSettings.ExchangeName,
                         type: _rabbitSettings.ExchangeType);
@@ -117,7 +125,7 @@ namespace PriceUpdater
 
                     if (ea.RoutingKey == "yahoo.financial")
                     {
-                        var command = new FinancialLoad(_rabbitSender);
+                        var command = new FinancialLoad(yahooClient, _rabbitSender);
                         var res = command.Exec(message);
                     }
                 }
