@@ -18,6 +18,8 @@ namespace CommonLib.Objects
         public ICollection<Financial> Financials { get; set; }
         public ICollection<Security> Securities { get; set; }
 
+        public ICollection<Note> Notes { get; set; }
+
         public EmitentProfile EmitentProfile { get; set; }
     }
 }

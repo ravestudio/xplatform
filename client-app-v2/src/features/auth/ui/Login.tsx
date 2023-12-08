@@ -1,10 +1,16 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Form, ISubmitResult, IValues, minLength, required } from "../form";
-import { ApplicationState } from "../../store";
-import * as AuthStore from "../../store/Auth";
-import { login } from "../../store/Auth";
+import {
+  Form,
+  ISubmitResult,
+  IValues,
+  minLength,
+  required,
+} from "../../../entities/form";
+import { ApplicationState } from "../../../store";
+import * as AuthStore from "../store";
+import { login } from "../store";
 
 const mapDispatchToProps = (dispatch: any) => {
   return { actions: bindActionCreators(AuthStore.actionCreators, dispatch) };

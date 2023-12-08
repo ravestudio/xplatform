@@ -1,7 +1,13 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Form, ISubmitResult, IValues, minLength, required } from "../form";
+import {
+  Form,
+  ISubmitResult,
+  IValues,
+  minLength,
+  required,
+} from "../../entities/form";
 import { ApplicationState } from "../../store";
 import * as SecuritiesStore from "../../store/Securities";
 import { Grid } from "@ravestudio/xgrid";

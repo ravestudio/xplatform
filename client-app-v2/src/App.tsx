@@ -3,14 +3,14 @@ import logo from "./logo.svg";
 
 import Layout from "./components/blocks/2Layout";
 import Shares from "./components/shares/2Shares";
-import Auth from "./components/auth/Login";
+import Auth from "./features/auth/ui/Login";
 import Portfolio from "./components/portfolio/Portfolio";
 import Import from "./components/import/import";
 
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import { ApplicationState } from "./store";
-import Financials from "./components/financials/Financials";
+import Financials from "./pages/financials/Financials";
 import Positions from "./components/positions/Positions";
 import Products from "./components/products/Products";
 import Admin from "./components/admin/admin";

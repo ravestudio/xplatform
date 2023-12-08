@@ -1,6 +1,6 @@
 import { Action, Reducer } from "redux";
 
-import { AppThunkAction } from "./";
+import { AppThunkAction } from "../../../store";
 
 export interface AuthState {
   token?: string;

@@ -6,13 +6,14 @@ import * as FinancialsStore from "../../store/Financials";
 import "./Financials.scss";
 
 import { compose } from "recompose";
-import Tabs, { Tab } from "../tabs";
+import Tabs, { Tab } from "../../components/tabs";
 import { useParams } from "react-router";
 import IncomesChart from "./IncomesChart";
 import IncomesTable from "./IncomesTable";
 import FlowsTable from "./FlowsTable";
 import BalanceTable from "./BalanceTable";
 import KeyStatistics from "./KeyStatistics";
+import NoteListConnected from "./ui/NoteListConnected";
 
 interface IParams {
   params: any;
@@ -149,6 +150,8 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
 
           <div className="chart">
             <IncomesChart financials={this.props.financials} />
+
+            <NoteListConnected />
           </div>
         </div>
       </React.Fragment>

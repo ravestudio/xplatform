@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using xplatform.DataAccess;
@@ -11,9 +12,11 @@ using xplatform.DataAccess;
 namespace xplatform.Migrations
 {
     [DbContext(typeof(XContext))]
-    partial class XContextModelSnapshot : ModelSnapshot
+    [Migration("20231201093249_addNote")]
+    partial class addNote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,11 +69,11 @@ namespace xplatform.Migrations
                         .HasColumnName("Count");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("Date");
 
                     b.Property<DateTime>("DeliveryDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeliveryDate");
 
                     b.Property<bool>("Locked")
@@ -195,7 +198,7 @@ namespace xplatform.Migrations
                         .HasColumnName("EmitentId");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreateDate");
 
                     b.Property<string>("Data")
@@ -221,7 +224,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Code");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreateDate");
 
                     b.Property<string>("Data")
@@ -342,7 +345,7 @@ namespace xplatform.Migrations
                         .HasColumnName("SecurityId");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreateDate");
 
                     b.Property<string>("Data")
@@ -383,7 +386,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Data");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("Date");
 
                     b.Property<Guid?>("MarketIndexId")
@@ -450,7 +453,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("ChangeDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ChangeDate");
 
                     b.Property<string>("Data")
@@ -514,7 +517,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Limit");
 
                     b.Property<DateTime>("OpenDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("OpenDate");
 
                     b.Property<int>("accountId")
@@ -540,7 +543,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("ChangeDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ChangeDate");
 
                     b.Property<string>("Data")
@@ -576,7 +579,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Figi");
 
                     b.Property<DateTime?>("lastUpdate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastUpdate");
 
                     b.Property<decimal>("open")
@@ -699,7 +702,7 @@ namespace xplatform.Migrations
                         .HasColumnName("SecurityId");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreateDate");
 
                     b.Property<string>("Data")
@@ -720,7 +723,7 @@ namespace xplatform.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("ChangeDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ChangeDate");
 
                     b.Property<string>("Data")
@@ -749,11 +752,11 @@ namespace xplatform.Migrations
                         .HasColumnName("Data");
 
                     b.Property<DateTime?>("LastFinance")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LastFinance");
 
                     b.Property<DateTime?>("LoadDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("LoadDate");
 
                     b.Property<byte>("Status")

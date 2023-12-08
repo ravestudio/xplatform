@@ -5,10 +5,11 @@ import * as Portfolio from "./Portfolio";
 import * as Financials from "./Financials";
 import * as Shares from "./Shares";
 import * as Import from "./Import";
-import * as Auth from "./Auth";
+import * as Auth from "../features/auth/store";
 import * as Positions from "./Positions";
 import * as Products from "./Products";
 import * as System from "./System";
+import * as NoteList from "../widgets/note-list/store";
 
 export interface ApplicationState {
   securities: Securities.SecuritiesState | undefined;
@@ -22,6 +23,7 @@ export interface ApplicationState {
   shares: Shares.SharesState | undefined;
   import: Import.ImportState | undefined;
   auth: Auth.AuthState | undefined;
+  noteList: NoteList.NoteListState | undefined;
 }
 
 export const reducers = {
@@ -36,6 +38,7 @@ export const reducers = {
   shares: Shares.reducer,
   import: Import.reducer,
   auth: Auth.reducer,
+  noteList: NoteList.reducer,
 };
 
 export interface AppThunkAction<TAction> {
