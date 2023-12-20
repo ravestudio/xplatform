@@ -150,7 +150,6 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
 
           <div className="chart">
             <IncomesChart financials={this.props.financials} />
-
             <NoteListConnected />
           </div>
         </div>

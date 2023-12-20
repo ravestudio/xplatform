@@ -8,10 +8,10 @@
   width: 500px;
   //height: 250px;
   background: #f5f5f5;
-  padding: 20px 30px;
+  //padding: 20px 30px;
   overflow: hidden;
   //border-radius: 50px;
-  box-shadow: 5px 10px 5px #ccc;
+  //box-shadow: 5px 10px 5px #ccc;
 
   .tab-header {
     height: 60px;
@@ -19,7 +19,7 @@
     align-items: center;
 
     > div {
-      width: calc(100% / 4);
+      
       text-align: center;
       color: #888;
       font-weight: 600;
@@ -29,19 +29,25 @@
       outline: none;
 
       &.active {
-        color: #00acee;
+        color: #143595;
       }
 
       > i {
         display: block;
         margin-bottom: 5px;
       }
+
+      height: 100%;
+      line-height: 55px;
+    }
+
+    > div:hover {
+      background-color: #d6d6d6;
     }
   }
 
   .tab-indicator {
     position: relative;
-    width: calc(100% / 4);
     height: 2px;
     background: #f44336;
     left: 0px;

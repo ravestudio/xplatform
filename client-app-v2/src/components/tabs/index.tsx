@@ -15,6 +15,7 @@ interface ITab {
   value: string;
   active?: boolean;
   onSelect?: (value: string) => void;
+  style?: any;
 }
 
 export const Tab = (props: ITab) => {
@@ -28,6 +29,7 @@ export const Tab = (props: ITab) => {
     <div
       className={`${props.active === true ? "active" : null}`}
       onClick={onClick}
+      style={props.style}
     >
       <i className={`fa ${props.icon}`}></i>
       {props.label}
@@ -57,13 +59,17 @@ const Tabs: React.FC<ITabsProps> = (props) => {
           React.cloneElement(child, {
             onSelect,
             active: child.props.value === activeTab,
+            style: { width: `calc(100% / ${values.length})` },
           })
         )}
       </div>
 
       <div
         className="tab-indicator"
-        style={{ left: `calc(calc(100% / ${values.length}) * ${activeIndex})` }}
+        style={{
+          width: `calc(100% / ${values.length})`,
+          left: `calc(calc(100% / ${values.length}) * ${activeIndex})`,
+        }}
       ></div>
     </div>
   );

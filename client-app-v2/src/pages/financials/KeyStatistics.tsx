@@ -1,4 +1,5 @@
 import React from "react";
+import { format } from "date-fns";
 
 interface Props {
   financials: any;
@@ -112,6 +113,16 @@ const keyStatistics = (props: Props) => {
             props.financials.currencies,
             props.financials.cashflowStatementHistory[0].dividendsPaid?.raw,
             props.financials.financialData?.financialCurrency
+          )}
+        </div>
+      </div>
+
+      <div className="share-statistics-item">
+        <div className="share-statistics-item-name">Price updated</div>
+        <div className="share-statistics-item-value">
+          {format(
+            new Date(props.financials.quote.lastUpdate),
+            "dd-MM-yyyy hh:mm"
           )}
         </div>
       </div>
