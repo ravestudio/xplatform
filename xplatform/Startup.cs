@@ -7,8 +7,8 @@ using xplatform.Services;
 
 namespace xplatform
 {
-    public class Startup222
-    {123
+    public class Startup
+    {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
