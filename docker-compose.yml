@@ -6,7 +6,7 @@ networks:
 
 services:
   clientapp:
-    image: yakovlevdev/client-app:latest
+    image: client-app:latest
     build:
       context: .
       dockerfile: Dockerfile_client
@@ -14,7 +14,7 @@ services:
     networks:
       - dockerapi-dev
   dockerapi:
-    image: yakovlevdev/xplatform:latest
+    image: xplatform:latest
     depends_on:
       - postgres
     build:
@@ -27,9 +27,10 @@ services:
     networks:
       - dockerapi-dev
   priceupdater:
-    image: yakovlevdev/priceupdater:latest
+    image: priceupdater:latest
     depends_on:
       - "dockerapi"
+      - "rabbitmq"
     build:
       context: .
       dockerfile: Dockerfile_priceUpdater
@@ -38,10 +39,21 @@ services:
       - /home/xuser/log/xplatform/priceupdater:/var/log/xplatform/priceupdater
     networks:
       - dockerapi-dev
+  xcub:
+    image: xcub:latest
+    depends_on:
+      - rabbitmq
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile_xcub
+    container_name: xcub
+    networks:
+      - dockerapi-dev
   postgres:
     image: postgres:latest
     ports:
-      - 5432:5432
+      - 25432:5432
     restart: always
     volumes:
       - db_volume:/var/lib/postgresql/data
@@ -63,6 +75,14 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - dockerapi-dev
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
     networks:
       - dockerapi-dev
   #Nginx Service
