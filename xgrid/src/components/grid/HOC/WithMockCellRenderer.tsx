@@ -18,7 +18,9 @@ const WithMockCellRenderer = <P extends ICellRendererParams>(
 ): React.ComponentClass<P> =>
   class extends React.Component<P> implements ICellRenderer {
     state: WithMockCellRendererState;
+
     static contextType: React.Context<IMockEditingContext> = MockEditingContext;
+    context!: React.ContextType<typeof MockEditingContext>;
 
     constructor(props: P) {
       super(props);

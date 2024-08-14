@@ -1,0 +1,25 @@
+.adminSecurities {
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.updForm {
+        padding-top: 10px;
+}
+.updForm .updParam {
+            display: flex;
+            }
+
+.updForm .currentValue {
+            width: 200px;
+}
+
+.updForm .checkNewValue{
+            padding-top: 25px;
+            width: 30px;
+}
+    

@@ -1,3 +1,4 @@
+import style from "./Financials.module.css";
 import React from "react";
 import { format } from "date-fns";
 
@@ -73,40 +74,42 @@ const keyStatistics = (props: Props) => {
     : undefined;
 
   return (
-    <div className="share-statistics">
-      <div className="share-statistics-item">
-        <div className="share-statistics-item-name">ISIN</div>
-        <div className="share-statistics-item-value">
+    <div className={style.shareStatistics}>
+      <div className={style.shareStatisticsItem}>
+        <div className={style.shareStatisticsItemName}>ISIN</div>
+        <div className={style.shareStatisticsItemValue}>
           {props.financials.isin}
         </div>
       </div>
 
-      <div className="share-statistics-item">
-        <div className="share-statistics-item-name">Shares Outstanding</div>
-        <div className="share-statistics-item-value">
+      <div className={style.shareStatisticsItem}>
+        <div className={style.shareStatisticsItemName}>Shares Outstanding</div>
+        <div className={style.shareStatisticsItemValue}>
           {new Intl.NumberFormat("en", { notation: "compact" }).format(
             sharesOutstanding
           )}
         </div>
       </div>
 
-      <div className="share-statistics-item">
-        <div className="share-statistics-item-name">Float</div>
-        <div className="share-statistics-item-value">
+      <div className={style.shareStatisticsItem}>
+        <div className={style.shareStatisticsItemName}>Float</div>
+        <div className={style.shareStatisticsItemValue}>
           {currentStatistics.floatShares.fmt}
         </div>
       </div>
 
-      <div className="share-statistics-item">
-        <div className="share-statistics-item-name">Capitalization</div>
-        <div className="share-statistics-item-value">
+      <div className={style.shareStatisticsItem}>
+        <div className={style.shareStatisticsItemName}>Capitalization</div>
+        <div className={style.shareStatisticsItemValue}>
           {getCapitalization(sharesOutstanding, props.financials.quote.price)}
         </div>
       </div>
 
-      <div className="share-statistics-item">
-        <div className="share-statistics-item-name">Current dividend yield</div>
-        <div className="share-statistics-item-value">
+      <div className={style.shareStatisticsItem}>
+        <div className={style.shareStatisticsItemName}>
+          Current dividend yield
+        </div>
+        <div className={style.shareStatisticsItemValue}>
           {getCurrDividendYield(
             sharesOutstanding,
             props.financials.quote,
@@ -117,9 +120,9 @@ const keyStatistics = (props: Props) => {
         </div>
       </div>
 
-      <div className="share-statistics-item">
-        <div className="share-statistics-item-name">Price updated</div>
-        <div className="share-statistics-item-value">
+      <div className={style.shareStatisticsItem}>
+        <div className={style.shareStatisticsItemName}>Price updated</div>
+        <div className={style.shareStatisticsItemValue}>
           {format(
             new Date(props.financials.quote.lastUpdate),
             "dd-MM-yyyy hh:mm"

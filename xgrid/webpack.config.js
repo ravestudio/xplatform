@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const webpack = require('webpack');
+const webpack = require("webpack");
 const path = require("path");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env, argv) => {
-
   const isDevelopment = argv.mode === "development";
 
   return {
@@ -14,7 +13,7 @@ module.exports = (env, argv) => {
     plugins: [
       new MiniCssExtractPlugin({
         filename: "components.css",
-      })
+      }),
     ],
     module: {
       rules: [
@@ -31,7 +30,11 @@ module.exports = (env, argv) => {
         {
           test: /\.(scss|css)$/,
           use: [
-            { loader: isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader },
+            {
+              loader: isDevelopment
+                ? "style-loader"
+                : MiniCssExtractPlugin.loader,
+            },
             { loader: "css-loader", options: { importLoaders: 1 } },
             //{ loader: "postcss-loader" },
             { loader: "sass-loader" },
@@ -52,8 +55,10 @@ module.exports = (env, argv) => {
     },
     devServer: {
       /*open: true,*/
+      static: {
+        directory: path.join(__dirname, "public"),
+      },
 
-      contentBase: path.join(__dirname, "public"),
       compress: true,
       historyApiFallback: true,
       port: 9000,

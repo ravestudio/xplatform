@@ -1,3 +1,5 @@
+import style from "./Financials.module.css";
+
 import React from "react";
 
 import ValueRenderer from "./ValueRenderer";
@@ -11,9 +13,9 @@ const incomesTable = (props: Props) => {
     <table>
       <thead>
         <tr>
-          <th className="cellHead">Breakdown</th>
+          <th className={style.cellHead}>Breakdown</th>
           {props.financials?.years.map((year: number) => (
-            <th className="cellHead" key={year}>
+            <th className={style.cellHead} key={year}>
               {year}
             </th>
           ))}
@@ -24,7 +26,7 @@ const incomesTable = (props: Props) => {
           <td>Total Revenue</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={inc.totalRevenue} />
               </td>
             )
@@ -34,7 +36,7 @@ const incomesTable = (props: Props) => {
           <td>Cost of Revenue</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={inc.costOfRevenue} />
               </td>
             )
@@ -44,7 +46,7 @@ const incomesTable = (props: Props) => {
           <td>Total Operating Expenses</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={inc.totalOperatingExpenses} />
               </td>
             )
@@ -54,7 +56,7 @@ const incomesTable = (props: Props) => {
           <td>Net Income</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={inc.netIncome} />
               </td>
             )

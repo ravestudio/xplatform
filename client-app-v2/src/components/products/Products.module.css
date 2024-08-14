@@ -1,0 +1,85 @@
+.product {
+
+    width: 550px;
+    border: #d1d1d1;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 10px;
+}
+
+.productPosition {
+    display: flex;
+    flex-direction: row;
+}
+
+.posCell {
+    padding: 4px;
+    line-height: 30px;
+}
+
+.posCode {
+    width: 80px;
+    text-align: right;
+}
+
+.posDate {
+    text-align: right;
+    width: 100px;
+}
+
+.posLimit {
+    width: 80px;
+    text-align: right;
+}
+
+.posCost {
+    width: 80px;
+    text-align: right;
+}
+
+.posProfit {
+    flex-grow: 1;
+    text-align: right;
+}
+
+.posWithIcon {
+    display: flex;
+    flex-direction: row;
+}
+
+.posWithIcon .posIcon {
+    width: 30px;
+}
+
+.posWithIcon .posIcon img {
+    border-radius: 50%;
+    width: 100%;
+}
+
+.posText {
+    flex-grow: 1;
+    text-align: right;
+}
+
+.productHeader {
+    font-weight: 450;
+}
+
+.productFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.productFooter .total {
+    padding: 4px;
+    line-height: 30px;
+}
+
+.green {
+    color: #0cb51a;
+}
+
+.red {
+    color: #b50c28;
+}

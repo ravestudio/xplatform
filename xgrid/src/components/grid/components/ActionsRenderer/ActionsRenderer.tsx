@@ -38,7 +38,9 @@ class ActionsRenderer extends React.Component<
 > {
   state: ActionsRendererState;
 
+  //static context: React.ContextType<typeof MockEditingContext>;
   static contextType: React.Context<IMockEditingContext> = MockEditingContext;
+  context!: React.ContextType<typeof MockEditingContext>;
 
   public constructor(props: ActionsRendererProps) {
     super(props);

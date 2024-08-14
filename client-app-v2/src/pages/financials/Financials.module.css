@@ -5,30 +5,29 @@
 .cell {
     padding: 10px;
     text-align: right,
-  }
+}
 
-.emitent-profile {
+.emitentProfile {
     padding: 10px 0 10px 0;
 }
 
-.emitent-website {
+.emitentWebsite {
     padding: 0 0 10px 0;
 }
 
-.share-statistics {
+.shareStatistics {
     padding: 10px 0 10px 0;
-    &-item {
+}
+.shareStatisticsItem {
         display: flex;
+}
 
-        &-name {
-            width: 200px;
+.shareStatisticsItemName {
+        width: 200px;
+}
 
-        }
-
-        &-value {
-            font-weight: bold;
-        }
-    }
+.shareStatisticsItemValue {
+    font-weight: bold;
 }
 
 .chart {
@@ -36,7 +35,7 @@
     flex-shrink: 0;
 }
 
-.common_data{
+.commonData{
     flex-grow: 1;
     overflow: hidden;
 }

@@ -1,3 +1,4 @@
+import style from "./Financials.module.css";
 import React from "react";
 
 import ValueRenderer from "./ValueRenderer";
@@ -30,9 +31,9 @@ const flowsTable = (props: Props) => {
     <table>
       <thead>
         <tr>
-          <th className="cellHead">Breakdown</th>
+          <th className={style.cellHead}>Breakdown</th>
           {props.financials?.years.map((year: number) => (
-            <th className="cellHead" key={year}>
+            <th className={style.cellHead} key={year}>
               {year}
             </th>
           ))}
@@ -44,7 +45,7 @@ const flowsTable = (props: Props) => {
           <td>Depreciation</td>
           {props.financials?.cashflowStatementHistory.map(
             (fl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={fl.depreciation} />
               </td>
             )
@@ -55,7 +56,7 @@ const flowsTable = (props: Props) => {
           <td>Flows from investing activities</td>
           {props.financials?.cashflowStatementHistory.map(
             (fl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer
                   value={fl.totalCashflowsFromInvestingActivities}
                 />
@@ -68,7 +69,7 @@ const flowsTable = (props: Props) => {
           <td>Capital expenditures</td>
           {props.financials?.cashflowStatementHistory.map(
             (fl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={fl.capitalExpenditures} />
               </td>
             )
@@ -79,7 +80,7 @@ const flowsTable = (props: Props) => {
           <td>NWC</td>
           {props.financials?.cashflowStatementHistory.map(
             (fl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={calcNWC(fl)} />
               </td>
             )
@@ -90,7 +91,7 @@ const flowsTable = (props: Props) => {
           <td>Repurchase Of Stock</td>
           {props.financials?.cashflowStatementHistory.map(
             (fl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={fl.repurchaseOfStock} />
               </td>
             )
@@ -101,7 +102,7 @@ const flowsTable = (props: Props) => {
           <td>Dividends Paid</td>
           {props.financials?.cashflowStatementHistory.map(
             (fl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={fl.dividendsPaid} />
               </td>
             )

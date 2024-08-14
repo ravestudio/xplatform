@@ -6,7 +6,7 @@ import { ApplicationState } from "../../store";
 
 import * as ProductsStore from "../../store/Products";
 import ProductItem from "./ProductItem";
-import "./Products.scss";
+import styles from "./Products.module.css";
 import ProductHeader from "./ProductHeader";
 import ProductFooter from "./ProductFooter";
 
@@ -26,7 +26,7 @@ class Products extends React.PureComponent<ProductsProps> {
     return (
       <div>
         {this.props.products.map((product) => (
-          <div className="product">
+          <div className={styles.product}>
             <ProductHeader product={product} />
             <div>
               {product.positions.map((position) => (

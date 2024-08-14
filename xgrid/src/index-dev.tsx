@@ -4,6 +4,8 @@ import * as ReactDOM from "react-dom";
 import Grid from "./components/grid";
 import "./Grid.scss";
 import "./ActionsRenderer.scss";
+import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
+import "ag-grid-community/styles/ag-theme-alpine.css";
 
 function App() {
   // Declare a new state variable, which we'll call "count"

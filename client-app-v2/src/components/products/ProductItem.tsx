@@ -1,6 +1,8 @@
+import styles from "./Products.module.css";
 import React from "react";
 import { ProductPosition } from "../../store/Products";
 import { format } from "date-fns";
+import clsx from "clsx";
 
 interface Props {
   position: ProductPosition;
@@ -8,20 +10,28 @@ interface Props {
 
 const ProductItem: React.FC<Props> = (props: Props) => {
   return (
-    <div className="product-position">
-      <div className="pos-cell pos-code pos-with-icon">
-        <div className="pos-icon">
+    <div className={styles.productPosition}>
+      <div className={clsx(styles.posCell, styles.posCode, styles.posWithIcon)}>
+        <div className={styles.posIcon}>
           <img src={`/icons/${props.position.code}.png`} />
         </div>
-        <div className="pos-text">{props.position.code}</div>
+        <div className={styles.posText}>{props.position.code}</div>
       </div>
-      <div className="pos-cell pos-date">
+      <div className={clsx(styles.posCell, styles.posDate)}>
         {format(new Date(props.position.date), "dd-MM-yyyy")}
       </div>
-      <div className="pos-cell pos-limit">{props.position.limit}</div>
-      <div className="pos-cell pos-cost">{props.position.cost}</div>
-      <div className="pos-cell pos-cost">{props.position.currentCost}</div>
-      <div className="pos-cell pos-profit">{props.position.profit}</div>
+      <div className={clsx(styles.posCell, styles.posLimit)}>
+        {props.position.limit}
+      </div>
+      <div className={clsx(styles.posCell, styles.posCost)}>
+        {props.position.cost}
+      </div>
+      <div className={clsx(styles.posCell, styles.posCost)}>
+        {props.position.currentCost}
+      </div>
+      <div className={clsx(styles.posCell, styles.posProfit)}>
+        {props.position.profit}
+      </div>
     </div>
   );
 };

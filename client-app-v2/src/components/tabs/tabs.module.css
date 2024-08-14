@@ -1,0 +1,50 @@
+.tabs {
+    color: rgb(34, 6, 59);
+    width: 500px;
+    background: #f5f5f5;
+    overflow: hidden;
+
+}
+  
+.tabHeader {
+      height: 60px;
+      display: flex;
+      align-items: center;
+}
+
+.tabHeader div {
+    text-align: center;
+        color: #888;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 14px;
+        text-transform: uppercase;
+        outline: none;
+
+        height: 100%;
+        line-height: 55px;
+}
+
+.tabHeader div:active {
+    color: #143595;
+}
+
+tabHeader div:hover {
+    background-color: #d6d6d6;
+  }
+
+.tabHeader div i {
+    display: block;
+          margin-bottom: 5px;
+}
+  
+
+ .tabIndicator {
+    position: relative;
+    height: 2px;
+    background: #f44336;
+    left: 0px;
+    border-radius: 5px;
+    transition: all 500ms ease-in-out;
+ }
+  

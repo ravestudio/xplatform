@@ -2,9 +2,10 @@ import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { History } from "history";
 import { ApplicationState, reducers } from "./";
+import { configureStore as config } from "@reduxjs/toolkit";
 
 export default function configureStore(history: History, initialState?: any) {
-  const middleware = [thunk];
+  //const middleware = [thunk];
 
   const enhancers = [];
   const windowIfDefined =
@@ -17,9 +18,15 @@ export default function configureStore(history: History, initialState?: any) {
     ...reducers,
   });
 
-  return createStore(
+  /*return createStore(
     rootReducer,
     initialState,
     compose(applyMiddleware(...middleware), ...enhancers)
-  );
+  );*/
+
+  return config({
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    reducer: rootReducer,
+    preloadedState: initialState,
+  });
 }

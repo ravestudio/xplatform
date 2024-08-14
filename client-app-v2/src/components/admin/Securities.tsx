@@ -11,7 +11,7 @@ import {
 import { ApplicationState } from "../../store";
 import * as SecuritiesStore from "../../store/Securities";
 import { Grid } from "@ravestudio/xgrid";
-import "./Securities.scss";
+import style from "./Securities.module.css";
 import { updateSecurity } from "../../store/Securities";
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -96,7 +96,7 @@ const Securities: React.FC<AuthProps> = (props: AuthProps) => {
   };
 
   return (
-    <div className="admin-securities">
+    <div className={style.adminSecurities}>
       <div style={{ height: 300 }}>
         {/* @ts-ignore */}
         <Grid
@@ -120,7 +120,7 @@ const Securities: React.FC<AuthProps> = (props: AuthProps) => {
           onSaving={onSaving}
         />
       </div>
-      <div className="upd-form">
+      <div className={style.updForm}>
         {props.editModel && (
           <Form
             defaultValues={props.editModel}
@@ -131,12 +131,12 @@ const Securities: React.FC<AuthProps> = (props: AuthProps) => {
             onSubmit={handleSubmit}
           >
             {Object.keys(props.editModel).map((pr) => (
-              <div className="upd-param">
-                <div className="current-value form-group">
+              <div className={style.updParam}>
+                <div className={`${style.currentValue} ${style.formGroup}`}>
                   <label>{pr}</label>
                   <div>{props.editModel[pr]}</div>
                 </div>
-                <div className="check-newv-alue">
+                <div className={style.checkNewValue}>
                   <input
                     type="checkbox"
                     checked={checked.includes(pr)}

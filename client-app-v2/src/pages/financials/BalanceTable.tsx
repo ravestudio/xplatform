@@ -1,3 +1,5 @@
+import style from "./Financials.module.css";
+
 import React from "react";
 
 import ValueRenderer from "./ValueRenderer";
@@ -21,9 +23,9 @@ const balanceTable = (props: Props) => {
     <table>
       <thead>
         <tr>
-          <th className="cellHead">Balance Sheet</th>
+          <th className={style.cellHead}>Balance Sheet</th>
           {props.financials?.years.map((year: number) => (
-            <th className="cellHead" key={year}>
+            <th className={style.cellHead} key={year}>
               {year}
             </th>
           ))}
@@ -34,7 +36,7 @@ const balanceTable = (props: Props) => {
           <td>Current Liabilities</td>
           {props.financials?.balanceSheetHistory.map(
             (bl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={bl.totalCurrentLiabilities} />
               </td>
             )
@@ -45,7 +47,7 @@ const balanceTable = (props: Props) => {
           <td>Non-Current Liabilities</td>
           {props.financials?.balanceSheetHistory.map(
             (bl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={calcLongLiab(bl)} />
               </td>
             )
@@ -56,7 +58,7 @@ const balanceTable = (props: Props) => {
           <td>Total Liabilities</td>
           {props.financials?.balanceSheetHistory.map(
             (bl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={bl.totalLiab} />
               </td>
             )
@@ -67,7 +69,7 @@ const balanceTable = (props: Props) => {
           <td>Current Assets</td>
           {props.financials?.balanceSheetHistory.map(
             (bl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={bl.totalCurrentAssets} />
               </td>
             )
@@ -78,7 +80,7 @@ const balanceTable = (props: Props) => {
           <td>Total Assets</td>
           {props.financials?.balanceSheetHistory.map(
             (bl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={bl.totalAssets} />
               </td>
             )
@@ -89,7 +91,7 @@ const balanceTable = (props: Props) => {
           <td>Stockholder Equity</td>
           {props.financials?.balanceSheetHistory.map(
             (bl: any, index: number) => (
-              <td className="cell" key={index}>
+              <td className={style.cell} key={index}>
                 <ValueRenderer value={bl.totalStockholderEquity} />
               </td>
             )

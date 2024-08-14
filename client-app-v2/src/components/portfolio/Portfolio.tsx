@@ -6,7 +6,7 @@ import * as PortfolioStore from "../../store/Portfolio";
 
 import Dropdown from "../dropdown";
 
-import "./Portfolio.scss";
+import style from "./Portfolio.module.css";
 
 type PortfolioProps = PortfolioStore.PortfolioState &
   typeof PortfolioStore.actionCreators;
@@ -41,8 +41,8 @@ class Portfolio extends React.PureComponent<PortfolioProps> {
         {this.props.isLoading && <span>Loading...</span>}
 
         {this.props.portfolioList && (
-          <div className="filterPanel">
-            <h4 className="title">Портфели</h4>
+          <div className={style.filterPanel}>
+            <h4 className={style.title}>Портфели</h4>
 
             <div style={{ width: 200 }}>
               <Dropdown

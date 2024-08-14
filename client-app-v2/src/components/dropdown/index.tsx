@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./dropdown.css";
+import styles from "./dropdown.module.css";
 
 interface IDropdownProps {
   options: any;
@@ -57,9 +57,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
   }
 
   return (
-    <div className="dropdown">
-      <div className="control">
-        <div className="selected-value">
+    <div className={styles.dropdown}>
+      <div className={styles.control}>
+        <div className={styles.selectedValue}>
           <input
             type="text"
             ref={ref}
@@ -73,13 +73,15 @@ const Dropdown: React.FC<IDropdownProps> = ({
             onTouchEnd={toggle}
           />
         </div>
-        <div className={`arrow ${open ? "open" : null}`}></div>
+        <div className={`${styles.arrow} ${open ? styles.open : null}`}></div>
       </div>
-      <div className={`options ${open ? "open" : null}`}>
+      <div className={`${styles.options} ${open ? styles.open : null}`}>
         {filter(options).map((option: any) => (
           <div
             key={option[id]}
-            className={`option ${value === option ? "selected" : null}`}
+            className={`${styles.option} ${
+              value === option ? styles.selected : null
+            }`}
             onClick={() => selectOption(option)}
             onTouchEnd={() => selectOption(option)}
           >

@@ -7,7 +7,7 @@ import {
   GridReadyEvent,
   ICellRenderer,
   RefreshCellsParams,
-  RowNode,
+  IRowNode,
 } from "ag-grid-community";
 import TextFieldRenderer from "../TextFieldRender/TextFieldRender";
 import { AgGridReact } from "ag-grid-react";
@@ -72,6 +72,7 @@ class Grid extends React.Component<GridProps, GridState> {
   private gridApi: GridApi | null = null;
 
   static contextType: React.Context<IMockEditingContext> = MockEditingContext;
+  context!: React.ContextType<typeof MockEditingContext>;
 
   public constructor(props: GridProps) {
     super(props);
@@ -125,15 +126,16 @@ class Grid extends React.Component<GridProps, GridState> {
         this.props.mockEditingId === null
           ? prevProps.mockEditingId
           : this.props.mockEditingId;
-      const nodeToUpdate: RowNode = this.gridApi.getRowNode(idToUpdate);
+      const nodeToUpdate: IRowNode | undefined =
+        this.gridApi?.getRowNode(idToUpdate);
       const refreshCellsParams: RefreshCellsParams = {
-        rowNodes: [nodeToUpdate],
+        rowNodes: nodeToUpdate ? [nodeToUpdate] : [],
         force: true,
       };
 
       //если ноды не удалены операцией роллбек то обновляем
       if (nodeToUpdate) {
-        this.gridApi.refreshCells(refreshCellsParams);
+        this.gridApi?.refreshCells(refreshCellsParams);
       }
     }
   }
@@ -147,7 +149,7 @@ class Grid extends React.Component<GridProps, GridState> {
   };
 
   onSelectionChanged = () => {
-    const selectedRows = this.gridApi.getSelectedRows();
+    const selectedRows = this.gridApi?.getSelectedRows();
 
     if (this.props.onSelectionChanged) {
       this.props.onSelectionChanged(selectedRows);
@@ -172,13 +174,16 @@ class Grid extends React.Component<GridProps, GridState> {
 
     if (e.cancel) return;
 
-    const res = this.gridApi.applyTransaction({ remove: [item] });
+    const res = this.gridApi?.applyTransaction({ remove: [item] });
   };
 
   private commitChanges = (): void => {
-    const mockEditingNode: RowNode = this.gridApi.getRowNode(
+    const mockEditingNode: IRowNode | undefined = this.gridApi?.getRowNode(
       this.context.mockEditingId
     );
+
+    if (!mockEditingNode) return;
+
     const updatedData: any = { ...mockEditingNode.data };
 
     const mockEditors: IMockCellEditor[] = this.getMockEditors(mockEditingNode);
@@ -190,13 +195,15 @@ class Grid extends React.Component<GridProps, GridState> {
       updatedData[field] = updatedValue;
     });
 
-    const res = this.gridApi.applyTransaction({ update: [updatedData] });
+    const res = this.gridApi?.applyTransaction({ update: [updatedData] });
   };
 
   private rollbackChanges = (): void => {
-    const mockEditingNode: RowNode = this.gridApi.getRowNode(
+    const mockEditingNode: IRowNode | undefined = this.gridApi?.getRowNode(
       this.context.mockEditingId
     );
+
+    if (!mockEditingNode) return;
 
     const mockEditors: IMockCellEditor[] = this.getMockEditors(mockEditingNode);
     mockEditors.forEach((mockEditor) => {
@@ -204,26 +211,29 @@ class Grid extends React.Component<GridProps, GridState> {
     });
   };
 
-  private getMockEditors = (node: RowNode): IMockCellEditor[] => {
-    const mockEditors: IMockCellEditor[] = this.gridApi
-      .getCellRendererInstances({
+  private getMockEditors = (node: IRowNode): IMockCellEditor[] => {
+    const mockEditors: IMockCellEditor[] | undefined = this.gridApi
+      ?.getCellRendererInstances({
         rowNodes: [node],
       })
       .map((cellRenderer) => cellRenderer as any)
 
       .filter((cellRenderer) => instanceOfIMockCellEditor(cellRenderer));
+
+    if (!mockEditors) throw new Error("editors not found");
+
     return mockEditors;
   };
 
   onFirstDataRendered = (params: any) => {
-    if (this.props.selectedKeys !== undefined) {
-      params.api.forEachNode((node: any) =>
-        node.setSelected(
-          !!node.data &&
-            this.props.selectedKeys.indexOf(node.data[this.props.keyField]) >= 0
-        )
-      );
-    }
+    if (!this.props.selectedKeys) return;
+
+    params.api.forEachNode((node: any) =>
+      node.setSelected(
+        !!node.data &&
+          this.props.selectedKeys.indexOf(node.data[this.props.keyField]) >= 0
+      )
+    );
   };
 
   public render(): React.ReactElement {

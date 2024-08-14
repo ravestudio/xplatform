@@ -1,18 +1,11 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var React = require('react');
 var clsx = require('clsx');
 var agGridReact = require('ag-grid-react');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-var clsx__default = /*#__PURE__*/_interopDefaultLegacy(clsx);
-
 var Button = function (props) {
-    return React__default["default"].createElement("button", null, props.label);
+    return React.createElement("button", null, props.label);
 };
 
 /******************************************************************************
@@ -29,7 +22,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise */
+/* global Reflect, Promise, SuppressedError, Symbol */
 
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
@@ -79,7 +72,12 @@ function __spreadArray(to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 }
 
-var MockEditingContext = React__default["default"].createContext({
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
+var MockEditingContext = React.createContext({
     mockEditingId: null,
     setMockEditingId: function (id, operation) { },
 });
@@ -91,7 +89,7 @@ var WithMockCellEditor = function (WrappedComponent) { var _a; return _a = /** @
             _this.state = {
                 isMockEditing: false,
             };
-            _this.wrappedComponentRef = React__default["default"].createRef();
+            _this.wrappedComponentRef = React.createRef();
             return _this;
         }
         class_1.prototype.refresh = function () {
@@ -108,10 +106,10 @@ var WithMockCellEditor = function (WrappedComponent) { var _a; return _a = /** @
             this.wrappedComponentRef.current.reset();
         };
         class_1.prototype.render = function () {
-            return (React__default["default"].createElement(WrappedComponent, __assign({}, this.props, { isMockEditing: this.state.isMockEditing, ref: this.wrappedComponentRef })));
+            return (React.createElement(WrappedComponent, __assign({}, this.props, { isMockEditing: this.state.isMockEditing, ref: this.wrappedComponentRef })));
         };
         return class_1;
-    }(React__default["default"].Component)),
+    }(React.Component)),
     _a.contextType = MockEditingContext,
     _a; };
 
@@ -125,7 +123,7 @@ var TextFieldRenderer = /** @class */ (function (_super) {
         _this.state = {
             value: "",
         };
-        _this.inputRef = React__default["default"].createRef();
+        _this.inputRef = React.createRef();
         return _this;
     }
     TextFieldRenderer.prototype.refresh = function () {
@@ -152,15 +150,15 @@ var TextFieldRenderer = /** @class */ (function (_super) {
         var component;
         this.props.node.isSelected();
         if (this.props.isMockEditing) {
-            component = (React__default["default"].createElement("input", { ref: this.inputRef, value: this.state.value, onChange: this.inputChangedHandler }));
+            component = (React.createElement("input", { ref: this.inputRef, value: this.state.value, onChange: this.inputChangedHandler }));
         }
         else {
-            component = React__default["default"].createElement("span", null, this.state.value);
+            component = React.createElement("span", null, this.state.value);
         }
-        return (React__default["default"].createElement("div", { className: clsx__default["default"]("cmp", this.props.isMockEditing && "cmp-edit-mode") }, component));
+        return (React.createElement("div", { className: clsx("cmp", this.props.isMockEditing && "cmp-edit-mode") }, component));
     };
     return TextFieldRenderer;
-}(React__default["default"].Component));
+}(React.Component));
 var TextFieldRenderer$1 = WithMockCellEditor(TextFieldRenderer);
 
 var WithMockCellRenderer = function (WrappedComponent) { var _a; return _a = /** @class */ (function (_super) {
@@ -179,10 +177,10 @@ var WithMockCellRenderer = function (WrappedComponent) { var _a; return _a = /**
             return true;
         };
         class_1.prototype.render = function () {
-            return (React__default["default"].createElement(WrappedComponent, __assign({}, this.props, { isMockEditing: this.state.isMockEditing })));
+            return (React.createElement(WrappedComponent, __assign({}, this.props, { isMockEditing: this.state.isMockEditing })));
         };
         return class_1;
-    }(React__default["default"].Component)),
+    }(React.Component)),
     _a.contextType = MockEditingContext,
     _a; };
 
@@ -227,13 +225,13 @@ var ActionsRenderer = /** @class */ (function (_super) {
             var btn = (_a = _this.props.actionButtons) === null || _a === void 0 ? void 0 : _a.filter(function (btn) { return btn.name === actionName; });
             return btn && btn.length > 0 ? btn[0] : undefined;
         };
-        var mockEditingIcons = (React__default["default"].createElement(React__default["default"].Fragment, null,
-            React__default["default"].createElement("button", { className: "save-icon", onClick: this.saveChanges }, "save"),
-            React__default["default"].createElement("button", { className: "cancel-icon", onClick: this.undoChanges }, "cancel")));
+        var mockEditingIcons = (React.createElement(React.Fragment, null,
+            React.createElement("button", { className: "save-icon", onClick: this.saveChanges }, "save"),
+            React.createElement("button", { className: "cancel-icon", onClick: this.undoChanges }, "cancel")));
         var editBtnSettings = getActionSettings("edit");
-        var nonMockEditingIcons = (React__default["default"].createElement(React__default["default"].Fragment, null, this.props.actionButtons.map(function (btn, index) {
+        var nonMockEditingIcons = (React.createElement(React.Fragment, null, this.props.actionButtons.map(function (btn, index) {
             if (btn.name === "edit") {
-                return (React__default["default"].createElement("button", { className: "edit-icon", onClick: editBtnSettings && editBtnSettings.onClick
+                return (React.createElement("button", { className: "edit-icon", onClick: editBtnSettings && editBtnSettings.onClick
                         ? function () {
                             return editBtnSettings.onClick({
                                 item: _this.props.data,
@@ -242,14 +240,15 @@ var ActionsRenderer = /** @class */ (function (_super) {
                         : _this.enterMockEditMode }, "edit"));
             }
             if (btn.name === "delete") {
-                return (React__default["default"].createElement("button", { className: "delete-icon", onClick: _this.deleteItem }, "delete"));
+                return (React.createElement("button", { className: "delete-icon", onClick: _this.deleteItem }, "delete"));
             }
         })));
-        return (React__default["default"].createElement("div", { className: "actions-wrapper" }, this.props.isMockEditing ? mockEditingIcons : nonMockEditingIcons));
+        return (React.createElement("div", { className: "actions-wrapper" }, this.props.isMockEditing ? mockEditingIcons : nonMockEditingIcons));
     };
+    //static context: React.ContextType<typeof MockEditingContext>;
     ActionsRenderer.contextType = MockEditingContext;
     return ActionsRenderer;
-}(React__default["default"].Component));
+}(React.Component));
 var ActionsRenderer$1 = WithMockCellRenderer(ActionsRenderer);
 
 var WithMockEditingContext = function (WrappedComponent) {
@@ -268,11 +267,11 @@ var WithMockEditingContext = function (WrappedComponent) {
             return _this;
         }
         class_1.prototype.render = function () {
-            return (React__default["default"].createElement(MockEditingContext.Provider, { value: this.state },
-                React__default["default"].createElement(WrappedComponent, __assign({}, this.props, { mockEditingId: this.state.mockEditingId }))));
+            return (React.createElement(MockEditingContext.Provider, { value: this.state },
+                React.createElement(WrappedComponent, __assign({}, this.props, { mockEditingId: this.state.mockEditingId }))));
         };
         return class_1;
-    }(React__default["default"].Component));
+    }(React.Component));
 };
 
 /**
@@ -311,13 +310,15 @@ var Grid = /** @class */ (function (_super) {
             return item[_this.props.keyField];
         };
         _this.onSelectionChanged = function () {
-            var selectedRows = _this.gridApi.getSelectedRows();
+            var _a;
+            var selectedRows = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getSelectedRows();
             if (_this.props.onSelectionChanged) {
                 _this.props.onSelectionChanged(selectedRows);
             }
         };
         _this.deleteItem = function (item) {
-            var _a = item, _b = _this.props.keyField, id = _a[_b], data = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
+            var _a;
+            var _b = item, _c = _this.props.keyField, id = _b[_c], data = __rest(_b, [typeof _c === "symbol" ? _c : _c + ""]);
             var e = {
                 cancel: false,
                 type: "remove",
@@ -325,46 +326,52 @@ var Grid = /** @class */ (function (_super) {
                 data: data,
             };
             if (_this.props.onSaving) {
-                var _c = item, _d = _this.props.keyField; _c[_d]; __rest(_c, [typeof _d === "symbol" ? _d : _d + ""]);
+                var _d = item, _e = _this.props.keyField; _d[_e]; __rest(_d, [typeof _e === "symbol" ? _e : _e + ""]);
                 _this.props.onSaving(e);
             }
             if (e.cancel)
                 return;
-            _this.gridApi.applyTransaction({ remove: [item] });
+            (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.applyTransaction({ remove: [item] });
         };
         _this.commitChanges = function () {
-            var mockEditingNode = _this.gridApi.getRowNode(_this.context.mockEditingId);
+            var _a, _b;
+            var mockEditingNode = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getRowNode(_this.context.mockEditingId);
+            if (!mockEditingNode)
+                return;
             var updatedData = __assign({}, mockEditingNode.data);
             var mockEditors = _this.getMockEditors(mockEditingNode);
             mockEditors.forEach(function (mockEditor) {
                 var _a = mockEditor.getValue(), field = _a[0], updatedValue = _a[1];
                 updatedData[field] = updatedValue;
             });
-            _this.gridApi.applyTransaction({ update: [updatedData] });
+            (_b = _this.gridApi) === null || _b === void 0 ? void 0 : _b.applyTransaction({ update: [updatedData] });
         };
         _this.rollbackChanges = function () {
-            var mockEditingNode = _this.gridApi.getRowNode(_this.context.mockEditingId);
+            var _a;
+            var mockEditingNode = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getRowNode(_this.context.mockEditingId);
+            if (!mockEditingNode)
+                return;
             var mockEditors = _this.getMockEditors(mockEditingNode);
             mockEditors.forEach(function (mockEditor) {
                 mockEditor.reset();
             });
         };
         _this.getMockEditors = function (node) {
-            var mockEditors = _this.gridApi
-                .getCellRendererInstances({
+            var _a;
+            var mockEditors = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getCellRendererInstances({
                 rowNodes: [node],
-            })
-                .map(function (cellRenderer) { return cellRenderer; })
-                .filter(function (cellRenderer) { return instanceOfIMockCellEditor(cellRenderer); });
+            }).map(function (cellRenderer) { return cellRenderer; }).filter(function (cellRenderer) { return instanceOfIMockCellEditor(cellRenderer); });
+            if (!mockEditors)
+                throw new Error("editors not found");
             return mockEditors;
         };
         _this.onFirstDataRendered = function (params) {
-            if (_this.props.selectedKeys !== undefined) {
-                params.api.forEachNode(function (node) {
-                    return node.setSelected(!!node.data &&
-                        _this.props.selectedKeys.indexOf(node.data[_this.props.keyField]) >= 0);
-                });
-            }
+            if (!_this.props.selectedKeys)
+                return;
+            params.api.forEachNode(function (node) {
+                return node.setSelected(!!node.data &&
+                    _this.props.selectedKeys.indexOf(node.data[_this.props.keyField]) >= 0);
+            });
         };
         _this.state = {
             gridOptions: {
@@ -406,18 +413,19 @@ var Grid = /** @class */ (function (_super) {
         return _this;
     }
     Grid.prototype.componentDidUpdate = function (prevProps) {
+        var _a, _b;
         if (prevProps.mockEditingId !== this.props.mockEditingId) {
             var idToUpdate = this.props.mockEditingId === null
                 ? prevProps.mockEditingId
                 : this.props.mockEditingId;
-            var nodeToUpdate = this.gridApi.getRowNode(idToUpdate);
+            var nodeToUpdate = (_a = this.gridApi) === null || _a === void 0 ? void 0 : _a.getRowNode(idToUpdate);
             var refreshCellsParams = {
-                rowNodes: [nodeToUpdate],
+                rowNodes: nodeToUpdate ? [nodeToUpdate] : [],
                 force: true,
             };
             //если ноды не удалены операцией роллбек то обновляем
             if (nodeToUpdate) {
-                this.gridApi.refreshCells(refreshCellsParams);
+                (_b = this.gridApi) === null || _b === void 0 ? void 0 : _b.refreshCells(refreshCellsParams);
             }
         }
     };
@@ -430,15 +438,15 @@ var Grid = /** @class */ (function (_super) {
             filter: true,
             resizable: true,
         };
-        return (React__default["default"].createElement("div", { className: "ag-grid" },
-            React__default["default"].createElement("div", { className: "grid-toolbar" },
-                React__default["default"].createElement("button", null, "add")),
-            React__default["default"].createElement("div", { className: "ag-theme-alpine", style: { flexGrow: 1, width: "100%" } },
-                React__default["default"].createElement(agGridReact.AgGridReact, __assign({ rowData: this.props.data, gridOptions: this.state.gridOptions, defaultColDef: defaultColDef, getRowNodeId: this.getRowNodeId, onGridReady: this.onGridReady }, this.props.agGridProps, { onSelectionChanged: this.onSelectionChanged, onFirstDataRendered: this.onFirstDataRendered })))));
+        return (React.createElement("div", { className: "ag-grid" },
+            React.createElement("div", { className: "grid-toolbar" },
+                React.createElement("button", null, "add")),
+            React.createElement("div", { className: "ag-theme-alpine", style: { flexGrow: 1, width: "100%" } },
+                React.createElement(agGridReact.AgGridReact, __assign({ rowData: this.props.data, gridOptions: this.state.gridOptions, defaultColDef: defaultColDef, getRowNodeId: this.getRowNodeId, onGridReady: this.onGridReady }, this.props.agGridProps, { onSelectionChanged: this.onSelectionChanged, onFirstDataRendered: this.onFirstDataRendered })))));
     };
     Grid.contextType = MockEditingContext;
     return Grid;
-}(React__default["default"].Component));
+}(React.Component));
 var Grid$1 = WithMockEditingContext(Grid);
 
 exports.Dutton = Button;

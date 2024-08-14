@@ -20,7 +20,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise */
+/* global Reflect, Promise, SuppressedError, Symbol */
 
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
@@ -69,6 +69,11 @@ function __spreadArray(to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 }
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
 
 var MockEditingContext = React.createContext({
     mockEditingId: null,
@@ -238,6 +243,7 @@ var ActionsRenderer = /** @class */ (function (_super) {
         })));
         return (React.createElement("div", { className: "actions-wrapper" }, this.props.isMockEditing ? mockEditingIcons : nonMockEditingIcons));
     };
+    //static context: React.ContextType<typeof MockEditingContext>;
     ActionsRenderer.contextType = MockEditingContext;
     return ActionsRenderer;
 }(React.Component));
@@ -302,13 +308,15 @@ var Grid = /** @class */ (function (_super) {
             return item[_this.props.keyField];
         };
         _this.onSelectionChanged = function () {
-            var selectedRows = _this.gridApi.getSelectedRows();
+            var _a;
+            var selectedRows = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getSelectedRows();
             if (_this.props.onSelectionChanged) {
                 _this.props.onSelectionChanged(selectedRows);
             }
         };
         _this.deleteItem = function (item) {
-            var _a = item, _b = _this.props.keyField, id = _a[_b], data = __rest(_a, [typeof _b === "symbol" ? _b : _b + ""]);
+            var _a;
+            var _b = item, _c = _this.props.keyField, id = _b[_c], data = __rest(_b, [typeof _c === "symbol" ? _c : _c + ""]);
             var e = {
                 cancel: false,
                 type: "remove",
@@ -316,46 +324,52 @@ var Grid = /** @class */ (function (_super) {
                 data: data,
             };
             if (_this.props.onSaving) {
-                var _c = item, _d = _this.props.keyField; _c[_d]; __rest(_c, [typeof _d === "symbol" ? _d : _d + ""]);
+                var _d = item, _e = _this.props.keyField; _d[_e]; __rest(_d, [typeof _e === "symbol" ? _e : _e + ""]);
                 _this.props.onSaving(e);
             }
             if (e.cancel)
                 return;
-            _this.gridApi.applyTransaction({ remove: [item] });
+            (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.applyTransaction({ remove: [item] });
         };
         _this.commitChanges = function () {
-            var mockEditingNode = _this.gridApi.getRowNode(_this.context.mockEditingId);
+            var _a, _b;
+            var mockEditingNode = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getRowNode(_this.context.mockEditingId);
+            if (!mockEditingNode)
+                return;
             var updatedData = __assign({}, mockEditingNode.data);
             var mockEditors = _this.getMockEditors(mockEditingNode);
             mockEditors.forEach(function (mockEditor) {
                 var _a = mockEditor.getValue(), field = _a[0], updatedValue = _a[1];
                 updatedData[field] = updatedValue;
             });
-            _this.gridApi.applyTransaction({ update: [updatedData] });
+            (_b = _this.gridApi) === null || _b === void 0 ? void 0 : _b.applyTransaction({ update: [updatedData] });
         };
         _this.rollbackChanges = function () {
-            var mockEditingNode = _this.gridApi.getRowNode(_this.context.mockEditingId);
+            var _a;
+            var mockEditingNode = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getRowNode(_this.context.mockEditingId);
+            if (!mockEditingNode)
+                return;
             var mockEditors = _this.getMockEditors(mockEditingNode);
             mockEditors.forEach(function (mockEditor) {
                 mockEditor.reset();
             });
         };
         _this.getMockEditors = function (node) {
-            var mockEditors = _this.gridApi
-                .getCellRendererInstances({
+            var _a;
+            var mockEditors = (_a = _this.gridApi) === null || _a === void 0 ? void 0 : _a.getCellRendererInstances({
                 rowNodes: [node],
-            })
-                .map(function (cellRenderer) { return cellRenderer; })
-                .filter(function (cellRenderer) { return instanceOfIMockCellEditor(cellRenderer); });
+            }).map(function (cellRenderer) { return cellRenderer; }).filter(function (cellRenderer) { return instanceOfIMockCellEditor(cellRenderer); });
+            if (!mockEditors)
+                throw new Error("editors not found");
             return mockEditors;
         };
         _this.onFirstDataRendered = function (params) {
-            if (_this.props.selectedKeys !== undefined) {
-                params.api.forEachNode(function (node) {
-                    return node.setSelected(!!node.data &&
-                        _this.props.selectedKeys.indexOf(node.data[_this.props.keyField]) >= 0);
-                });
-            }
+            if (!_this.props.selectedKeys)
+                return;
+            params.api.forEachNode(function (node) {
+                return node.setSelected(!!node.data &&
+                    _this.props.selectedKeys.indexOf(node.data[_this.props.keyField]) >= 0);
+            });
         };
         _this.state = {
             gridOptions: {
@@ -397,18 +411,19 @@ var Grid = /** @class */ (function (_super) {
         return _this;
     }
     Grid.prototype.componentDidUpdate = function (prevProps) {
+        var _a, _b;
         if (prevProps.mockEditingId !== this.props.mockEditingId) {
             var idToUpdate = this.props.mockEditingId === null
                 ? prevProps.mockEditingId
                 : this.props.mockEditingId;
-            var nodeToUpdate = this.gridApi.getRowNode(idToUpdate);
+            var nodeToUpdate = (_a = this.gridApi) === null || _a === void 0 ? void 0 : _a.getRowNode(idToUpdate);
             var refreshCellsParams = {
-                rowNodes: [nodeToUpdate],
+                rowNodes: nodeToUpdate ? [nodeToUpdate] : [],
                 force: true,
             };
             //если ноды не удалены операцией роллбек то обновляем
             if (nodeToUpdate) {
-                this.gridApi.refreshCells(refreshCellsParams);
+                (_b = this.gridApi) === null || _b === void 0 ? void 0 : _b.refreshCells(refreshCellsParams);
             }
         }
     };

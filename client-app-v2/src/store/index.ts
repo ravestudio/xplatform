@@ -10,6 +10,7 @@ import * as Positions from "./Positions";
 import * as Products from "./Products";
 import * as System from "./System";
 import * as NoteList from "../widgets/note-list/store";
+import * as FinancialList from "../widgets/financial-list/store";
 
 export interface ApplicationState {
   securities: Securities.SecuritiesState | undefined;
@@ -24,6 +25,7 @@ export interface ApplicationState {
   import: Import.ImportState | undefined;
   auth: Auth.AuthState | undefined;
   noteList: NoteList.NoteListState | undefined;
+  financialList: FinancialList.FinancialListState | undefined;
 }
 
 export const reducers = {
@@ -39,6 +41,7 @@ export const reducers = {
   import: Import.reducer,
   auth: Auth.reducer,
   noteList: NoteList.reducer,
+  financialList: FinancialList.reducer,
 };
 
 export interface AppThunkAction<TAction> {

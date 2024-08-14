@@ -8,9 +8,7 @@ import * as SharesStore from "../../store/Shares";
 
 import Dropdown from "../dropdown";
 
-import { compose } from "recompose";
-
-import "./Shares.scss";
+import styles from "./Shares.module.css";
 
 const regions = [
   {
@@ -51,8 +49,8 @@ class Shares extends React.PureComponent<SharesProps> {
       <React.Fragment>
         {this.props.isLoading && <span>Loading...</span>}
 
-        <div className="filterPanel">
-          <h4 className="title">Shares</h4>
+        <div className={styles.filterPanel}>
+          <h4 className={styles.title}>Shares</h4>
 
           <div style={{ width: 200 }}>
             <Dropdown
@@ -81,7 +79,7 @@ class Shares extends React.PureComponent<SharesProps> {
 
   private renderSharesTableShort() {
     return (
-      <table className="xtable">
+      <table className={styles.xtable}>
         <thead>
           <tr>
             <th>Code</th>
@@ -109,7 +107,7 @@ class Shares extends React.PureComponent<SharesProps> {
 
   private renderSharesTable() {
     return (
-      <table className="xtable">
+      <table className={styles.xtable}>
         <thead>
           <tr>
             <th>Code</th>
@@ -150,6 +148,7 @@ class Shares extends React.PureComponent<SharesProps> {
   }
 }
 
-export default compose(
-  connect((state: ApplicationState) => state.shares, SharesStore.actionCreators)
+export default connect(
+  (state: ApplicationState) => state.shares,
+  SharesStore.actionCreators
 )(Shares as any);

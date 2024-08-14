@@ -23,6 +23,7 @@ const WithMockCellEditor = <P extends ICellRendererParams>(
       React.Component<P> & IMockCellEditor
     >;
     static contextType: React.Context<IMockEditingContext> = MockEditingContext;
+    context!: React.ContextType<typeof MockEditingContext>;
 
     constructor(props: P) {
       super(props);

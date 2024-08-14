@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 
 import Layout from "./components/blocks/2Layout";
 import Shares from "./components/shares/2Shares";
@@ -14,8 +13,9 @@ import Financials from "./pages/financials/Financials";
 import Positions from "./components/positions/Positions";
 import Products from "./components/products/Products";
 import Admin from "./components/admin/admin";
-import "./app.scss";
+import styles from "./app.module.css";
 import ProtectedRoute from "./ProtectedRoute";
+import { FinancialList } from "./widgets/financial-list";
 
 export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
@@ -23,7 +23,7 @@ export default connect((state: ApplicationState) => ({
   <Layout>
     <BrowserRouter>
       {props.loggedIn && (
-        <div className="mainMenu">
+        <div className={styles.mainMenu}>
           <Link to="/">Home</Link>
 
           <Link to="portfolio">Portfolio</Link>
@@ -35,6 +35,8 @@ export default connect((state: ApplicationState) => ({
           <Link to="positions">Positions</Link>
 
           <Link to="admin">Admin</Link>
+
+          <Link to="financialEdit">Financial</Link>
         </div>
       )}
       <Routes>
@@ -92,6 +94,14 @@ export default connect((state: ApplicationState) => ({
           element={
             <ProtectedRoute isLoggedIn={props.loggedIn}>
               <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/financialEdit"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <FinancialList />
             </ProtectedRoute>
           }
         />

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import "./tabs.scss";
+import css from "./tabs.module.css";
 
 interface ITabsProps {
   value: any;
@@ -53,8 +53,8 @@ const Tabs: React.FC<ITabsProps> = (props) => {
   }
 
   return (
-    <div className="tabs">
-      <div className="tab-header">
+    <div className={css.tabs}>
+      <div className={css.tabHeader}>
         {props.children.map((child) =>
           React.cloneElement(child, {
             onSelect,
@@ -65,7 +65,7 @@ const Tabs: React.FC<ITabsProps> = (props) => {
       </div>
 
       <div
-        className="tab-indicator"
+        className={css.tabIndicator}
         style={{
           width: `calc(100% / ${values.length})`,
           left: `calc(calc(100% / ${values.length}) * ${activeIndex})`,

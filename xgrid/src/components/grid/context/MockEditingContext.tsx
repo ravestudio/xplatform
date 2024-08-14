@@ -8,8 +8,9 @@ export interface IMockEditingContext {
   setMockEditingId: (id: string, operation: TMockOperation) => void;
 }
 
-export const MockEditingContext: React.Context<IMockEditingContext> = React.createContext({
-  mockEditingId: null,
+export const MockEditingContext: React.Context<IMockEditingContext> =
+  React.createContext({
+    mockEditingId: null,
 
-  setMockEditingId: (id: string, operation: TMockOperation): void => {},
-});
+    setMockEditingId: (id: string, operation: TMockOperation): void => {},
+  });

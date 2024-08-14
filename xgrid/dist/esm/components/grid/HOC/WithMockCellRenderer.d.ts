@@ -3,5 +3,5 @@ import { ICellRendererParams } from "ag-grid-community";
 export interface WithMockCellRendererProps {
     isMockEditing: boolean;
 }
-declare const WithMockCellRenderer: <P extends ICellRendererParams>(WrappedComponent: React.ComponentClass<P, any>) => React.ComponentClass<P, any>;
+declare const WithMockCellRenderer: <P extends ICellRendererParams>(WrappedComponent: React.ComponentClass<P>) => React.ComponentClass<P>;
 export default WithMockCellRenderer;

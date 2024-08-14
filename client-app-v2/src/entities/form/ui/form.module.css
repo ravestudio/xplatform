@@ -1,18 +1,14 @@
-.form {
-  //width: 300px;
-  //margin: 0px auto 0px auto;
-}
-.form-group {
+.formGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
-.form-group label {
+.formGroup label {
   align-self: flex-start;
   font-size: 16px;
   margin-bottom: 3px;
 }
-.form-group input,
+.formGroup input,
 select,
 textarea {
   font-family: Arial;
@@ -22,7 +18,7 @@ textarea {
   border-radius: 5px;
 }
 
-.form-group button {
+.formGroup button {
   font-size: 16px;
   padding: 8px 5px;
   width: 80px;
@@ -31,13 +27,13 @@ textarea {
   background-color: black;
   color: white;
 }
-.form-group button:disabled {
+.formGroup button:disabled {
   border: gray solid 1px;
   background-color: gray;
   cursor: not-allowed;
 }
 
-.form-error {
+.formError {
   font-size: 13px;
   color: red;
   margin: 3px auto 0px 0px;

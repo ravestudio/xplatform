@@ -1,5 +1,6 @@
 import * as React from "react";
-import "./form.scss";
+import css from "./form.module.css";
+import TextField from "./TextField";
 
 interface IFormContext {
   errors: IErrors;
@@ -73,6 +74,7 @@ interface IFormProps {
   defaultValues: IValues;
   validationRules: IValidationProp;
   onSubmit: (values: IValues) => Promise<ISubmitResult>;
+  children: any;
 }
 interface IState {
   values: IValues;
@@ -109,15 +111,18 @@ export class Form extends React.Component<IFormProps, IState> {
       }
     };
 
+    console.log(`render ${name}`);
+    console.log(css);
+
     return (
       <FormContext.Consumer>
         {(context) => (
-          <div className="form-group">
+          <div className={css.formGroup}>
             <label htmlFor={name}>{label}</label>
             {(type === "Text" || type === "Email") && (
-              <input
-                type={type.toLowerCase()}
-                id={name}
+              <TextField
+                type={type}
+                name={name}
                 value={context.values[name]}
                 onChange={(e) => handleChange(e, context)}
                 onBlur={(e) => handleBlur(e, context)}
@@ -250,9 +255,9 @@ export class Form extends React.Component<IFormProps, IState> {
 
     return (
       <FormContext.Provider value={context}>
-        <form className="form" noValidate={true} onSubmit={this.handleSubmit}>
+        <form noValidate={true} onSubmit={this.handleSubmit}>
           {this.props.children}
-          <div className="form-group">
+          <div className={css.formGroup}>
             <button
               type="submit"
               disabled={this.state.submitting || this.state.submitted}

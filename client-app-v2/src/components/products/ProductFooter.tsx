@@ -1,3 +1,4 @@
+import styles from "./Products.module.css";
 import React from "react";
 import { Product } from "../../store/Products";
 import clsx from "clsx";
@@ -8,18 +9,18 @@ interface Props {
 
 const ProductFooter: React.FC<Props> = (props: Props) => {
   return (
-    <div className="product-footer">
+    <div className={styles.productFooter}>
       <div
         className={clsx(
-          "total",
-          "pos-with-icon",
+          styles.total,
+          styles.posWithIcon,
           props.product.profit > 0 ? "green" : "red"
         )}
       >
-        <div className="pos-icon">
+        <div className={styles.posIcon}>
           <img src="/icons/money.png" />
         </div>
-        <div className="pos-text">{props.product.profit}</div>
+        <div className={styles.posText}>{props.product.profit}</div>
       </div>
     </div>
   );

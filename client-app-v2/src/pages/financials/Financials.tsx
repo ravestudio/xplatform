@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 
 import { ApplicationState } from "../../store";
 import * as FinancialsStore from "../../store/Financials";
-import "./Financials.scss";
+import style from "./Financials.module.css";
 
-import { compose } from "recompose";
 import Tabs, { Tab } from "../../components/tabs";
 import { useParams } from "react-router";
 import IncomesChart from "./IncomesChart";
@@ -85,7 +84,7 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
         )}
 
         {this.props.financials?.assetProfile && (
-          <div className="emitent-website">
+          <div className={style.emitentWebsite}>
             <a href={this.props.financials.assetProfile.website}>
               {this.props.financials.assetProfile.website}
             </a>
@@ -95,7 +94,7 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
         <KeyStatistics financials={this.props.financials} />
 
         <div className="container">
-          <div className="container_auto">
+          <div className="container column auto">
             <Tabs value={this.state.activeTab} onSelect={this.handleChange}>
               <Tab
                 label="Incomes"
@@ -139,7 +138,7 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
             </TabPanel>
 
             {this.props.financials?.assetProfile && (
-              <div className="emitent-profile">
+              <div className={style.emitentProfile}>
                 <h2>Description</h2>
                 <div>
                   {this.props.financials.assetProfile.longBusinessSummary}
@@ -148,7 +147,7 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
             )}
           </div>
 
-          <div className="chart">
+          <div className={style.chart}>
             <IncomesChart financials={this.props.financials} />
             <NoteListConnected />
           </div>
@@ -158,10 +157,9 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
   }
 }
 
-export default compose(
-  withRouter,
+export default withRouter(
   connect(
     (state: ApplicationState) => state.financials,
     FinancialsStore.actionCreators
-  )
-)(Financials as any);
+  )(Financials as any)
+);
