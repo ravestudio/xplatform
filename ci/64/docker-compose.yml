@@ -1,0 +1,72 @@
+version: '3.4'
+
+networks:
+  dockerapi-dev:
+    driver: bridge
+
+services:
+  clientapp:
+    image: client-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile_client
+    container_name: clientapp
+    networks:
+      - dockerapi-dev
+  dockerapi:
+    image: xplatform:latest
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80
+    volumes:
+      - /home/xuser/log/xplatform/xplatform:/var/log/xplatform/xplatform
+    networks:
+      - dockerapi-dev
+  postgres:
+    image: postgres:latest
+    ports:
+      - 25432:5432
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+      - ./dbscripts/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    environment:
+      POSTGRES_USER: "xuser"
+      POSTGRES_PASSWORD: "xpss"
+      POSTGRES_DB: "xpl_db"
+    networks:
+      - dockerapi-dev
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: info@xplatform.net
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - dockerapi-dev
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - dockerapi-dev
+volumes:
+  db_volume:
+  pgadmin-data:
+
