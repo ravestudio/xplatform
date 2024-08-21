@@ -106,7 +106,7 @@ module.exports = (env, argv) => {
       proxy: [
         {
           context: ["/api"],
-          target: "http://192.168.0.17:80",
+          target: "http://localhost",
         },
       ],
     },

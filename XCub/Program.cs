@@ -40,12 +40,12 @@ namespace XCub
                 // Add your services with depedency injection.
                 services.AddHostedService<RabbitReceiver>();
 
-                //services.AddHostedService<PriceHostedService>();
                 services.AddHostedService<StateHostedService>();
-
                 services.AddSingleton<RabbitSender>();
-                /*services.AddHostedService<PriceHostedService>();
-                services.AddHostedService<FinanceHostedService>();*/
+
+                //services.AddHostedService<DevHostedService>();
+
+
             });
 
             await hostBuilder.RunConsoleAsync();

@@ -100,9 +100,11 @@ namespace XCub
                 observer.OnCompleted();
                 return Disposable.Empty;
             })
-            .Delay(TimeSpan.FromSeconds(60))
+            .Delay(TimeSpan.FromSeconds(20))
             .Select(list => {
-                _rabbitSender.PublishMessage<IList<YahooFinancial>>(list, "state.yahooFinancial.update");
+
+                var filetred = list.Where(i => i.status != "Processed").ToList();
+                _rabbitSender.PublishMessage<IList<YahooFinancial>>(filetred, "state.yahooFinancial.update");
                 return list;
             })
             .Repeat();

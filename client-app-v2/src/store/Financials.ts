@@ -35,6 +35,10 @@ interface ReceiveFinancialsAction {
 
 type KnownAction = RequestFinancialsAction | ReceiveFinancialsAction;
 
+const getValue = (sourse: any, field: string) => {
+  return sourse[field] ? { raw: sourse[field] } : undefined;
+};
+
 export const actionCreators = {
   requestFinancials:
     (code: string): AppThunkAction<KnownAction> =>
@@ -49,10 +53,90 @@ export const actionCreators = {
         fetch(`/api/yahoo/${code}`)
           .then((response) => response.json() as Promise<Financials>)
           .then((data) => {
+            const adapted = {
+              ...data,
+              incomeStatementHistory: data.incomeStatementHistory.map(
+                (income: any) =>
+                  income.version === 2
+                    ? {
+                        ...income,
+                        totalRevenue: getValue(income, "TotalRevenue"),
+                        netIncome: getValue(income, "NetIncome"),
+                        totalOperatingExpenses: getValue(
+                          income,
+                          "TotalExpenses"
+                        ),
+                        grossProfit: getValue(income, "GrossProfit"),
+                        costOfRevenue: getValue(income, "CostOfRevenue"),
+                      }
+                    : { ...income }
+              ),
+              balanceSheetHistory: data.balanceSheetHistory.map(
+                (balance: any) =>
+                  balance.version === 2
+                    ? {
+                        ...balance,
+                        totalCurrentLiabilities: getValue(
+                          balance,
+                          "CurrentLiabilities"
+                        ),
+                        totalLiab: getValue(
+                          balance,
+                          "TotalLiabilitiesNetMinorityInterest"
+                        ),
+                        totalCurrentAssets: getValue(balance, "CurrentAssets"),
+                        totalAssets: getValue(balance, "TotalAssets"),
+                        totalStockholderEquity: getValue(
+                          balance,
+                          "StockholdersEquity"
+                        ),
+                      }
+                    : { ...balance }
+              ),
+              cashflowStatementHistory: data.cashflowStatementHistory.map(
+                (cashflow: any) =>
+                  cashflow.version === 2
+                    ? {
+                        ...cashflow,
+                        depreciation: getValue(cashflow, "Depreciation"),
+                        totalCashflowsFromInvestingActivities: getValue(
+                          cashflow,
+                          "InvestingCashFlow"
+                        ),
+                        capitalExpenditures: getValue(
+                          cashflow,
+                          "PurchaseOfPPE"
+                        ),
+                        repurchaseOfStock: getValue(
+                          cashflow,
+                          "RepurchaseOfCapitalStock"
+                        ),
+                        dividendsPaid: getValue(cashflow, "CashDividendsPaid"),
+                        changeToLiabilities: getValue(
+                          cashflow,
+                          "ChangeInPayable"
+                        ),
+                        changeToInventory: getValue(
+                          cashflow,
+                          "ChangeInInventory"
+                        ),
+                        changeToAccountReceivables: getValue(
+                          cashflow,
+                          "ChangeInReceivables"
+                        ),
+                        changeToOperatingActivities: getValue(
+                          cashflow,
+                          "ChangeInPrepaidAssets"
+                        ),
+                      }
+                    : { ...cashflow }
+              ),
+            };
+
             dispatch({
               type: "FINANCIALS_RECEIVE",
               code: code,
-              financials: data,
+              financials: adapted,
             });
           });
         dispatch({ type: "FINANCIALS_REQUEST", code: code });

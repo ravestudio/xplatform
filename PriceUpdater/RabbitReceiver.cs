@@ -67,9 +67,12 @@ namespace PriceUpdater
 
 
             var apiYahooClient = new CommonLib.WebApiClient();
-            apiYahooClient.addHeader("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
+            /*apiYahooClient.addHeader("x-rapidapi-host", "apidojo-yahoo-finance-v1.p.rapidapi.com");
+            apiYahooClient.addHeader("x-rapidapi-key", "d8c3e2c892msh13cac0704b75eb0p115a47jsn5be47ce5097d");*/
+
+            apiYahooClient.addHeader("x-rapidapi-host", "yahoo-finance160.p.rapidapi.com");
             apiYahooClient.addHeader("x-rapidapi-key", "d8c3e2c892msh13cac0704b75eb0p115a47jsn5be47ce5097d");
-            YahooClient yahooClient = new YahooClient(apiYahooClient);
+            YahooV2Client yahooClient = new YahooV2Client(apiYahooClient);
 
 
             _channel.ExchangeDeclare(exchange: _rabbitSettings.ExchangeName,
@@ -125,7 +128,7 @@ namespace PriceUpdater
 
                     if (ea.RoutingKey == "yahoo.financial")
                     {
-                        var command = new FinancialLoad(yahooClient, _rabbitSender);
+                        var command = new FinancialV2Load(yahooClient, _rabbitSender);
                         var res = command.Exec(message);
                     }
                 }
