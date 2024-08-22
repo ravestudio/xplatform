@@ -129,6 +129,17 @@ const keyStatistics = (props: Props) => {
           )}
         </div>
       </div>
+
+      <div className={style.shareStatisticsItem}>
+        <div className={style.shareStatisticsItemName}></div>
+        <div className={style.shareStatisticsItemValue}>
+          <a
+            href={`https://finance.yahoo.com/quote/${props.financials.financialPage}/financials/`}
+          >
+            view in yahoo
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
