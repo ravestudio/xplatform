@@ -15,6 +15,7 @@ export interface ShareInfo {
   priceChange?: number;
   financialPage?: string;
   sector?: string;
+  lastFinancial?: number;
 }
 
 export interface PriceValues {

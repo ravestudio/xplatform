@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommonLib.ISS;
 using CommonLib.Objects;
+using Iot.Device.Max31856;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ namespace xplatform.Controllers
         public IEnumerable<ShareInfo> Get(string region)
         {
             var quotes = _context.QuoteSet.ToList();
+
+            var finance = from annual in _context.FinanceAnnualSet group annual by annual.Code into g select new { Code = g.Key, year = (from t2 in g select t2.Year).Max() };
 
             Func<IList<Quote>, string, decimal> getPrice = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
             {
@@ -57,7 +60,8 @@ namespace xplatform.Controllers
                 Currency = s.Currency,
                 Price = getPrice(quotes, s.Code),
                 PriceChange = getPriceChange(quotes, s.Code),
-                Sector = s.Emitent.EmitentProfile != null ? (string)JObject.Parse(s.Emitent.EmitentProfile.Data)["sector"] : null
+                Sector = s.Emitent.EmitentProfile != null ? (string)JObject.Parse(s.Emitent.EmitentProfile.Data)["sector"] : null,
+                LastFinancial = finance.SingleOrDefault(f => f.Code == s.Emitent.FinancialPage).year
             }).ToArray();
         }
 

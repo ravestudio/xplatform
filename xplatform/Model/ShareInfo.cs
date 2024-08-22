@@ -15,6 +15,7 @@ namespace xplatform.Model
 
         public string FinancialPage { get; set; }
 
+        public int? LastFinancial { get; set; }
         public string Sector { get; set; }
     }
 }
