@@ -35,5 +35,23 @@ namespace CommonLib.Yahoo
             return response;
         }
 
+        public async Task<string> GetInfo(string Code)
+        {
+            //private
+            string url = $"https://yahoo-finance160.p.rapidapi.com/info";
+
+            HttpContent Content = new StringContent($"{{\"stock\":\"{Code}\"}}")
+            {
+                Headers =
+                {
+                    ContentType = new MediaTypeHeaderValue("application/json")
+                }
+            };
+
+            string response = await _apiClient.PostDataAsync(url, Content);
+
+            return response;
+        }
+
     }
 }

@@ -176,6 +176,39 @@ namespace XCub.commands
                             fillReportPath(security.Emitent.FinancialPage, "balanceSheet", balanceSet);
                         }
 
+                        if (obj["assetProfile"] != null)
+                        {
+                            if (security.Emitent.EmitentProfile == null)
+                            {
+                                security.Emitent.EmitentProfile = new EmitentProfile();
+                            }
+
+                            security.Emitent.EmitentProfile.Data = obj["assetProfile"].ToString();
+                            security.Emitent.EmitentProfile.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+                        }
+
+                        if (obj["financialData"] != null)
+                        {
+                            if (security.FinancialData == null)
+                            {
+                                security.FinancialData = new FinancialData();
+                            }
+
+                            security.FinancialData.Data = obj["financialData"].ToString();
+                            security.FinancialData.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+                        }
+
+                        if (obj["defaultKeyStatistics"] != null)
+                        {
+                            if (security.SecurityStatistics == null)
+                            {
+                                security.SecurityStatistics = new SecurityStatistics();
+                            }
+
+                            security.SecurityStatistics.Data = obj["defaultKeyStatistics"].ToString();
+                            security.SecurityStatistics.CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+                        }
+
                         foreach (var rep in _reports)
                         {
                             var annual = context.FinanceAnnualSet.SingleOrDefault(f => f.Code == rep.Code && f.Year == rep.Year);

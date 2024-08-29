@@ -29,9 +29,40 @@ namespace PriceUpdater.commands
                     try
                     {
                         string resp = await this._client.GetFinancial(code);
-                        
+                        string info = await this._client.GetInfo(code);
+
 
                         JObject obj = JObject.Parse(resp);
+                        JObject objInfo = JObject.Parse(info);
+
+                        JObject financialData = new JObject();
+                        JObject keyStatistics = new JObject();
+                        JObject assetProfile = new JObject();
+
+
+                        financialData["financialCurrency"] = objInfo["financialCurrency"];
+
+                        assetProfile["address1"] = objInfo["address1"];
+                        assetProfile["city"] = objInfo["city"];
+                        assetProfile["zip"] = objInfo["zip"];
+                        assetProfile["phone"] = objInfo["phone"];
+                        assetProfile["fax"] = objInfo["fax"];
+                        assetProfile["website"] = objInfo["website"];
+                        assetProfile["industry"] = objInfo["industry"];
+                        assetProfile["industryKey"] = objInfo["industryKey"];
+                        assetProfile["industryDisp"] = objInfo["industryDisp"];
+                        assetProfile["sector"] = objInfo["sector"];
+                        assetProfile["sectorKey"] = objInfo["sectorKey"];
+                        assetProfile["sectorDisp"] = objInfo["sectorDisp"];
+                        assetProfile["longBusinessSummary"] = objInfo["longBusinessSummary"];
+
+                        keyStatistics["floatShares"] = objInfo["floatShares"];
+                        keyStatistics["sharesOutstanding"] = objInfo["sharesOutstanding"];
+
+                        obj["defaultKeyStatistics"] = keyStatistics;
+                        obj["assetProfile"] = assetProfile;
+                        obj["financialData"] = financialData;
+
 
                         var respMsg = new YahooReceived()
                         {
