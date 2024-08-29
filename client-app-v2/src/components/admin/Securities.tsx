@@ -123,6 +123,7 @@ const Securities: React.FC<AuthProps> = (props: AuthProps) => {
       <div className={style.updForm}>
         {props.editModel && (
           <Form
+            key={props.editModelKey}
             defaultValues={props.editModel}
             validationRules={{
               userName: { validator: required },

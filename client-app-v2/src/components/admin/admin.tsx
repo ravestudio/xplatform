@@ -2,14 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import * as EmitentsStore from "../../store/Emitents";
 import * as SecuritiesStore from "../../store/Securities";
 import * as SystemStore from "../../store/System";
 import Tabs, { Tab } from "../tabs";
 import Securities from "./Securities";
 import System from "./System";
+import Emitents from "./Emitents";
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    emitentActions: bindActionCreators(EmitentsStore.actionCreators, dispatch),
     secActions: bindActionCreators(SecuritiesStore.actionCreators, dispatch),
     sysActions: bindActionCreators(SystemStore.actionCreators, dispatch),
   };
@@ -52,8 +55,9 @@ class Admin extends React.PureComponent<AdminProps, IState> {
   }
 
   public componentDidMount() {
+    this.props.emitentActions.requestEmitents();
     this.props.secActions.requestSecurities();
-    this.props.sysActions.requestData();
+    //this.props.sysActions.requestData();
   }
 
   private handleChange(newValue: string) {
@@ -67,6 +71,12 @@ class Admin extends React.PureComponent<AdminProps, IState> {
 
         <Tabs value={this.state.activeTab} onSelect={this.handleChange}>
           <Tab
+            label="Emitents"
+            value="emitents"
+            icon="fa-code"
+            //onSelect={this.handleChange}
+          />
+          <Tab
             label="Securities"
             value="securities"
             icon="fa-code"
@@ -79,6 +89,10 @@ class Admin extends React.PureComponent<AdminProps, IState> {
             //onSelect={this.handleChange}
           />
         </Tabs>
+
+        <TabPanel value={this.state.activeTab} index="emitents">
+          <Emitents />
+        </TabPanel>
 
         <TabPanel value={this.state.activeTab} index="securities">
           <Securities />

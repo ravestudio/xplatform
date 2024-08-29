@@ -1,5 +1,6 @@
 import * as Deals from "./Deals";
 import * as Accounts from "./Accounts";
+import * as Emitents from "./Emitents";
 import * as Securities from "./Securities";
 import * as Portfolio from "./Portfolio";
 import * as Financials from "./Financials";
@@ -13,6 +14,7 @@ import * as NoteList from "../widgets/note-list/store";
 import * as FinancialList from "../widgets/financial-list/store";
 
 export interface ApplicationState {
+  emitents: Emitents.EmitentsState | undefined;
   securities: Securities.SecuritiesState | undefined;
   system: System.SystemState | undefined;
   deals: Deals.DealsState | undefined;
@@ -29,6 +31,7 @@ export interface ApplicationState {
 }
 
 export const reducers = {
+  emitents: Emitents.reducer,
   securities: Securities.reducer,
   system: System.reducer,
   deals: Deals.reducer,

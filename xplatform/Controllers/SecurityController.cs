@@ -59,12 +59,37 @@ namespace xplatform.Controllers
         public IActionResult Post([FromBody] UpdateModel requestModel)
         {
             var security = _context.SecuritySet.Include(s => s.Emitent).SingleOrDefault(s => s.Code == requestModel.Code);
+            var quote = _context.QuoteSet.SingleOrDefault(q => q.symbol == requestModel.Code);
+            var raw = _context.SecurityRawSet.SingleOrDefault(q => q.ticker == requestModel.Code);
+
+            if (raw != null)
+            {
+                _context.SecurityRawSet.Remove(raw);
+            }
+
+            SecurityRaw newRaw = null;
+
+            if (raw != null) {
+                newRaw = new SecurityRaw()
+                {
+                    isin = raw.isin,
+                    figi = raw.figi,
+                    ticker = raw.ticker,
+                    minPriceIncrement = raw.minPriceIncrement,
+                    lot = raw.lot,
+                    currency = raw.currency,
+                    name = raw.name,
+                    type = raw.type,
+                    Processed = raw.Processed,
+                    Board = raw.Board,
+                    Emitent = raw.Emitent,
+                };
+            };
 
             if (requestModel.Values.ContainsKey("code"))
             {
                 security.Code = requestModel.Values["code"];
 
-                var quote = _context.QuoteSet.SingleOrDefault(q => q.symbol == requestModel.Code);
 
                 if (quote != null)
                 {
@@ -77,16 +102,37 @@ namespace xplatform.Controllers
                 {
                     indexCmp.Code = requestModel.Values["code"];
                 }
+
+                if (newRaw != null)
+                {
+                    newRaw.ticker = requestModel.Values["code"];
+                }
             }
 
             if (requestModel.Values.ContainsKey("name"))
             {
                 security.Name = requestModel.Values["name"];
+                newRaw.name = requestModel.Values["name"];
             }
 
             if (requestModel.Values.ContainsKey("isin"))
             {
                 security.ISIN = requestModel.Values["isin"];
+                newRaw.isin = requestModel.Values["isin"];
+
+            }
+
+            if (requestModel.Values.ContainsKey("figi"))
+            {
+                if (quote != null)
+                {
+                    quote.figi = requestModel.Values["figi"];
+                }
+
+                if (newRaw != null)
+                {
+                    newRaw.figi = requestModel.Values["figi"];
+                }
             }
 
             if (requestModel.Values.ContainsKey("emitent"))
@@ -113,7 +159,14 @@ namespace xplatform.Controllers
                 security.Emitent.FinancialPage = newFinPage;
             }
 
+
+            //_context.SaveChanges();
+            if (newRaw != null)
+            {
+                _context.SecurityRawSet.Add(newRaw);
+            }
             _context.SaveChanges();
+
 
 
             return Ok();

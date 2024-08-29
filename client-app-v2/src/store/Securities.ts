@@ -1,10 +1,12 @@
 import { Action, Reducer } from "redux";
 import { AppThunkAction } from "./";
+import { v4 } from "uuid";
 
 export interface SecuritiesState {
   isLoading: boolean;
   securities: Security[];
 
+  editModelKey?: any;
   editModel?: any;
 }
 
@@ -136,7 +138,7 @@ export const reducer: Reducer<SecuritiesState> = (
       };
 
     case "EDIT_MODEL_RECEIVE":
-      return { ...state, editModel: action.model };
+      return { ...state, editModel: action.model, editModelKey: v4() };
     default:
       return state;
   }

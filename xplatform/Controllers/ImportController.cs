@@ -73,7 +73,7 @@ namespace xplatform.Controllers
 
                     }
 
-                    if (board == "RUB") return $"{ticker}.ME";
+                    if (board == "TQBR") return $"{ticker}.ME";
 
                     return ticker;
                 };
@@ -82,7 +82,7 @@ namespace xplatform.Controllers
                 {
                     if (board == "SPBHKEX")return "China";
 
-                    if (board == "RUB") return "Moscow";
+                    if (board == "TQBR") return "Moscow";
 
                     return "United States";
                 };
@@ -111,7 +111,8 @@ namespace xplatform.Controllers
                         Code = rawItem.ticker,
                         Name = rawItem.name,
                         Region = getRegion(rawItem.Board),
-                        Currency = rawItem.currency
+                        Currency = rawItem.currency,
+                        FinancialPage = getFinPage(rawItem.Board, rawItem.ticker),
                     };
 
                     Quote quote = new Quote()
