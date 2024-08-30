@@ -200,6 +200,9 @@ namespace XCub.commands
 
                         if (obj["defaultKeyStatistics"] != null)
                         {
+
+                            obj["defaultKeyStatistics"]["version"] = 2;
+
                             if (security.SecurityStatistics == null)
                             {
                                 security.SecurityStatistics = new SecurityStatistics();
