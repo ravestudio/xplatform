@@ -136,8 +136,8 @@ export const actionCreators = {
                 stat.version === 2
                   ? {
                       ...stat,
-                      floatShares: getValue(stat, "FloatShares"),
-                      sharesOutstanding: getValue(stat, "SharesOutstanding"),
+                      floatShares: getValue(stat, "floatShares"),
+                      sharesOutstanding: getValue(stat, "sharesOutstanding"),
                     }
                   : { ...stat }
               ),
