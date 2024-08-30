@@ -131,6 +131,16 @@ export const actionCreators = {
                       }
                     : { ...cashflow }
               ),
+
+              defaultKeyStatistics: data.defaultKeyStatistics.map((stat: any) =>
+                stat.version === 2
+                  ? {
+                      ...stat,
+                      floatShares: getValue(stat, "FloatShares"),
+                      sharesOutstanding: getValue(stat, "SharesOutstanding"),
+                    }
+                  : { ...stat }
+              ),
             };
 
             dispatch({
