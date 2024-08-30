@@ -36,7 +36,15 @@ interface ReceiveFinancialsAction {
 type KnownAction = RequestFinancialsAction | ReceiveFinancialsAction;
 
 const getValue = (sourse: any, field: string) => {
-  return sourse[field] ? { raw: sourse[field] } : undefined;
+  return sourse[field]
+    ? {
+        raw: sourse[field],
+        fmt: new Intl.NumberFormat("en", {
+          notation: "compact",
+          compactDisplay: "short",
+        }).format(sourse[field]),
+      }
+    : undefined;
 };
 
 export const actionCreators = {
