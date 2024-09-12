@@ -8,6 +8,7 @@ import style from "./Financials.module.css";
 import Tabs, { Tab } from "../../components/tabs";
 import { useParams } from "react-router";
 import IncomesChart from "./IncomesChart";
+import IncomesEChart from "./IncomesEChart";
 import IncomesTable from "./IncomesTable";
 import FlowsTable from "./FlowsTable";
 import BalanceTable from "./BalanceTable";
@@ -149,6 +150,7 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
 
           <div className={style.chart}>
             <IncomesChart financials={this.props.financials} />
+            <IncomesEChart financials={this.props.financials} />
             <NoteListConnected />
           </div>
         </div>

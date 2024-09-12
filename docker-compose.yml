@@ -53,7 +53,7 @@ services:
   postgres:
     image: postgres:latest
     ports:
-      - 25432:5432
+      - 5432:5432
     restart: always
     volumes:
       - db_volume:/var/lib/postgresql/data
