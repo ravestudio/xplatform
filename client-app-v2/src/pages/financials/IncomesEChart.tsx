@@ -22,6 +22,9 @@ const IncomesEChart: React.FC<Props> = (props: Props) => {
         type: "shadow",
       },
     },
+    legend: {
+      top: "bottom",
+    },
     grid: {
       left: 80,
       right: 0,
@@ -42,7 +45,8 @@ const IncomesEChart: React.FC<Props> = (props: Props) => {
     series: [
       {
         name: "Revenue",
-        color: "rgba(66,146,40,1)",
+        color: "#91cc75",
+        //color: "#5470c6",
         barGap: 0,
         data: props.financials.incomeStatementHistory
           .slice()
@@ -52,7 +56,8 @@ const IncomesEChart: React.FC<Props> = (props: Props) => {
       },
       {
         name: "Earnings",
-        color: "rgba(35,99,165,1)",
+        color: "#5470c6",
+        //color: "#91cc75",
         data: props.financials.incomeStatementHistory
           .slice()
           .reverse()
@@ -62,7 +67,7 @@ const IncomesEChart: React.FC<Props> = (props: Props) => {
     ],
   };
 
-  return <ReactECharts option={options} />;
+  return <ReactECharts option={options} style={{ height: 400 }} />;
 };
 
 export default IncomesEChart;

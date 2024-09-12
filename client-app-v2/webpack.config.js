@@ -92,6 +92,7 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, "./dist"),
       filename: "bundle.js",
+      //publicPath: '/',
     },
     devServer: {
       /*open: true,*/
@@ -100,9 +101,11 @@ module.exports = (env, argv) => {
       },
 
       compress: true,
-      historyApiFallback: true,
+      historyApiFallback: {
+        disableDotRule: true,
+      },
       port: 9000,
-
+      hot: true,
       proxy: [
         {
           context: ["/api"],

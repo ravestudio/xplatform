@@ -8,6 +8,7 @@ import configureStore from "./store/configureStore";
 import App from "./App";
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import { getAuthToken } from "./shared/utils/auth";
 
 // Create browser history to use in the Redux store
 const baseUrl = document
@@ -15,11 +16,9 @@ const baseUrl = document
   .getAttribute("href") as string;
 const history = createBrowserHistory();
 
-const token = localStorage.getItem("token");
-
 const initial = {
   auth: {
-    token,
+    token: getAuthToken(),
   },
 };
 

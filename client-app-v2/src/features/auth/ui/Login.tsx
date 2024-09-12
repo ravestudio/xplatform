@@ -11,6 +11,7 @@ import {
 import { ApplicationState } from "../../../store";
 import * as AuthStore from "../store";
 import { login } from "../store";
+import { setAuthToken } from "../../../shared/utils/auth";
 
 const mapDispatchToProps = (dispatch: any) => {
   return { actions: bindActionCreators(AuthStore.actionCreators, dispatch) };
@@ -24,7 +25,7 @@ const Login: React.FC<AuthProps> = (props: AuthProps) => {
 
     props.actions.SetToken(result);
 
-    localStorage.setItem("token", result.token);
+    setAuthToken(result.token);
 
     return result;
   };

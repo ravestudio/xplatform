@@ -149,7 +149,6 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
           </div>
 
           <div className={style.chart}>
-            <IncomesChart financials={this.props.financials} />
             <IncomesEChart financials={this.props.financials} />
             <NoteListConnected />
           </div>
