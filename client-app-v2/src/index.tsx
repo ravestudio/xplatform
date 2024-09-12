@@ -15,7 +15,15 @@ const baseUrl = document
   .getAttribute("href") as string;
 const history = createBrowserHistory();
 
-const store = configureStore(history);
+const token = localStorage.getItem("token");
+
+const initial = {
+  auth: {
+    token,
+  },
+};
+
+const store = configureStore(history, initial);
 
 ReactDOM.render(
   <Provider store={store}>

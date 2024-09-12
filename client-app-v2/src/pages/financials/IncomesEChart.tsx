@@ -13,6 +13,9 @@ const IncomesEChart: React.FC<Props> = (props: Props) => {
   if (!financials) return null;
 
   const options: EChartsOption = {
+    title: {
+      text: "Annual revenue and earnings",
+    },
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -20,8 +23,8 @@ const IncomesEChart: React.FC<Props> = (props: Props) => {
       },
     },
     grid: {
-      left: "20%",
-      right: "0%",
+      left: 80,
+      right: 0,
     },
     xAxis: {
       type: "category",

@@ -24,6 +24,8 @@ const Login: React.FC<AuthProps> = (props: AuthProps) => {
 
     props.actions.SetToken(result);
 
+    localStorage.setItem("token", result.token);
+
     return result;
   };
 
