@@ -1,3 +1,6 @@
+import counterReducer from "../features/counter/counterSlice";
+import settingsReducer from "../features/settings/settingsSlice";
+
 import * as Deals from "./Deals";
 import * as Accounts from "./Accounts";
 import * as Emitents from "./Emitents";
@@ -31,6 +34,8 @@ export interface ApplicationState {
 }
 
 export const reducers = {
+  counter: counterReducer,
+  settings: settingsReducer,
   emitents: Emitents.reducer,
   securities: Securities.reducer,
   system: System.reducer,

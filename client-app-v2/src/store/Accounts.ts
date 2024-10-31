@@ -18,7 +18,7 @@ const unloadedState: AccountsState = {
     },
     {
       id: 2,
-      name: "Open",
+      name: "VTB",
     },
     {
       id: 3,
@@ -31,6 +31,10 @@ const unloadedState: AccountsState = {
     {
       id: 5,
       name: "BCS small",
+    },
+    {
+      id: 8,
+      name: "InvestPalata",
     },
   ],
   isLoading: false,
