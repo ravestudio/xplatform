@@ -114,7 +114,7 @@ namespace xplatform.Controllers
 
             foreach (PortfolioItem etfItem in result.Items.Where(i => i.Type == "etf"))
             {
-                var structure = JObject.Parse(_context.ETFSet.Single(s => s.Code == etfItem.Code).Structure);
+                var structure = JObject.Parse(_context.ETFSet.Single(s => s.ISIN == etfItem.Code).Structure);
                 decimal bondPrc = structure.Value<decimal>("bond") + structure.Value<decimal>("gold");
                 decimal bondCost = etfItem.Cost * (bondPrc / 100);
                 decimal stockCost = etfItem.Cost * ((100 - bondPrc) / 100);
