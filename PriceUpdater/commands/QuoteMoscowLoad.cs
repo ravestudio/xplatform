@@ -30,6 +30,7 @@ namespace PriceUpdater.commands
             if (result != null)
             {
                 result.Id = md.quote.Id;
+                result.ISIN = md.quote.ISIN;
                 result.figi = md.quote.figi;
                 result.symbol = md.quote.symbol;
                 result.Board = md.quote.Board;

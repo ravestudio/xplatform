@@ -34,6 +34,7 @@ namespace PriceUpdater.commands
                 if (result != null)
                 {
                     result.Id = quote.Id;
+                    result.ISIN = quote.ISIN;
                     result.symbol = quote.symbol;
                     result.Board = quote.Board;
                     result.figi = quote.figi;
