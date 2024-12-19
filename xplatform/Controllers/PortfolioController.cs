@@ -106,7 +106,7 @@ namespace xplatform.Controllers
                     cost = cost * getPrice(hkdrub);
                 }
 
-                result.AddItem(el.code, security.Name, el.limit, cost + nkdcost, security.Type);
+                result.AddItem(security.ISIN, security.Code, security.Name, el.limit, cost + nkdcost, security.Type);
             }
 
             result.SharesTotal = result.Items.Where(i => i.Type == "stock").Sum(s => s.Cost);
@@ -114,7 +114,7 @@ namespace xplatform.Controllers
 
             foreach (PortfolioItem etfItem in result.Items.Where(i => i.Type == "etf"))
             {
-                var structure = JObject.Parse(_context.ETFSet.Single(s => s.ISIN == etfItem.Code).Structure);
+                var structure = JObject.Parse(_context.ETFSet.Single(s => s.ISIN == etfItem.ISIN).Structure);
                 decimal bondPrc = structure.Value<decimal>("bond") + structure.Value<decimal>("gold");
                 decimal bondCost = etfItem.Cost * (bondPrc / 100);
                 decimal stockCost = etfItem.Cost * ((100 - bondPrc) / 100);

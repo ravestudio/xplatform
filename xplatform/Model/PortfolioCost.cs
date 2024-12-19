@@ -12,10 +12,11 @@ namespace xplatform.Model
             Items = new List<PortfolioItem>();
         }
 
-        public void AddItem(string code, string name, int limit, decimal cost, string type)
+        public void AddItem(string isin, string code, string name, int limit, decimal cost, string type)
         {
             Items.Add(new PortfolioItem()
             {
+                ISIN = isin,
                 Code = code,
                 Name = name,
                 Limit = limit,
@@ -34,6 +35,7 @@ namespace xplatform.Model
 
     public class PortfolioItem
     {
+        public string ISIN { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public int Limit { get; set; }
