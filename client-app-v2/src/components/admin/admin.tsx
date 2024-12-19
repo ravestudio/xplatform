@@ -9,6 +9,7 @@ import Tabs, { Tab } from "../tabs";
 import Securities from "./Securities";
 import System from "./System";
 import Emitents from "./Emitents";
+import { Settings } from "../../features/settings";
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -88,6 +89,12 @@ class Admin extends React.PureComponent<AdminProps, IState> {
             icon="fa-code"
             //onSelect={this.handleChange}
           />
+          <Tab
+            label="Settings"
+            value="settings"
+            icon="fa-code"
+            //onSelect={this.handleChange}
+          />
         </Tabs>
 
         <TabPanel value={this.state.activeTab} index="emitents">
@@ -99,6 +106,9 @@ class Admin extends React.PureComponent<AdminProps, IState> {
         </TabPanel>
         <TabPanel value={this.state.activeTab} index="system">
           <System />
+        </TabPanel>
+        <TabPanel value={this.state.activeTab} index="settings">
+          <Settings />
         </TabPanel>
       </React.Fragment>
     );

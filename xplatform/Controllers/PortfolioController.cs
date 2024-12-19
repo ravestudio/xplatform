@@ -66,10 +66,9 @@ namespace xplatform.Controllers
 
             foreach (var el in ds)
             {
-                Security security = _context.SecuritySet.Single(s => s.Code == el.code);
+                Security security = _context.SecuritySet.Single(s => s.ISIN == el.code);
 
-                //todo нужна фильтрация по board
-                Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code);
+                Quote quote = _context.QuoteSet.Single(q => q.ISIN == security.ISIN);
 
                 //ISSResponse issResp = await micexClient.GetSecurityInfo(security.Market, security.Board, el.code);
 

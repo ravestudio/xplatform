@@ -7,6 +7,7 @@ namespace CommonLib.Objects
     public class Quote
     {
         public Guid Id { get; set; }
+        public string ISIN { get; set; }
         public string figi { get; set; }
         public string symbol { get; set; }
         public DateTime? lastUpdate { get; set; }

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
 import { Settings } from "./model";
-import { fetchSettings } from "./settingsAPI";
+import { fetchSettings, saveSettings } from "./settingsAPI";
 
 export interface SettingsState {
   value?: Settings;
@@ -12,7 +12,7 @@ const initialState: SettingsState = {
   status: "idle",
 };
 
-export const incrementAsync = createAsyncThunk(
+export const loadAsync = createAsyncThunk(
   "settings/fetchSettings",
   async () => {
     const response = await fetchSettings();
@@ -20,6 +20,12 @@ export const incrementAsync = createAsyncThunk(
     return response.data;
   }
 );
+
+export const saveAsync = createAsyncThunk("settings/saveSettings", async () => {
+  const response = await saveSettings();
+  // The value we return becomes the `fulfilled` action payload
+  return response;
+});
 
 /*export const fetchUsers = createAsyncThunk("users/fetchAll", async () => {
   const response = await userAPI.fetchAll();
@@ -35,12 +41,16 @@ export const settingsSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(incrementAsync.pending, (state) => {
+      .addCase(loadAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(incrementAsync.fulfilled, (state, action) => {
+      .addCase(loadAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.value = action.payload;
+      })
+
+      .addCase(saveAsync.fulfilled, (state, action) => {
+        state.status = "idle";
       });
   },
 });

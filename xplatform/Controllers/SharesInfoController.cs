@@ -32,15 +32,15 @@ namespace xplatform.Controllers
 
             var finance = from annual in _context.FinanceAnnualSet group annual by annual.Code into g select new { Code = g.Key, year = (from t2 in g select t2.Year).Max() };
 
-            Func<IList<Quote>, string, decimal> getPrice = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
+            Func<IList<Quote>, string, decimal> getPrice = new Func<IList<Quote>, string, decimal>((quotes, isin) =>
             {
-                var quote = quotes.SingleOrDefault(q => q.symbol == symbol);
+                var quote = quotes.SingleOrDefault(q => q.ISIN == isin);
                 return quote.price == 0 && quote.previousClose > 0? quote.previousClose : quote.price;
             });
 
-            Func<IList<Quote>, string, decimal> getPriceChange = new Func<IList<Quote>, string, decimal>((quotes, symbol) =>
+            Func<IList<Quote>, string, decimal> getPriceChange = new Func<IList<Quote>, string, decimal>((quotes, isin) =>
             {
-                Quote quote = quotes.Single(q => q.symbol == symbol);
+                Quote quote = quotes.Single(q => q.ISIN == isin);
 
                 var price = quote.price == 0 && quote.previousClose > 0 ? quote.previousClose : quote.price;
 
@@ -58,8 +58,8 @@ namespace xplatform.Controllers
                 Emitent = s.Emitent.Name,
                 FinancialPage = s.FinancialPage,
                 Currency = s.Currency,
-                Price = getPrice(quotes, s.Code),
-                PriceChange = getPriceChange(quotes, s.Code),
+                Price = getPrice(quotes, s.ISIN),
+                PriceChange = getPriceChange(quotes, s.ISIN),
                 Sector = s.Emitent.EmitentProfile != null ? (string)JObject.Parse(s.Emitent.EmitentProfile.Data)["sector"] : null,
                 LastFinancial = finance.SingleOrDefault(f => f.Code == s.Emitent.FinancialPage).year
             }).ToArray();

@@ -182,6 +182,7 @@ namespace CommonLib.ModelBuilder
 
             modelBuilder.Entity<Quote>().HasKey(q => q.Id);
             modelBuilder.Entity<Quote>().Property(q => q.Id).HasColumnName("Id");
+            modelBuilder.Entity<Quote>().Property(q => q.ISIN).HasColumnName("ISIN");
             modelBuilder.Entity<Quote>().Property(q => q.figi).HasColumnName("Figi");
             modelBuilder.Entity<Quote>().Property(q => q.symbol).HasColumnName("Symbol");
             modelBuilder.Entity<Quote>().Property(q => q.lastUpdate).HasColumnName("LastUpdate");

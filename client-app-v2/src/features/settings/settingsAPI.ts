@@ -6,9 +6,21 @@ export function fetchSettings() {
     setTimeout(
       () =>
         resolve({
-          data: { loadEmitentProfile: true, loadEmitentFinancial: true },
+          data: { loadEmitentProfile: true, loadEmitentFinancial: false },
         }),
       500
+    )
+  );
+}
+
+export function saveSettings() {
+  return new Promise<{ success: boolean }>((resolve) =>
+    setTimeout(
+      () =>
+        resolve({
+          success: true,
+        }),
+      1000
     )
   );
 }
