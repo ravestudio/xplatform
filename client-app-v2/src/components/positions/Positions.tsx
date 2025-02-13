@@ -34,7 +34,7 @@ class Positions extends React.PureComponent<PositionsProps> {
 
   private onOpen(selectedRows: any[]) {
     this.props.requestPositionDetails(
-      selectedRows[0].code,
+      selectedRows[0].isin,
       this.props.accountId
     );
   }
@@ -48,6 +48,16 @@ class Positions extends React.PureComponent<PositionsProps> {
           width: 50,
         },
         {
+          field: "isin",
+          headerName: "isin",
+          width: 100,
+        },
+        {
+          field: "name",
+          headerName: "name",
+          width: 150,
+        },
+        {
           field: "limit",
           headerName: "limit",
           width: 150,
@@ -58,8 +68,8 @@ class Positions extends React.PureComponent<PositionsProps> {
     const detailsConfig = {
       columns: [
         {
-          field: "code",
-          headerName: "code",
+          field: "isin",
+          headerName: "isin",
           width: 50,
         },
         {
@@ -81,7 +91,7 @@ class Positions extends React.PureComponent<PositionsProps> {
     };
 
     const positionsProps = {
-      keyField: "code",
+      keyField: "isin",
       gridConfig: positionsConfig,
       items: this.props.positions,
       onSelectionChanged: this.onOpen.bind(this),

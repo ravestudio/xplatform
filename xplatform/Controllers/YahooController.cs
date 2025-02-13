@@ -65,7 +65,7 @@ namespace xplatform.Controllers
 
             var security = securityList.Single(s => s.FinancialPage == Code);
 
-            Quote quote = _context.QuoteSet.Single(q => q.symbol == security.Code);
+            Quote quote = _context.QuoteSet.Single(q => q.ISIN == security.ISIN);
 
             IList<Quote> currencies = _context.QuoteSet.Where(q => q.Board == "CETS").ToList();
 

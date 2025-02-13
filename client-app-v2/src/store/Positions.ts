@@ -14,12 +14,14 @@ export interface PositionsState {
 
 export interface Position {
   code: string;
+  isin: string;
+  name: string;
   limit: number;
 }
 
 export interface PositionDetails {
   account: number;
-  code: string;
+  isin: string;
   date: Date;
   limit: number;
   price: number;
@@ -84,12 +86,12 @@ export const actionCreators = {
     },
 
   requestPositionDetails:
-    (code: string, accountId?: number): AppThunkAction<KnownAction> =>
+    (isin: string, accountId?: number): AppThunkAction<KnownAction> =>
     (dispatch, getState) => {
       const appState = getState();
 
       fetch(
-        `/api/position/getDetails?security=${code}${
+        `/api/position/getDetails?security=${isin}${
           accountId ? `&accountId=${accountId}` : ""
         }`
       )

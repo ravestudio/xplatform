@@ -36,20 +36,30 @@ namespace xplatform.Controllers
             {
                 query = query.Where(a => a.Key == accountId);
             }
-            
+
 
             var ds = query.SelectMany(a => a.Value.PositionItems, (a, q) => new
             {
                 account = a.Key,
-                code = q.Key,
+                isin = q.Key,
                 limit = q.Value.Sum(p => p.Limit)
-            }).GroupBy(v => new { v.code }).Select(g => new
+            }).GroupBy(v => new { v.isin }).Select(g => new
             {
-                code = g.Key.code,
+                isin = g.Key.isin,
                 limit = g.Sum(p => p.limit)
             }).ToList();
 
-            return ds;
+            var positions = from pos in ds
+                            join security in _context.SecuritySet on pos.isin equals security.ISIN
+                            select new
+                            {
+                                security.Code,
+                                security.ISIN,
+                                security.Name,
+                                pos.limit,
+                            };
+
+            return positions.ToList();
         }
         [HttpGet]
         public IEnumerable<object> GetDetails(string security, int? accountId)
@@ -69,13 +79,13 @@ namespace xplatform.Controllers
             var ds = query.SelectMany(a => a.Value.PositionItems, (a, q) => q.Value.Select(t => new
             {
                 account = a.Key,
-                code = q.Key,
+                isin = q.Key,
                 date = t.DealDate,
                 limit = t.Limit,
                 price = t.Price
             })).SelectMany(g => g);
 
-            return ds.Where(d => d.code == security);
+            return ds.Where(d => d.isin == security);
         }
 
         [HttpPost]
