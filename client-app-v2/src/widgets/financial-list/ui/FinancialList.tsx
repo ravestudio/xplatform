@@ -14,9 +14,6 @@ const FinancialList = (props: FinancialListProps) => {
   return (
     <div>
       <div>
-        <FinancialYears />
-      </div>
-      <div>
         <FinancialEdit />
       </div>
 

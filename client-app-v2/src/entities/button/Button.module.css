@@ -1,0 +1,22 @@
+.button {
+  font-size: 16px;
+  padding: 4px 2px;
+  width: 60px;
+  border-radius: 5px;
+  color: white;
+}
+
+.default {
+  border: rgb(18, 9, 90) solid 1px;
+  background-color: rgb(14, 35, 156);
+}
+
+.green {
+  border: rgb(23, 44, 4) solid 1px;
+  background-color: rgb(67, 211, 23);
+}
+
+.red {
+  border: rgb(63, 4, 11) solid 1px;
+  background-color: rgb(168, 13, 52);
+}

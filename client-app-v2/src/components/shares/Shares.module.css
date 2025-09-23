@@ -4,7 +4,7 @@
 }
 
 .title {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .xtable {
@@ -14,21 +14,22 @@
   border-collapse: collapse;
 }
 
-.xtable th, td {
-    display: table-cell;
-    padding: 16px;
-    font-size: 0.875rem;
-    text-align: left;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    font-weight: 400;
-    line-height: 1.43;
-    border-bottom: 1px solid #e0e0e00f;
-    letter-spacing: 0.01071em;
-    vertical-align: inherit;
-  }
+.xtable th,
+.xtable td {
+  display: table-cell;
+  padding: 16px;
+  font-size: 0.875rem;
+  text-align: left;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.43;
+  border-bottom: 1px solid #e0e0e00f;
+  letter-spacing: 0.01071em;
+  vertical-align: inherit;
+}
 
 .xtable th {
-    color: #5dc193;
-    font-weight: 500;
-    line-height: 1.5rem;
+  color: #5dc193;
+  font-weight: 500;
+  line-height: 1.5rem;
 }

@@ -2,8 +2,15 @@ import * as React from "react";
 import css from "./FinancialEdit.module.css";
 import { Form, ISubmitResult, IValues, required } from "../../../entities/form";
 import { login } from "../../auth/store";
+import { config } from "../model";
+import { YearAdd } from "./YearAdd";
+import { useAppSelector } from "../../../app/hooks";
+import { selectYears } from "../store";
+import { CommonInfo } from "./CommonInfo";
 
 const FinancialEdit: React.FC = () => {
+  const years = useAppSelector(selectYears);
+
   const handleSubmit = async (values: IValues): Promise<ISubmitResult> => {
     const result = await login(values.userName, values.password);
 
@@ -13,26 +20,36 @@ const FinancialEdit: React.FC = () => {
   return (
     <Form
       defaultValues={{
+        year1: 2023,
         totalRevenue1: "100",
-        totalRevenue2: "120",
-        costOfRevenue: "",
-        totalOperatingExpenses: "",
-        netIncome: "",
+        costOfRevenue1: "",
+        totalOperatingExpenses1: "",
+        netIncome1: "",
       }}
       validationRules={{}}
       onSubmit={handleSubmit}
     >
-      <div className={css.row}>
-        <div>Total Revenue</div>
-        <Form.Field name="totalRevenue1" label="totalRevenue" />
-        <Form.Field name="totalRevenue2" label="totalRevenue" />
-      </div>
-      <Form.Field name="costOfRevenue" label="costOfRevenue" />
-      <Form.Field
-        name="totalOperatingExpenses"
-        label="totalOperatingExpenses"
-      />
-      <Form.Field name="netIncome" label="netIncome" />
+      <CommonInfo />
+      <YearAdd />
+
+      {config.fields.map((field) => {
+        return (
+          <div className={css.row}>
+            <div className={css.fieldTitle}>{field.caption}</div>
+
+            {years.map((year) => {
+              return (
+                <Form.Field
+                  name={field.fieldName + year}
+                  type="Number"
+                  label=""
+                  className={css.field}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
     </Form>
   );
 };

@@ -1,3 +1,25 @@
 .row {
-    display: flex;
+  display: flex;
+  align-items: start;
+  gap: 7px;
+}
+
+.fieldTitle {
+  width: 200px;
+}
+
+.field {
+  width: 100px;
+}
+
+.fieldWithButton {
+  width: 100px;
+  display: flex;
+  align-items: start;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.fieldSmall {
+  width: 60px;
 }

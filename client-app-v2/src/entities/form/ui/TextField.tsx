@@ -13,7 +13,6 @@ const TextField = (props: IFieldProps) => {
   const { type, name, value, disabled, onChange, onBlur } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //const newValue = e.currentTarget.value.replace(/\:/g, "").substring(0, 4);
     const newValue = e.currentTarget.value;
 
     onChange({
@@ -24,9 +23,6 @@ const TextField = (props: IFieldProps) => {
       },
     });
   };
-
-  //const sValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //const sValue = value.replace(/\B(?=(\d{2})+(?!\d))/g, ":");
 
   return (
     <input

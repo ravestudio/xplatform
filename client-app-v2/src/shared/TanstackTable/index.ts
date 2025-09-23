@@ -1,0 +1,1 @@
+export { TanstackTable } from "./TanstackTable";

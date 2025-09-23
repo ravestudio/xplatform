@@ -1,15 +1,19 @@
 import * as React from "react";
 import css from "./form.module.css";
 import TextField from "./TextField";
+import clsx from "clsx";
+import { current } from "@reduxjs/toolkit";
+import NumberField from "./NumberField";
 
-interface IFormContext {
+export interface IFormContext {
   errors: IErrors;
   values: IValues;
   setValue?: (fieldName: string, value: any) => void;
   validate?: (fieldName: string, value: any) => void;
+  reset?: (fieldNameList: string[]) => void;
 }
 
-const FormContext = React.createContext<IFormContext>({
+export const FormContext = React.createContext<IFormContext>({
   errors: {},
   values: {},
 });
@@ -21,7 +25,8 @@ export interface IValues {
 interface IFieldProps {
   name: string;
   label: string;
-  type?: "Text" | "Email" | "Select" | "TextArea";
+  className?: string;
+  type?: "Text" | "Number" | "Email" | "Select" | "TextArea";
   options?: string[];
   disabled?: boolean;
 }
@@ -85,7 +90,7 @@ interface IState {
 
 export class Form extends React.Component<IFormProps, IState> {
   public static Field: React.FC<IFieldProps> = (props) => {
-    const { name, label, type, options, disabled } = props;
+    const { name, label, className, type, options, disabled } = props;
 
     const handleChange = (
       e:
@@ -114,14 +119,26 @@ export class Form extends React.Component<IFormProps, IState> {
     console.log(`render ${name}`);
     console.log(css);
 
+    const withLabel = label !== "";
+
     return (
       <FormContext.Consumer>
         {(context) => (
-          <div className={css.formGroup}>
-            <label htmlFor={name}>{label}</label>
+          <div className={clsx(css.formGroup, className)}>
+            {withLabel && <label htmlFor={name}>{label}</label>}
             {(type === "Text" || type === "Email") && (
               <TextField
                 type={type}
+                name={name}
+                value={context.values[name]}
+                onChange={(e) => handleChange(e, context)}
+                onBlur={(e) => handleBlur(e, context)}
+                disabled={disabled}
+              />
+            )}
+
+            {type === "Number" && (
+              <NumberField
                 name={name}
                 value={context.values[name]}
                 onChange={(e) => handleChange(e, context)}
@@ -189,6 +206,17 @@ export class Form extends React.Component<IFormProps, IState> {
     this.setState({ values: newValues });
   };
 
+  private reset = (fieldNameList: string[]) => {
+    const newValues = Object.keys(this.state.values)
+      .filter((key) => !fieldNameList.includes(key))
+      .reduce(
+        (acc, current) => ({ ...acc, [current]: this.state.values[current] }),
+        {}
+      );
+
+    this.setState({ values: newValues });
+  };
+
   private validateForm(): boolean {
     const errors: IErrors = {};
     let haveError: boolean = false;
@@ -249,6 +277,7 @@ export class Form extends React.Component<IFormProps, IState> {
     const context: IFormContext = {
       errors: this.state.errors,
       setValue: this.setValue,
+      reset: this.reset,
       validate: this.validate,
       values: this.state.values,
     };

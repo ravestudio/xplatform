@@ -7,6 +7,8 @@ import * as PortfolioStore from "../../store/Portfolio";
 import Dropdown from "../dropdown";
 
 import style from "./Portfolio.module.css";
+import { AccessorKeyColumnDef } from "@tanstack/react-table";
+import { TanstackTable } from "../../shared/TanstackTable/";
 
 type PortfolioProps = PortfolioStore.PortfolioState &
   typeof PortfolioStore.actionCreators;
@@ -83,38 +85,56 @@ class Portfolio extends React.PureComponent<PortfolioProps> {
       ? this.props.portfolio?.sharesTotal + this.props.portfolio?.bondsTotal
       : 0;
 
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Limit</th>
-            <th>Cost</th>
-            <th>Prc</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.props.portfolio?.items.map(
-            (item: PortfolioStore.PortfolioItem) => (
-              <tr key={item.code}>
-                <td>{item.code}</td>
-                <td>{item.name}</td>
-                <td>{item.limit}</td>
-                <td>{item.cost.toFixed(2)}</td>
-                <td>{this.RenderPrc(total, item.cost)}</td>
-              </tr>
-            )
-          )}
-          <tr>
-            <td>Total</td>
-            <td></td>
-            <td></td>
-            <td>{total.toFixed(2)}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
+    const data = this.props.portfolio?.items;
+
+    //const columnHelper = createColumnHelper<PortfolioStore.PortfolioItem>();
+    //const cc = columnHelper.accessor("cost", {cell: info => info.getValue().toFixed(2)})
+
+    const columns: AccessorKeyColumnDef<PortfolioStore.PortfolioItem>[] = [
+      {
+        accessorKey: "code",
+        header: "Code",
+        cell: (info) => info.getValue(),
+        size: 80,
+      },
+      {
+        accessorKey: "name",
+        header: "Name",
+        cell: (info) => info.getValue(),
+        size: 350,
+      },
+      {
+        accessorKey: "limit",
+        header: "Limit",
+        cell: (info) => info.getValue(),
+        size: 80,
+      },
+      {
+        accessorKey: "cost",
+        header: "Cost",
+        cell: (info) => info.getValue<number>().toFixed(2),
+        footer: ({ table }) => {
+          const totalAmount = table
+            .getFilteredRowModel()
+            .rows.reduce((sum, row) => sum + row.getValue<number>("cost"), 0);
+          return `${totalAmount.toFixed(2)} (${total.toFixed(2)})`;
+        },
+        size: 150,
+      },
+      {
+        id: "prc",
+        accessorKey: "cost",
+        header: "Prc",
+        cell: (info) => this.RenderPrc(total, info.getValue<number>()),
+        size: 30,
+      },
+    ];
+
+    if (!data) {
+      return null;
+    }
+
+    return <TanstackTable columns={columns} tableData={data} />;
   }
 }
 
