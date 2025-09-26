@@ -22,6 +22,7 @@ namespace xplatform.DataAccess
 
         public DbSet<Portfolio> PortfolioSet { get; set; }
         public DbSet<SnapshootData> SnapshootSet { get; set; }
+        public DbSet<BalancingLogData> BalancingLogDataSet { get; set; }
         public DbSet<ProductData> ProductSet { get; set; }
 
         public DbSet<YahooFinanceRaw> YahooFinanceRawSet { get; set; }

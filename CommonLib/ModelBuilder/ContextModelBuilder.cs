@@ -157,6 +157,12 @@ namespace CommonLib.ModelBuilder
             modelBuilder.Entity<SnapshootData>().Property(p => p.Data).HasColumnName("Data");
             modelBuilder.Entity<SnapshootData>().ToTable("SnapshootSet");
 
+            modelBuilder.Entity<BalancingLogData>().HasKey(p => p.Id);
+            modelBuilder.Entity<BalancingLogData>().Property(p => p.Id).HasColumnName("Id");
+            modelBuilder.Entity<BalancingLogData>().Property(p => p.ChangeDate).HasColumnName("ChangeDate");
+            modelBuilder.Entity<BalancingLogData>().Property(p => p.Data).HasColumnName("Data");
+            modelBuilder.Entity<BalancingLogData>().ToTable("BalancingLogSet");
+
             modelBuilder.Entity<ProductData>().HasKey(p => p.Id);
             modelBuilder.Entity<ProductData>().Property(p => p.Id).HasColumnName("Id");
             modelBuilder.Entity<ProductData>().Property(p => p.ChangeDate).HasColumnName("ChangeDate");
