@@ -1,0 +1,1 @@
+export const fetchLogs = () => fetch('/api/balancingLog/')

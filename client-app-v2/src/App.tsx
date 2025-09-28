@@ -16,6 +16,7 @@ import Admin from "./components/admin/admin";
 import styles from "./app.module.css";
 import ProtectedRoute from "./ProtectedRoute";
 import { FinancialList } from "./widgets/financial-list";
+import { BalancingLog } from "./pages/balancingLog/BalancingLog";
 
 export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
@@ -29,6 +30,8 @@ export default connect((state: ApplicationState) => ({
           <Link to="portfolio">Portfolio</Link>
 
           <Link to="products">Products</Link>
+
+          <Link to="balancingLog">BalancingLog</Link>
 
           <Link to="import">Import</Link>
 
@@ -86,6 +89,14 @@ export default connect((state: ApplicationState) => ({
           element={
             <ProtectedRoute isLoggedIn={props.loggedIn}>
               <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/balancingLog"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <BalancingLog />
             </ProtectedRoute>
           }
         />
