@@ -4,6 +4,8 @@ import {
   loadAsync,
   selectBalancingLog,
 } from "../../../features/balancingLog/balancingLogSlice";
+import { BalancingLogView } from "../../../entities/balancingLog";
+import css from "./BalancingLogList.module.css";
 
 export const BalancingLogList = () => {
   const balancingLog = useAppSelector(selectBalancingLog);
@@ -14,9 +16,9 @@ export const BalancingLogList = () => {
   }, []);
 
   return (
-    <div>
+    <div className={css.logList}>
       {balancingLog.map((log) => (
-        <div>{log.changeDate}</div>
+        <BalancingLogView value={log} />
       ))}
     </div>
   );

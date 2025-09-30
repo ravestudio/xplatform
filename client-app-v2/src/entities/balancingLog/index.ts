@@ -1,2 +1,2 @@
-export {  BalancingLogItem} from './ui/BalancingLogItem'
-export type { BalancingLog } from './model/model'
+export { BalancingLogView } from "./ui/BalancingLogView";
+export type { BalancingLog } from "./model/model";
