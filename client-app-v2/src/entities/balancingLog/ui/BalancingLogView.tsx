@@ -13,7 +13,7 @@ export const BalancingLogView = ({ value }: LogItemProps) => {
       <div className={css.title}>
         {new Date(value.changeDate).toDateString()}
       </div>
-      <div>
+      <div className={css.logViewBody}>
         <BalancingLogViewHeader />
         {value.balancingLogItems.map((item) => (
           <BalancingLogViewItem value={item} />

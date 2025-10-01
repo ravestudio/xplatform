@@ -7,19 +7,54 @@ type LogItemProps = {
 };
 
 export const BalancingLogViewSammary = ({ value }: LogItemProps) => {
-  //  const portfolioList = value.
+  const portfolioList = value.structure.reduce<string[]>(
+    (acc, curr) =>
+      acc.includes(curr.portfolio) ? acc : [...acc, curr.portfolio],
+    []
+  );
+
   const flow = value.balancingLogItems.reduce((acc, current) => {
     return current.operation === "Buy"
       ? (acc -= current.cost)
       : (acc += current.cost);
   }, 0);
   const viewFlow = flow < 0 ? `(${(flow * -1).toFixed(2)})` : flow.toFixed(2);
+
+  const portfolioBefore = (portfolio: string) => {
+    return value.structure.find(
+      (item) => item.portfolio === portfolio && item.period === "before"
+    );
+  };
+
+  const portfolioAfter = (portfolio: string) => {
+    return value.structure.find(
+      (item) => item.portfolio === portfolio && item.period === "after"
+    );
+  };
+
   return (
     <div className={css.sammary}>
       <div className={css.sammaryItem}>
         <div className={css.sammaryItemLabel}>CashFlow:</div>
         <div className={css.sammaryItemValue}>{viewFlow}</div>
       </div>
+
+      {portfolioList.map((p) => {
+        const before = portfolioBefore(p);
+        const after = portfolioAfter(p);
+
+        return (
+          <div className={css.sammaryItem}>
+            <div className={css.sammaryItemLabel}>{`${p} (shares/bond):`}</div>
+            <div
+              className={css.sammaryItemValue}
+            >{`${before?.shares}/${before?.bond} before`}</div>
+            <div
+              className={css.sammaryItemValue}
+            >{`${after?.shares}/${after?.bond} after`}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };

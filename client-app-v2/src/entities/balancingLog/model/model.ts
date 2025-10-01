@@ -1,6 +1,7 @@
 export interface BalancingLog {
   changeDate: string;
   balancingLogItems: BalancingLogItem[];
+  structure: structureItem[];
 }
 
 export interface BalancingLogItem {
@@ -11,4 +12,11 @@ export interface BalancingLogItem {
   price: number;
   cost: number;
   account: string;
+}
+
+export interface structureItem {
+  portfolio: string;
+  period: string;
+  shares: number;
+  bond: number;
 }

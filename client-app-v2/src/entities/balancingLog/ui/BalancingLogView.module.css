@@ -15,6 +15,10 @@
     display: flex;
 }
 
+.logViewBody {
+    padding: 4px;
+}
+
 .itemCell {
     padding: 4px;
     line-height: 30px;
@@ -31,9 +35,9 @@
 }
 
 .sammaryItemLabel {
-    width: 100px;
+    width: 200px;
 }
 
 .sammaryItemValue {
-    width: 100px;
+    width: 170px;
 }
