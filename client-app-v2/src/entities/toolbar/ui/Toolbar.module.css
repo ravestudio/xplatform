@@ -1,0 +1,6 @@
+.toolbar {
+    display: flex;
+    gap: 4px;
+    background-color: rgb(122, 122, 122);
+    padding: 4px;
+}

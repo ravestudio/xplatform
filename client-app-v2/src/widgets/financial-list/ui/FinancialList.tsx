@@ -1,5 +1,5 @@
 import React from "react";
-import FinancialEdit from "../../../features/financial-edit/ui/FinancialEdit";
+import { FinancialEdit } from "../../../features/financial-edit";
 import FinancialYears from "../../../features/financial-edit/ui/FinancialYears";
 import SmartInput from "../../../entities/smartInput/SmartInput";
 import { ActionProps, StateProps } from "../model/model";

@@ -3,6 +3,7 @@ import style from "./Financials.module.css";
 import React from "react";
 
 import ValueRenderer from "./ValueRenderer";
+import { viewConfig } from "../../entities/financial";
 
 interface Props {
   financials: any;
@@ -23,7 +24,7 @@ const incomesTable = (props: Props) => {
       </thead>
       <tbody>
         <tr>
-          <td>Total Revenue</td>
+          <td>{viewConfig.totalRevenue}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
               <td className={style.cell} key={index}>
@@ -33,7 +34,7 @@ const incomesTable = (props: Props) => {
           )}
         </tr>
         <tr>
-          <td>Cost of Revenue</td>
+          <td>{viewConfig.costOfRevenue}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
               <td className={style.cell} key={index}>
@@ -43,7 +44,7 @@ const incomesTable = (props: Props) => {
           )}
         </tr>
         <tr>
-          <td>Total Operating Expenses</td>
+          <td>{viewConfig.totalOperatingExpenses}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
               <td className={style.cell} key={index}>
@@ -53,7 +54,7 @@ const incomesTable = (props: Props) => {
           )}
         </tr>
         <tr>
-          <td>Net Income</td>
+          <td>{viewConfig.netIncome}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
               <td className={style.cell} key={index}>

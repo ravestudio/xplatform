@@ -42,13 +42,13 @@ export interface ComputedViewFields {
   NWC: FinValue;
 }
 
-type viewKeys =
+export type viewKeys =
   | keyof IncomeStatement
   | keyof BalanceSheet
   | keyof CashflowStatement
   | keyof ComputedViewFields;
 
-const viewConfig: { [key in viewKeys]: string } = {
+export const viewConfig: { [key in viewKeys]: string } = {
   //income
   totalRevenue: "Total Revenue",
   costOfRevenue: "Cost Of Revenue",
@@ -67,6 +67,31 @@ const viewConfig: { [key in viewKeys]: string } = {
   totalCashflowsFromInvestingActivities: "Flows from investing activities",
   capitalExpenditures: "Capital expenditures",
   NWC: "NWC",
+  repurchaseOfStock: "Repurchase Of Stock",
+  dividendsPaid: "Dividends Paid",
+  changeToLiabilities: "Change To Liabilities",
+  changeToInventory: "Change To Inventory",
+  changeToAccountReceivables: "Change To Account Receivables",
+  changeToOperatingActivities: "Change To Operating Activities",
+};
+
+export const editConfig: { [key in viewKeys]?: string } = {
+  //income
+  totalRevenue: "Total Revenue",
+  costOfRevenue: "Cost Of Revenue",
+  totalOperatingExpenses: "Total Operating Expenses",
+  netIncome: "Net Income",
+  grossProfit: "Gross Profit",
+  //balance
+  totalCurrentLiabilities: "Current Liabilities",
+  totalLiab: "Total Liabilities",
+  totalCurrentAssets: "Current Assets",
+  totalAssets: "Total Assets",
+  totalStockholderEquity: "Stockholder Equity",
+  //flow
+  depreciation: "Depreciation",
+  totalCashflowsFromInvestingActivities: "Flows from investing activities",
+  capitalExpenditures: "Capital expenditures",
   repurchaseOfStock: "Repurchase Of Stock",
   dividendsPaid: "Dividends Paid",
   changeToLiabilities: "Change To Liabilities",

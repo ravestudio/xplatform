@@ -1,1 +1,7 @@
-export { selectYears, addYear, removeYear } from "./financialEditSlice";
+export {
+  selectYears,
+  selectActions,
+  addYear,
+  removeYear,
+  save,
+} from "./financialEditSlice";
