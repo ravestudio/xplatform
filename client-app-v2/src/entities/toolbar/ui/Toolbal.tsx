@@ -12,7 +12,9 @@ export const Toolbar = ({ actions, onAction }: ToolbarProps) => {
   return (
     <div className={css.toolbar}>
       {actions.map((action) => (
-        <button onClick={onClickHandler(action.key)}>{action.caption}</button>
+        <button key={action.key} onClick={onClickHandler(action.key)}>
+          {action.caption}
+        </button>
       ))}
     </div>
   );

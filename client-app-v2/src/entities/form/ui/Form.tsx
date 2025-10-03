@@ -2,7 +2,6 @@ import * as React from "react";
 import css from "./form.module.css";
 import TextField from "./TextField";
 import clsx from "clsx";
-import { current } from "@reduxjs/toolkit";
 import NumberField from "./NumberField";
 
 export interface IFormContext {
@@ -115,9 +114,6 @@ export class Form extends React.Component<IFormProps, IState> {
         context.validate(props.name, e.currentTarget.value);
       }
     };
-
-    console.log(`render ${name}`);
-    console.log(css);
 
     const withLabel = label !== "";
 
@@ -271,6 +267,10 @@ export class Form extends React.Component<IFormProps, IState> {
     this.setState({ errors: newErrors });
 
     return errors;
+  };
+
+  public getValues = () => {
+    return this.state.values;
   };
 
   public render() {
