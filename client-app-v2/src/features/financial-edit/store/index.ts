@@ -1,7 +1,10 @@
 export {
   selectYears,
   selectActions,
+  selectFinData,
   addYear,
   removeYear,
-  save,
+  uiAction,
+  removeUiAction,
+  loadForm,
 } from "./financialEditSlice";

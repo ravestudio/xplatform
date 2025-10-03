@@ -11,20 +11,42 @@ import { login } from "../../auth/store";
 import { config } from "../model";
 import { YearAdd } from "./YearAdd";
 import { useAppSelector } from "../../../app/hooks";
-import { selectActions, selectYears } from "../store";
+import { loadForm, removeUiAction, selectActions, selectYears } from "../store";
 import { CommonInfo } from "./CommonInfo";
 import { editConfig, viewKeys } from "../../../entities/financial";
 import { useEffect, useRef } from "react";
+import { FinData, selectFinData } from "../store/financialEditSlice";
 
 export const FinancialEdit: React.FC = () => {
   const years = useAppSelector(selectYears);
   const actions = useAppSelector(selectActions);
+  const draft = useAppSelector(selectFinData);
 
   const formRef = useRef<Form | null>();
 
   useEffect(() => {
     if (actions.length > 0) {
-      alert(formRef.current?.getValues());
+      const action = actions[0];
+      if (action.type === "saveDraft") {
+        localStorage.setItem(
+          "financialDraft",
+          JSON.stringify({
+            years,
+            form: formRef.current?.getValues(),
+          })
+        );
+      }
+
+      if (action.type === "loadDraft") {
+        const jsonValue = localStorage.getItem("financialDraft");
+        const value: FinData | null = jsonValue ? JSON.parse(jsonValue) : null;
+
+        if (value) {
+          loadForm(value);
+        }
+      }
+
+      removeUiAction(action);
     }
   }, [actions]);
 
@@ -46,13 +68,7 @@ export const FinancialEdit: React.FC = () => {
   return (
     <Form
       ref={refCallback}
-      defaultValues={{
-        year1: 2023,
-        totalRevenue1: "100",
-        costOfRevenue1: "",
-        totalOperatingExpenses1: "",
-        netIncome1: "",
-      }}
+      defaultValues={draft ?? {}}
       validationRules={{}}
       onSubmit={handleSubmit}
     >

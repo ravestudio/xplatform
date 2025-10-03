@@ -1,18 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../app/store";
+import { IValues } from "../../../entities/form";
 
 export interface FinancialEditState {
   years: number[];
-  actions: TAction[];
+  formValue: IValues | null;
+  actions: UIAction[];
 }
 
 const initialState: FinancialEditState = {
   years: [1],
+  formValue: null,
   actions: [],
 };
 
-export type TAction = {
-  type: "save";
+export type UIAction = {
+  type: "saveDraft" | "loadDraft";
+};
+
+export type FinData = {
+  years: number[];
+  values: IValues;
 };
 
 export const financialEditSlice = createSlice({
@@ -29,13 +37,23 @@ export const financialEditSlice = createSlice({
     removeYear: (state, action: PayloadAction<number>) => {
       state.years = state.years.filter((item) => item !== action.payload);
     },
-    save: (state) => {
-      state.actions = [...state.actions, { type: "save" }];
+    uiAction: (state, action: PayloadAction<UIAction>) => {
+      state.actions = [...state.actions, action.payload];
+    },
+    removeUiAction: (state, action: PayloadAction<UIAction>) => {
+      state.actions = state.actions.filter(
+        (item) => item.type !== action.payload.type
+      );
+    },
+    loadForm: (state, action: PayloadAction<FinData>) => {
+      state.years = action.payload.years;
+      state.formValue = action.payload.values;
     },
   },
 });
 
-export const { addYear, removeYear, save } = financialEditSlice.actions;
+export const { addYear, removeYear, uiAction, removeUiAction, loadForm } =
+  financialEditSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -43,5 +61,8 @@ export const { addYear, removeYear, save } = financialEditSlice.actions;
 export const selectYears = (state: RootState) => state.financialEdit.years;
 
 export const selectActions = (state: RootState) => state.financialEdit.actions;
+
+export const selectFinData = (state: RootState) =>
+  state.financialEdit.formValue;
 
 export default financialEditSlice.reducer;
