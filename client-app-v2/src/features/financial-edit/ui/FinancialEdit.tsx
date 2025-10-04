@@ -1,16 +1,9 @@
 import * as React from "react";
 import css from "./FinancialEdit.module.css";
-import {
-  Form,
-  FormContext,
-  ISubmitResult,
-  IValues,
-  required,
-} from "../../../entities/form";
+import { Form, ISubmitResult, IValues } from "../../../entities/form";
 import { login } from "../../auth/store";
-import { config } from "../model";
 import { YearAdd } from "./YearAdd";
-import { useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { loadForm, removeUiAction, selectActions, selectYears } from "../store";
 import { CommonInfo } from "./CommonInfo";
 import { editConfig, viewKeys } from "../../../entities/financial";
@@ -18,6 +11,7 @@ import { useEffect, useRef } from "react";
 import { FinData, selectFinData } from "../store/financialEditSlice";
 
 export const FinancialEdit: React.FC = () => {
+  const dispatch = useAppDispatch();
   const years = useAppSelector(selectYears);
   const actions = useAppSelector(selectActions);
   const draft = useAppSelector(selectFinData);
@@ -32,7 +26,7 @@ export const FinancialEdit: React.FC = () => {
           "financialDraft",
           JSON.stringify({
             years,
-            form: formRef.current?.getValues(),
+            values: formRef.current?.getValues(),
           })
         );
       }
@@ -42,11 +36,11 @@ export const FinancialEdit: React.FC = () => {
         const value: FinData | null = jsonValue ? JSON.parse(jsonValue) : null;
 
         if (value) {
-          loadForm(value);
+          dispatch(loadForm(value));
         }
       }
 
-      removeUiAction(action);
+      dispatch(removeUiAction(action));
     }
   }, [actions]);
 

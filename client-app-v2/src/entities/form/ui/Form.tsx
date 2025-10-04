@@ -197,6 +197,14 @@ export class Form extends React.Component<IFormProps, IState> {
     };
   }
 
+  public componentDidUpdate(prevProps: IFormProps, prevState: IState) {
+    if (this.props.defaultValues !== prevProps.defaultValues) {
+      this.setState((prev) => ({
+        values: this.props.defaultValues,
+      }));
+    }
+  }
+
   private setValue = (fieldName: string, value: any) => {
     const newValues = { ...this.state.values, [fieldName]: value };
     this.setState({ values: newValues });
