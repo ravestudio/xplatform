@@ -97,6 +97,17 @@ const balanceTable = (props: Props) => {
             )
           )}
         </tr>
+
+        <tr>
+          <td>Minority Interest</td>
+          {props.financials?.balanceSheetHistory.map(
+            (bl: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer value={bl.minorityInterest} />
+              </td>
+            )
+          )}
+        </tr>
       </tbody>
     </table>
   );

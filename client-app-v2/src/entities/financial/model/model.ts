@@ -15,6 +15,8 @@ export interface IncomeStatement {
   totalOperatingExpenses: FinValue;
   grossProfit: FinValue;
   costOfRevenue: FinValue;
+  incomeTaxExpense: FinValue;
+  interestExpense: FinValue;
 }
 
 export interface BalanceSheet {
@@ -23,6 +25,7 @@ export interface BalanceSheet {
   totalCurrentAssets: FinValue;
   totalAssets: FinValue;
   totalStockholderEquity: FinValue;
+  minorityInterest: FinValue;
 }
 
 export interface CashflowStatement {
@@ -35,6 +38,8 @@ export interface CashflowStatement {
   changeToInventory: FinValue;
   changeToAccountReceivables: FinValue;
   changeToOperatingActivities: FinValue;
+  totalCashFromOperatingActivities: FinValue;
+  totalCashFromFinancingActivities: FinValue;
 }
 
 export interface ComputedViewFields {
@@ -55,6 +60,8 @@ export const viewConfig: { [key in viewKeys]: string } = {
   totalOperatingExpenses: "Total Operating Expenses",
   netIncome: "Net Income",
   grossProfit: "Gross Profit",
+  incomeTaxExpense: "Income Tax Expense",
+  interestExpense: "Interest Expense",
   //balance
   totalCurrentLiabilities: "Current Liabilities",
   totalNonCurrentLiabilities: "Non-Current Liabilities",
@@ -62,6 +69,7 @@ export const viewConfig: { [key in viewKeys]: string } = {
   totalCurrentAssets: "Current Assets",
   totalAssets: "Total Assets",
   totalStockholderEquity: "Stockholder Equity",
+  minorityInterest: "Minority Interest",
   //flow
   depreciation: "Depreciation",
   totalCashflowsFromInvestingActivities: "Flows from investing activities",
@@ -73,6 +81,9 @@ export const viewConfig: { [key in viewKeys]: string } = {
   changeToInventory: "Change To Inventory",
   changeToAccountReceivables: "Change To Account Receivables",
   changeToOperatingActivities: "Change To Operating Activities",
+
+  totalCashFromOperatingActivities: "Cash From Operating Activities",
+  totalCashFromFinancingActivities: "Cash From Financing Activities",
 };
 
 export const editConfig: { [key in viewKeys]?: string } = {
@@ -82,6 +93,8 @@ export const editConfig: { [key in viewKeys]?: string } = {
   totalOperatingExpenses: "Total Operating Expenses",
   netIncome: "Net Income",
   grossProfit: "Gross Profit",
+  incomeTaxExpense: "Income Tax Expense",
+  interestExpense: "Interest Expense",
   //balance
   totalCurrentLiabilities: "Current Liabilities",
   totalLiab: "Total Liabilities",
@@ -98,4 +111,6 @@ export const editConfig: { [key in viewKeys]?: string } = {
   changeToInventory: "Change To Inventory",
   changeToAccountReceivables: "Change To Account Receivables",
   changeToOperatingActivities: "Change To Operating Activities",
+  totalCashFromOperatingActivities: "Cash From Operating Activities",
+  totalCashFromFinancingActivities: "Cash From Financing Activities",
 };

@@ -98,6 +98,7 @@ export const actionCreators = {
                           balance,
                           "StockholdersEquity"
                         ),
+                        minorityInterest: getValue(balance, "MinorityInterest"),
                       }
                     : { ...balance }
               ),

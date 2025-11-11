@@ -9,6 +9,7 @@ export interface IFormContext {
   values: IValues;
   setValue?: (fieldName: string, value: any) => void;
   validate?: (fieldName: string, value: any) => void;
+  calc?: (fieldName: string) => string;
   reset?: (fieldNameList: string[]) => void;
 }
 
@@ -25,7 +26,7 @@ interface IFieldProps {
   name: string;
   label: string;
   className?: string;
-  type?: "Text" | "Number" | "Email" | "Select" | "TextArea";
+  type?: "Text" | "Number" | "Email" | "Select" | "TextArea" | "Computed";
   options?: string[];
   disabled?: boolean;
 }
@@ -70,6 +71,10 @@ interface IValidationProp {
   [key: string]: IValidation | IValidation[];
 }
 
+interface IComputedProp {
+  [key: string]: (values: IValues) => string;
+}
+
 interface IErrors {
   [key: string]: string[];
 }
@@ -77,6 +82,7 @@ interface IErrors {
 interface IFormProps {
   defaultValues: IValues;
   validationRules: IValidationProp;
+  computed?: IComputedProp;
   onSubmit: (values: IValues) => Promise<ISubmitResult>;
   children: any;
 }
@@ -89,7 +95,7 @@ interface IState {
 
 export class Form extends React.Component<IFormProps, IState> {
   public static Field: React.FC<IFieldProps> = (props) => {
-    const { name, label, className, type, options, disabled } = props;
+    const { name, label, className, type = "Text", options, disabled } = props;
 
     const handleChange = (
       e:
@@ -140,6 +146,16 @@ export class Form extends React.Component<IFormProps, IState> {
                 onChange={(e) => handleChange(e, context)}
                 onBlur={(e) => handleBlur(e, context)}
                 disabled={disabled}
+              />
+            )}
+
+            {type === "Computed" && (
+              <NumberField
+                name={name}
+                value={context.calc?.(name)}
+                onChange={(e) => handleChange(e, context)}
+                onBlur={(e) => handleBlur(e, context)}
+                disabled={true}
               />
             )}
 
@@ -277,6 +293,16 @@ export class Form extends React.Component<IFormProps, IState> {
     return errors;
   };
 
+  private calc = (fieldName: string): string => {
+    const calcFunc = this.props.computed?.[fieldName];
+
+    if (!calcFunc) {
+      return "";
+    }
+
+    return calcFunc(this.state.values);
+  };
+
   public getValues = () => {
     return this.state.values;
   };
@@ -287,6 +313,7 @@ export class Form extends React.Component<IFormProps, IState> {
       setValue: this.setValue,
       reset: this.reset,
       validate: this.validate,
+      calc: this.calc,
       values: this.state.values,
     };
 
@@ -307,7 +334,3 @@ export class Form extends React.Component<IFormProps, IState> {
     );
   }
 }
-
-Form.Field.defaultProps = {
-  type: "Text",
-};

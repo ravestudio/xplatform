@@ -1,3 +1,22 @@
+.groupList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.group {
+}
+
+.groupCaption {
+  background-color: aliceblue;
+  padding: 5px;
+}
+
+.groupBody {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
 .row {
   display: flex;
   align-items: start;

@@ -1,17 +1,25 @@
 import { Form } from "../../../entities/form";
+import css from "./FinancialEdit.module.css";
 
 export const CommonInfo = () => {
   return (
     <div className="container column">
       <div>Common</div>
-      <div className="container">
-        <Form.Field name="code" label="code" />
-        <Form.Field name="cur" label="currency" />
+      <div className={css.row}>
+        <Form.Field name="code" label="code" className={css.fieldTitle} />
         <Form.Field
           type="Select"
-          options={["template1", "template2"]}
-          name="template"
-          label="template"
+          name="currency"
+          options={["RUB", "USD"]}
+          label="currency"
+          className={css.field}
+        />
+        <Form.Field
+          type="Select"
+          options={["thousands", "millions"]}
+          name="in"
+          label="in"
+          className={css.field}
         />
       </div>
     </div>
