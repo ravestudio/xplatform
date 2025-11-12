@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../app/store";
 import { IValues } from "../../../entities/form";
+import { FinancialModel } from "../../../entities/financial";
 
 export interface FinancialEditState {
   years: number[];
@@ -22,6 +23,20 @@ export type FinData = {
   years: number[];
   values: IValues;
 };
+
+export type FinancialPayload = {
+  currency: string;
+  in: string;
+  financials: { year: number, data: FinancialModel}[]
+}
+
+export const saveFinancial = (payload: FinancialPayload) => fetch(`/api/yahoo`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json());
 
 export const financialEditSlice = createSlice({
   name: "financialEdit",

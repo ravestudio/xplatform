@@ -7,4 +7,5 @@ export {
   uiAction,
   removeUiAction,
   loadForm,
+  saveFinancial
 } from "./financialEditSlice";

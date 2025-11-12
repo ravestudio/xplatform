@@ -1,7 +1,6 @@
 import * as React from "react";
 import css from "./FinancialEdit.module.css";
 import { Form, ISubmitResult, IValues } from "../../../entities/form";
-import { login } from "../../auth/store";
 import { YearAdd } from "./YearAdd";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { loadForm, removeUiAction, selectActions, selectYears } from "../store";
@@ -13,7 +12,12 @@ import {
   viewKeysV2 as viewKeys,
 } from "../../../entities/financial";
 import { useEffect, useRef } from "react";
-import { FinData, selectFinData } from "../store/financialEditSlice";
+import {
+  FinancialPayload,
+  FinData,
+  saveFinancial,
+  selectFinData,
+} from "../store/financialEditSlice";
 import { getField, getFinancialModel } from "../model/utils";
 
 export const FinancialEdit: React.FC = () => {
@@ -51,7 +55,27 @@ export const FinancialEdit: React.FC = () => {
   }, [actions]);
 
   const handleSubmit = async (values: IValues): Promise<ISubmitResult> => {
-    const result = await login(values.userName, values.password);
+    const payload = years.reduce<FinancialPayload>(
+      (acc, year) => {
+        return {
+          ...acc,
+          financials: [
+            ...acc.financials,
+            {
+              year: values[`year${year}`],
+              data: getFinancialModel<FinancialModel>(values, year),
+            },
+          ],
+        };
+      },
+      {
+        currency: String(values["currency"]),
+        in: String(values["in"]),
+        financials: [],
+      }
+    );
+
+    const result = await saveFinancial(payload);
 
     return result;
   };
