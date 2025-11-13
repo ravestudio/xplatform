@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommonLib.Objects;
+using Iot.Device.Ft4222;
+using Iot.Device.Mcp25xxx.Register.ErrorDetection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using xplatform.DataAccess;
+using xplatform.Helpers;
+using xplatform.Model;
 
 namespace xplatform.Controllers
 {
@@ -40,11 +45,46 @@ namespace xplatform.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Financial financial)
+        public IActionResult Post([FromBody] AddFinancialModel addModel)
         {
-            financial.Period = 7;
+            var buildHelper = new FinancialHelpers();
 
-            _context.FinancialSet.Add(financial);
+            var factor = buildHelper.GetFactor(addModel.Unit);
+
+            foreach (var financial in addModel.Financials)
+            {
+
+                JObject reportData = new JObject(
+                    new JProperty("incomeStatement", buildHelper.GetStatement<IIncomeStatement>(financial.Data, factor)),
+                    new JProperty("balanceSheet", buildHelper.GetStatement<IBalanceSheet>(financial.Data, factor)),
+                    new JProperty("cashflowStatement", buildHelper.GetStatement<ICashflowStatement>(financial.Data, factor))
+                    );
+
+                CommonLib.Objects.FinanceAnnual report = new FinanceAnnual()
+                {
+                    Id = Guid.NewGuid(),
+                    Code = addModel.Code,
+                    Year = financial.Year,
+                    CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+                    Data = reportData.ToString()
+                };
+
+                var annual = _context.FinanceAnnualSet.SingleOrDefault(f => f.Code == report.Code && f.Year == report.Year);
+
+                //удалить старый отчет
+                /*if (annual != null)
+                {
+                    _context.FinanceAnnualSet.Remove(annual);
+                }*/
+
+                if (annual == null)
+                {
+
+                    _context.FinanceAnnualSet.Add(report);
+                }
+
+                //Console.WriteLine(report);
+            }
 
             _context.SaveChanges();
 

@@ -69,8 +69,9 @@ export const FinancialEdit: React.FC = () => {
         };
       },
       {
+        code: String(values["code"]),
         currency: String(values["currency"]),
-        in: String(values["in"]),
+        unit: String(values["unit"]),
         financials: [],
       }
     );
@@ -153,7 +154,7 @@ export const FinancialEdit: React.FC = () => {
       defaultValues={
         draft ?? {
           currency: "USD",
-          in: "millions",
+          unit: "millions",
         }
       }
       validationRules={{}}

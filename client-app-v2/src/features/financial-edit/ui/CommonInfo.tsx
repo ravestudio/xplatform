@@ -17,8 +17,8 @@ export const CommonInfo = () => {
         <Form.Field
           type="Select"
           options={["thousands", "millions"]}
-          name="in"
-          label="in"
+          name="unit"
+          label="unit"
           className={css.field}
         />
       </div>

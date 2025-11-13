@@ -25,12 +25,14 @@ export type FinData = {
 };
 
 export type FinancialPayload = {
+  code: string;
   currency: string;
-  in: string;
-  financials: { year: number, data: FinancialModel}[]
-}
+  unit: string;
+  financials: { year: number; data: FinancialModel }[];
+};
 
-export const saveFinancial = (payload: FinancialPayload) => fetch(`/api/yahoo`, {
+export const saveFinancial = (payload: FinancialPayload) =>
+  fetch(`/api/financial`, {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
