@@ -87,7 +87,12 @@ export const FinancialEdit: React.FC = () => {
       caption: group.caption,
       fields: Object.keys(group.items).map((key) => ({
         fieldName: key,
-        fieldType: ["NWC", "EquityAndLiabilities", "EBITDA"].includes(key)
+        fieldType: [
+          "GrossProfit",
+          "NWC",
+          "EquityAndLiabilities",
+          "EBITDA",
+        ].includes(key)
           ? "Computed"
           : "Number",
         caption: group.items[key as viewKeys],
@@ -105,12 +110,20 @@ export const FinancialEdit: React.FC = () => {
 
     const f = (field: viewKeys) => getField(field, y);
 
+    const GrossProfit = f("GrossProfit");
     const NWC = f("NWC");
     const EquityAndLiabilities = f("EquityAndLiabilities");
     const EBITDA = f("EBITDA");
 
     return {
       ...acc,
+      [GrossProfit]: (values: IValues) => {
+        const model = getModel(values);
+
+        const result = model.TotalRevenue - model.CostOfRevenue;
+
+        return result.toString();
+      },
       [NWC]: (values: IValues) => {
         const model = getModel(values);
 

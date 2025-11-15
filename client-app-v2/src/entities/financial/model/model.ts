@@ -11,6 +11,7 @@ export interface Financial {
 
 export interface IncomeStatement {
   totalRevenue: FinValue;
+  sellingGeneralAdministrative: FinValue;
   netIncome: FinValue;
   totalOperatingExpenses: FinValue;
   grossProfit: FinValue;
@@ -57,6 +58,7 @@ export const viewConfig: { [key in viewKeys]: string } = {
   //income
   totalRevenue: "Total Revenue",
   costOfRevenue: "Cost Of Revenue",
+  sellingGeneralAdministrative: "SellingGeneralAndAdministration",
   totalOperatingExpenses: "Total Operating Expenses",
   netIncome: "Net Income",
   grossProfit: "Gross Profit",

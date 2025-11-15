@@ -18,10 +18,10 @@
     public interface IIncomeStatement
     {
         decimal TotalRevenue { get; set; }
+        decimal CostOfRevenue { get; set; }
+        decimal SellingGeneralAndAdministration { get; set; }
         decimal NetIncome { get; set; }
         decimal TotalExpenses { get; set; }
-        decimal GrossProfit { get; set; }
-        decimal CostOfRevenue { get; set; }
         decimal TaxProvision { get; set; }
         decimal InterestIncome { get; set; }
         decimal InterestExpense { get; set; }
@@ -57,9 +57,9 @@
     {
         //income
         public decimal TotalRevenue { get; set; }
+        public decimal SellingGeneralAndAdministration { get; set; }
         public decimal NetIncome { get; set; }
         public decimal TotalExpenses { get; set; }
-        public decimal GrossProfit { get; set; }
         public decimal CostOfRevenue { get; set; }
         public decimal TaxProvision { get; set; }
         public decimal InterestIncome { get; set; }

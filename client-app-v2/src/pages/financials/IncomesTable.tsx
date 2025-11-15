@@ -44,6 +44,17 @@ const incomesTable = (props: Props) => {
           )}
         </tr>
         <tr>
+          <td>{viewConfig.sellingGeneralAdministrative}</td>
+          {props.financials?.incomeStatementHistory.map(
+            (inc: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer value={inc.sellingGeneralAdministrative} />
+              </td>
+            )
+          )}
+        </tr>
+
+        <tr>
           <td>{viewConfig.totalOperatingExpenses}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (

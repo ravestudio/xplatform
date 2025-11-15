@@ -69,6 +69,10 @@ export const actionCreators = {
                     ? {
                         ...income,
                         totalRevenue: getValue(income, "TotalRevenue"),
+                        sellingGeneralAdministrative: getValue(
+                          income,
+                          "SellingGeneralAndAdministration"
+                        ),
                         netIncome: getValue(income, "NetIncome"),
                         totalOperatingExpenses: getValue(
                           income,

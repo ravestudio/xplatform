@@ -1,12 +1,13 @@
 export interface IncomeStatement {
   TotalRevenue: number;
-  NetIncome: number;
-  TotalExpenses: number;
-  GrossProfit: number;
   CostOfRevenue: number;
+  GrossProfit: number;
+  SellingGeneralAndAdministration: number;
+  OperatingIncome: number;
   TaxProvision: number; //налоги
   InterestIncome: number; //процентные доходы
   InterestExpense: number; //процентные расходы
+  NetIncome: number;
 }
 
 export interface BalanceSheet {
@@ -37,6 +38,7 @@ export interface CashflowStatement {
 export type FinancialModel = IncomeStatement & BalanceSheet & CashflowStatement;
 
 export interface ComputedViewFields {
+  GrossProfit: Number;
   NWC: number;
   EquityAndLiabilities: number;
   EBITDA: number;
@@ -67,12 +69,13 @@ export const editConfigV2: EditGroup = {
     items: {
       TotalRevenue: "Total Revenue",
       CostOfRevenue: "Cost Of Revenue",
-      TotalExpenses: "Total Operating Expenses",
-      NetIncome: "Net Income",
       GrossProfit: "Gross Profit",
+      SellingGeneralAndAdministration: "Selling General And Administration",
+      OperatingIncome: "Operating Income",
       TaxProvision: "Income Tax Expense",
       InterestIncome: "Interest Income",
       InterestExpense: "Interest Expense",
+      NetIncome: "Net Income",
     },
   },
   balance: {

@@ -11,7 +11,8 @@ namespace xplatform.Helpers
 
             Type statement = typeof(T);
 
-            var props = statement.GetProperties().Select(p => new JProperty(p.Name, p.GetValue(model)));
+
+            var props = statement.GetProperties().Select(p => new JProperty(p.Name, (decimal?)p.GetValue(model) * factor));
 
             return new JObject(new JProperty("version", 2), props);
                 
