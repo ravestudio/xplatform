@@ -15,7 +15,7 @@ using xplatform.Model;
 
 namespace xplatform.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class FinancialController : ControllerBase
     {
@@ -42,6 +42,34 @@ namespace xplatform.Controllers
             financial.Emitent = null;
 
             return financial;
+        }
+
+        [HttpPost]
+        public AddFinancialModel LoadStored([FromBody] FinancialRequest request)
+        {
+            var buildHelper = new FinancialHelpers();
+
+            var annuals  = _context.FinanceAnnualSet.Where(f => f.Code == request.Code && request.Years.Contains(f.Year)).ToList();
+
+            AddFinancialModel model = new AddFinancialModel()
+            {
+                Code = request.Code,
+                Financials = new List<AddFinancialItem>()
+            };
+
+
+            foreach (var annual in annuals)
+            {
+                model.Financials.Add(new AddFinancialItem()
+                {
+                    Year = annual.Year,
+                    Data = buildHelper.GetModel(JObject.Parse(annual.Data))
+
+                });
+            }
+
+            return model;
+
         }
 
         [HttpPost]

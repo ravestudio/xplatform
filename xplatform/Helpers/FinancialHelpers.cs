@@ -32,5 +32,35 @@ namespace xplatform.Helpers
 
             return 1;
         }
+
+        public FinancialModel GetModel(JObject obj)
+        {
+            Type model = typeof(FinancialModel);
+
+            FinancialModel result = new FinancialModel();
+
+            //var values = new List<JToken>();
+
+            var incomeStatement = obj.GetValue("incomeStatement") as JObject;
+            var balanceSheet = obj.GetValue("balanceSheet") as JObject;
+            var cashflowStatement = obj.GetValue("cashflowStatement") as JObject;
+
+            var flatObj = new JObject(
+                incomeStatement.Properties().Where(p => p.Name != "version"),
+                balanceSheet.Properties().Where(p => p.Name != "version"),
+                cashflowStatement.Properties().Where(p => p.Name != "version"));
+
+            /*values.AddRange(obj["incomeStatement"].);
+            values.AddRange(obj["balanceSheet"]);
+            values.AddRange(obj["cashflowStatement"]);*/
+
+            foreach (var prop in model.GetProperties())
+            {
+                //var val = values.First();
+                prop.SetValue(result, (decimal)flatObj[prop.Name]);
+            }
+
+            return result;
+        }
     }
 }
