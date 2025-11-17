@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CommonLib.Objects;
 using Iot.Device.Ft4222;
@@ -8,10 +9,13 @@ using Iot.Device.Mcp25xxx.Register.ErrorDetection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using xplatform.DataAccess;
 using xplatform.Helpers;
 using xplatform.Model;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace xplatform.Controllers
 {
@@ -45,7 +49,7 @@ namespace xplatform.Controllers
         }
 
         [HttpPost]
-        public AddFinancialModel LoadStored([FromBody] FinancialRequest request)
+        public IActionResult LoadStored([FromBody] FinancialRequest request)
         {
             var buildHelper = new FinancialHelpers();
 
@@ -68,7 +72,13 @@ namespace xplatform.Controllers
                 });
             }
 
-            return model;
+
+            var options = new JsonSerializerOptions();
+
+
+            string json = JsonSerializer.Serialize(model, options);
+
+            return Ok(json);
 
         }
 
