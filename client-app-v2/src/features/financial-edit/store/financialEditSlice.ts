@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../app/store";
 import { IValues } from "../../../entities/form";
 import { FinancialModel } from "../../../entities/financial";
@@ -16,7 +16,7 @@ const initialState: FinancialEditState = {
 };
 
 export type UIAction = {
-  type: "saveDraft" | "loadDraft";
+  type: "saveDraft" | "loadStored" | "loadDraft";
 };
 
 export type FinData = {
@@ -39,6 +39,21 @@ export const saveFinancial = (payload: FinancialPayload) =>
       "Content-Type": "application/json",
     },
   }).then((response) => response.json());
+
+export const loadStoredAsync = createAsyncThunk<
+  FinancialPayload,
+  { code: string; years: number[] }
+>("counter/loadStored", async (args) => {
+  const response = await fetch(`/api/financial/LoadStored`, {
+    method: "Post",
+    body: JSON.stringify(args),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json() as Promise<FinancialPayload>);
+  // The value we return becomes the `fulfilled` action payload
+  return response;
+});
 
 export const financialEditSlice = createSlice({
   name: "financialEdit",
@@ -66,6 +81,12 @@ export const financialEditSlice = createSlice({
       state.years = action.payload.years;
       state.formValue = action.payload.values;
     },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(loadStoredAsync.fulfilled, (state, action) => {
+      //state.formValue = action.payload.values;
+    });
   },
 });
 

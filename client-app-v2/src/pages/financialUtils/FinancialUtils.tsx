@@ -15,6 +15,10 @@ export const FinancialUtils = () => {
     if (key === "loadDraft") {
       dispatch(uiAction({ type: "loadDraft" }));
     }
+
+    if (key === "loadStored") {
+      dispatch(uiAction({ type: "loadStored" }));
+    }
   };
 
   return (
@@ -28,6 +32,10 @@ export const FinancialUtils = () => {
           {
             key: "loadDraft",
             caption: "Load Draft",
+          },
+          {
+            key: "loadStored",
+            caption: "Load Stored",
           },
         ]}
         onAction={onAction}

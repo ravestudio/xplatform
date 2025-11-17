@@ -15,6 +15,7 @@ import { useEffect, useRef } from "react";
 import {
   FinancialPayload,
   FinData,
+  loadStoredAsync,
   saveFinancial,
   selectFinData,
 } from "../store/financialEditSlice";
@@ -48,6 +49,22 @@ export const FinancialEdit: React.FC = () => {
         if (value) {
           dispatch(loadForm(value));
         }
+      }
+
+      if (action.type === "loadStored") {
+        const values = formRef.current?.getValues();
+
+        if (!values) return;
+
+        dispatch(
+          loadStoredAsync({
+            code: String(values["code"]),
+            years: years.reduce<number[]>(
+              (acc, current) => [...acc, values[`year${current}`]],
+              []
+            ),
+          })
+        );
       }
 
       dispatch(removeUiAction(action));
