@@ -50,5 +50,5 @@ export const GetFormValues = (payload: FinancialPayload): IValues => {
     return { ...acc, [`year${index + 1}`]: String(current.year) };
   }, {} as IValues);
 
-  return { ...yearsValue, ...values };
+  return { code: payload.code, unit: payload.unit, ...yearsValue, ...values };
 };
