@@ -43,7 +43,7 @@ export const saveFinancial = (payload: FinancialPayload) =>
 
 export const loadStoredAsync = createAsyncThunk<
   FinancialPayload,
-  { code: string; years: number[] }
+  { code: string; unit: string; years: number[] }
 >("counter/loadStored", async (args) => {
   const response = await fetch(`/api/financial/LoadStored`, {
     method: "Post",

@@ -59,6 +59,7 @@ export const FinancialEdit: React.FC = () => {
         dispatch(
           loadStoredAsync({
             code: String(values["code"]),
+            unit: String(values["unit"]),
             years: years.reduce<number[]>(
               (acc, current) => [...acc, values[`year${current}`]],
               []
