@@ -3,7 +3,7 @@
     public class AddFinancialModel
     {
         public string code { get; set; }
-        public string currency { get; set; }
+        public string? currency { get; set; }
         public string unit { get; set; }
 
         public ICollection<AddFinancialItem> financials { get; set; }

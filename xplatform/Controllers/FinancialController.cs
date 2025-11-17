@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommonLib.Objects;
 using Iot.Device.Ft4222;
 using Iot.Device.Mcp25xxx.Register.ErrorDetection;
+using Iot.Device.Mcp3428;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,9 +56,17 @@ namespace xplatform.Controllers
 
             var annuals  = _context.FinanceAnnualSet.Where(f => f.Code == request.Code && request.Years.Contains(f.Year)).ToList();
 
+            var security = _context.SecuritySet.Include(s => s.FinancialData).SingleOrDefault(s => s.FinancialPage == request.Code);
+
+            var financialData = security?.FinancialData != null ? JObject.Parse(security.FinancialData.Data) : null;
+
+            var factor = buildHelper.GetFactor(request.Unit);
+
             AddFinancialModel model = new AddFinancialModel()
             {
                 code = request.Code,
+                unit = request.Unit,
+                currency = financialData != null? (string)financialData["financialCurrency"] : null,
                 financials = new List<AddFinancialItem>()
             };
 
@@ -67,7 +76,7 @@ namespace xplatform.Controllers
                 model.financials.Add(new AddFinancialItem()
                 {
                     year = annual.Year,
-                    data = buildHelper.GetModel(JObject.Parse(annual.Data))
+                    data = buildHelper.GetModel(JObject.Parse(annual.Data), factor)
 
                 });
             }

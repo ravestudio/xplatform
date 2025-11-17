@@ -33,7 +33,7 @@ namespace xplatform.Helpers
             return 1;
         }
 
-        public FinancialModel GetModel(JObject obj)
+        public FinancialModel GetModel(JObject obj, decimal factor)
         {
             Type model = typeof(FinancialModel);
 
@@ -45,10 +45,12 @@ namespace xplatform.Helpers
             var balanceSheet = obj.GetValue("balanceSheet") as JObject;
             var cashflowStatement = obj.GetValue("cashflowStatement") as JObject;
 
+            string[] excludProps = new string[] { "version", "endDate" };
+
             var flatObj = new JObject(
-                incomeStatement.Properties().Where(p => p.Name != "version"),
-                balanceSheet.Properties().Where(p => p.Name != "version"),
-                cashflowStatement.Properties().Where(p => p.Name != "version"));
+                incomeStatement.Properties().Where(p => !excludProps.Contains(p.Name)),
+                balanceSheet.Properties().Where(p => !excludProps.Contains(p.Name)),
+                cashflowStatement.Properties().Where(p => !excludProps.Contains(p.Name)));
 
             /*values.AddRange(obj["incomeStatement"].);
             values.AddRange(obj["balanceSheet"]);
@@ -56,8 +58,12 @@ namespace xplatform.Helpers
 
             foreach (var prop in model.GetProperties())
             {
-                //var val = values.First();
-                prop.SetValue(result, (decimal)flatObj[prop.Name]);
+                decimal? val = (decimal?)flatObj[prop.Name];
+
+                if (val != null)
+                {
+                    prop.SetValue(result, val / factor);
+                }
             }
 
             return result;

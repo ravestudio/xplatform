@@ -25,27 +25,30 @@ export const getFinancialModel = <T>(values: IValues, year: number): T => {
   return value;
 };
 
-export const getFinancialFormValues = (model: FinancialModel, yearIndex: number): IValues => {
-
+export const getFinancialFormValues = (
+  model: FinancialModel,
+  yearIndex: number
+): IValues => {
   const values = Object.keys(model).reduce((acc, current) => {
-    return {...acc,
-      [getField(current as viewKeys, yearIndex)]: model[current as keyof FinancialModel]
-    }}, {} as IValues)
+    return {
+      ...acc,
+      [getField(current as viewKeys, yearIndex)]: String(
+        model[current as keyof FinancialModel]
+      ),
+    };
+  }, {} as IValues);
 
-    return values
-}
+  return values;
+};
 
 export const GetFormValues = (payload: FinancialPayload): IValues => {
   const values = payload.financials.reduce((acc, current, index) => {
-
-    return {...acc, ...getFinancialFormValues(current.data, index+1)}
-  }, {} as IValues)
+    return { ...acc, ...getFinancialFormValues(current.data, index + 1) };
+  }, {} as IValues);
 
   const yearsValue = payload.financials.reduce((acc, current, index) => {
+    return { ...acc, [`year${index + 1}`]: String(current.year) };
+  }, {} as IValues);
 
-    return {...acc, [`year${index+1}`]: current.year}
-
-  }, {} as IValues)
-
-  return {...yearsValue, ...values}
-}
+  return { ...yearsValue, ...values };
+};

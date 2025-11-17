@@ -4,5 +4,7 @@
     {
         public string Code { get; set; }
         public int[] Years { get; set; }
+
+        public string Unit { get; set; }
     }
 }
