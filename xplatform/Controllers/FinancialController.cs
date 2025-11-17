@@ -57,17 +57,17 @@ namespace xplatform.Controllers
 
             AddFinancialModel model = new AddFinancialModel()
             {
-                Code = request.Code,
-                Financials = new List<AddFinancialItem>()
+                code = request.Code,
+                financials = new List<AddFinancialItem>()
             };
 
 
             foreach (var annual in annuals)
             {
-                model.Financials.Add(new AddFinancialItem()
+                model.financials.Add(new AddFinancialItem()
                 {
-                    Year = annual.Year,
-                    Data = buildHelper.GetModel(JObject.Parse(annual.Data))
+                    year = annual.Year,
+                    data = buildHelper.GetModel(JObject.Parse(annual.Data))
 
                 });
             }
@@ -87,22 +87,22 @@ namespace xplatform.Controllers
         {
             var buildHelper = new FinancialHelpers();
 
-            var factor = buildHelper.GetFactor(addModel.Unit);
+            var factor = buildHelper.GetFactor(addModel.unit);
 
-            foreach (var financial in addModel.Financials)
+            foreach (var financial in addModel.financials)
             {
 
                 JObject reportData = new JObject(
-                    new JProperty("incomeStatement", buildHelper.GetStatement<IIncomeStatement>(financial.Data, factor)),
-                    new JProperty("balanceSheet", buildHelper.GetStatement<IBalanceSheet>(financial.Data, factor)),
-                    new JProperty("cashflowStatement", buildHelper.GetStatement<ICashflowStatement>(financial.Data, factor))
+                    new JProperty("incomeStatement", buildHelper.GetStatement<IIncomeStatement>(financial.data, factor)),
+                    new JProperty("balanceSheet", buildHelper.GetStatement<IBalanceSheet>(financial.data, factor)),
+                    new JProperty("cashflowStatement", buildHelper.GetStatement<ICashflowStatement>(financial.data, factor))
                     );
 
                 CommonLib.Objects.FinanceAnnual report = new FinanceAnnual()
                 {
                     Id = Guid.NewGuid(),
-                    Code = addModel.Code,
-                    Year = financial.Year,
+                    Code = addModel.code,
+                    Year = financial.year,
                     CreateDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
                     Data = reportData.ToString()
                 };
