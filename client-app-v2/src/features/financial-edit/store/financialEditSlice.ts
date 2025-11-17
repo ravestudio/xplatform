@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../app/store";
 import { IValues } from "../../../entities/form";
 import { FinancialModel } from "../../../entities/financial";
+import { GetFormValues } from "../model/utils";
 
 export interface FinancialEditState {
   years: number[];
@@ -85,7 +86,8 @@ export const financialEditSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(loadStoredAsync.fulfilled, (state, action) => {
-      //state.formValue = action.payload.values;
+      state.years = action.payload.financials.map((fin, index) => index + 1);
+      state.formValue = GetFormValues(action.payload);
     });
   },
 });
