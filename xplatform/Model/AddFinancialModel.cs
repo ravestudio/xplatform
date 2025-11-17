@@ -2,17 +2,17 @@
 {
     public class AddFinancialModel
     {
-        public string Code { get; set; }
-        public string Currency { get; set; }
-        public string Unit { get; set; }
+        public string code { get; set; }
+        public string currency { get; set; }
+        public string unit { get; set; }
 
-        public ICollection<AddFinancialItem> Financials { get; set; }
+        public ICollection<AddFinancialItem> financials { get; set; }
 
     }
     public class AddFinancialItem
     {
-        public int Year { get; set; }
-        public FinancialModel Data { get; set; }
+        public int year { get; set; }
+        public FinancialModel data { get; set; }
     }
 
     public interface IIncomeStatement
