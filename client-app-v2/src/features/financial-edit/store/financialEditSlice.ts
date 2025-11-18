@@ -33,7 +33,7 @@ export type FinancialPayload = {
 };
 
 export const saveFinancial = (payload: FinancialPayload) =>
-  fetch(`/api/financial`, {
+  fetch(`/api/financial/post`, {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {

@@ -11,7 +11,7 @@ import {
   FinancialModel,
   viewKeysV2 as viewKeys,
 } from "../../../entities/financial";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   FinancialPayload,
   FinData,
@@ -19,7 +19,19 @@ import {
   saveFinancial,
   selectFinData,
 } from "../store/financialEditSlice";
-import { getField, getFinancialModel } from "../model/utils";
+import {
+  getEBITDA,
+  getFCF,
+  getField,
+  getFinancialModel,
+  getNWC,
+  getOCF,
+} from "../model/utils";
+
+const defValues = {
+  currency: "USD",
+  unit: "millions",
+};
 
 export const FinancialEdit: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -107,9 +119,12 @@ export const FinancialEdit: React.FC = () => {
         fieldName: key,
         fieldType: [
           "GrossProfit",
+          "SellingGeneralAndAdministration",
           "NWC",
           "EquityAndLiabilities",
           "EBITDA",
+          "OCF",
+          "FCF",
         ].includes(key)
           ? "Computed"
           : "Number",
@@ -129,9 +144,12 @@ export const FinancialEdit: React.FC = () => {
     const f = (field: viewKeys) => getField(field, y);
 
     const GrossProfit = f("GrossProfit");
+    const SGA = f("SellingGeneralAndAdministration");
     const NWC = f("NWC");
     const EquityAndLiabilities = f("EquityAndLiabilities");
     const EBITDA = f("EBITDA");
+    const OCF = f("OCF");
+    const FCF = f("FCF");
 
     return {
       ...acc,
@@ -142,16 +160,20 @@ export const FinancialEdit: React.FC = () => {
 
         return result.toString();
       },
-      [NWC]: (values: IValues) => {
+      [SGA]: (values: IValues) => {
         const model = getModel(values);
 
         const result =
-          model.ChangeInPayable +
-          model.ChangeInInventory +
-          model.ChangeInReceivables +
-          model.ChangeInPrepaidAssets;
+          model.TotalRevenue - model.CostOfRevenue - model.OperatingIncome;
 
         return result.toString();
+      },
+      [NWC]: (values: IValues) => {
+        const model = getModel(values);
+
+        const nwc = getNWC(model);
+
+        return nwc.toString();
       },
 
       [EquityAndLiabilities]: (values: IValues) => {
@@ -168,13 +190,24 @@ export const FinancialEdit: React.FC = () => {
       [EBITDA]: (values: IValues) => {
         const model = getModel(values);
 
-        const result =
-          model.NetIncome +
-          model.TaxProvision +
-          model.InterestExpense +
-          model.Depreciation;
+        const ebitda = getEBITDA(model);
 
-        return result.toString();
+        return ebitda.toString();
+      },
+
+      [OCF]: (values: IValues) => {
+        const model = getModel(values);
+
+        const ocf = getOCF(model);
+
+        return ocf.toString();
+      },
+      [FCF]: (values: IValues) => {
+        const model = getModel(values);
+
+        const fcf = getFCF(model);
+
+        return fcf.toString();
       },
     };
   }, {});
@@ -182,12 +215,7 @@ export const FinancialEdit: React.FC = () => {
   return (
     <Form
       ref={refCallback}
-      defaultValues={
-        draft ?? {
-          currency: "USD",
-          unit: "millions",
-        }
-      }
+      defaultValues={draft ?? defValues}
       validationRules={{}}
       computed={computed}
       onSubmit={handleSubmit}

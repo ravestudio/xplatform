@@ -1,8 +1,6 @@
 export interface IncomeStatement {
   TotalRevenue: number;
   CostOfRevenue: number;
-  GrossProfit: number;
-  SellingGeneralAndAdministration: number;
   OperatingIncome: number;
   TaxProvision: number; //налоги
   InterestIncome: number; //процентные доходы
@@ -39,9 +37,12 @@ export type FinancialModel = IncomeStatement & BalanceSheet & CashflowStatement;
 
 export interface ComputedViewFields {
   GrossProfit: Number;
+  SellingGeneralAndAdministration: number;
   NWC: number;
   EquityAndLiabilities: number;
   EBITDA: number;
+  OCF: number;
+  FCF: number;
 }
 
 export type viewKeysV2 =
@@ -111,6 +112,8 @@ export const editConfigV2: EditGroup = {
     caption: "indicators",
     items: {
       EBITDA: "EBITDA",
+      OCF: "OCF",
+      FCF: "FCF",
     },
   },
 };

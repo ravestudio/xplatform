@@ -19,7 +19,8 @@
     {
         decimal TotalRevenue { get; set; }
         decimal CostOfRevenue { get; set; }
-        decimal SellingGeneralAndAdministration { get; set; }
+        //decimal SellingGeneralAndAdministration { get; set; }
+        decimal OperatingIncome { get; set; }
         decimal NetIncome { get; set; }
         decimal TotalExpenses { get; set; }
         decimal TaxProvision { get; set; }
@@ -57,7 +58,8 @@
     {
         //income
         public decimal TotalRevenue { get; set; }
-        public decimal SellingGeneralAndAdministration { get; set; }
+        //public decimal SellingGeneralAndAdministration { get; set; }
+        public decimal OperatingIncome { get; set; }
         public decimal NetIncome { get; set; }
         public decimal TotalExpenses { get; set; }
         public decimal CostOfRevenue { get; set; }
