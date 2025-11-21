@@ -12,11 +12,12 @@ export interface Financial {
 export interface IncomeStatement {
   totalRevenue: FinValue;
   sellingGeneralAdministrative: FinValue;
+  operatingIncome: FinValue;
   netIncome: FinValue;
-  totalOperatingExpenses: FinValue;
   grossProfit: FinValue;
   costOfRevenue: FinValue;
   incomeTaxExpense: FinValue;
+  interestIncome: FinValue;
   interestExpense: FinValue;
 }
 
@@ -59,9 +60,10 @@ export const viewConfig: { [key in viewKeys]: string } = {
   totalRevenue: "Total Revenue",
   costOfRevenue: "Cost Of Revenue",
   sellingGeneralAdministrative: "SellingGeneralAndAdministration",
-  totalOperatingExpenses: "Total Operating Expenses",
+  operatingIncome: "Operating Income",
   netIncome: "Net Income",
   grossProfit: "Gross Profit",
+  interestIncome : "InterestIncome",
   incomeTaxExpense: "Income Tax Expense",
   interestExpense: "Interest Expense",
   //balance
@@ -92,7 +94,6 @@ export const editConfig: { [key in viewKeys]?: string } = {
   //income
   totalRevenue: "Total Revenue",
   costOfRevenue: "Cost Of Revenue",
-  totalOperatingExpenses: "Total Operating Expenses",
   netIncome: "Net Income",
   grossProfit: "Gross Profit",
   incomeTaxExpense: "Income Tax Expense",

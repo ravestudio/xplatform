@@ -9,6 +9,21 @@ interface Props {
   financials: any;
 }
 
+const val = (value: any) => {
+  return value?.raw ?? 0;
+};
+
+function calcGross(inc: any) {
+  return {
+    raw: val(inc?.totalRevenue) - val(inc?.costOfRevenue),
+  };
+}
+
+function calcSGA(inc: any) {
+  return {
+    raw: val(calcGross(inc)) - val(inc?.operatingIncome),
+  };
+}
 const incomesTable = (props: Props) => {
   return (
     <table>
@@ -44,26 +59,48 @@ const incomesTable = (props: Props) => {
           )}
         </tr>
         <tr>
+          <td>{viewConfig.grossProfit}</td>
+          {props.financials?.incomeStatementHistory.map(
+            (inc: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer value={calcGross(inc)} />
+              </td>
+            )
+          )}
+        </tr>
+        <tr>
           <td>{viewConfig.sellingGeneralAdministrative}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
               <td className={style.cell} key={index}>
-                <ValueRenderer value={inc.sellingGeneralAdministrative} />
+                <ValueRenderer value={calcSGA(inc)} />
               </td>
             )
           )}
         </tr>
 
         <tr>
-          <td>{viewConfig.totalOperatingExpenses}</td>
+          <td>{viewConfig.operatingIncome}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
               <td className={style.cell} key={index}>
-                <ValueRenderer value={inc.totalOperatingExpenses} />
+                <ValueRenderer value={inc.operatingIncome} />
               </td>
             )
           )}
         </tr>
+
+        <tr>
+          <td>{viewConfig.interestIncome}</td>
+          {props.financials?.incomeStatementHistory.map(
+            (inc: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer value={inc.interestIncome} />
+              </td>
+            )
+          )}
+        </tr>
+
         <tr>
           <td>{viewConfig.netIncome}</td>
           {props.financials?.incomeStatementHistory.map(

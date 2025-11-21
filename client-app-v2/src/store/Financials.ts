@@ -74,12 +74,11 @@ export const actionCreators = {
                           "SellingGeneralAndAdministration"
                         ),
                         netIncome: getValue(income, "NetIncome"),
-                        totalOperatingExpenses: getValue(
-                          income,
-                          "TotalExpenses"
-                        ),
+                        
                         grossProfit: getValue(income, "GrossProfit"),
                         costOfRevenue: getValue(income, "CostOfRevenue"),
+                        operatingIncome: getValue(income, "OperatingIncome"),
+                        interestIncome: getValue(income, "InterestIncome"),
                       }
                     : { ...income }
               ),
