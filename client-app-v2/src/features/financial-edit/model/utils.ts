@@ -68,7 +68,8 @@ export const getEBITDA = (model: FinancialModel) => {
     model.TaxProvision +
     model.InterestExpense -
     model.InterestIncome +
-    model.Depreciation
+    model.Depreciation +
+    model.ImpairmentOfCapitalAssets
   );
 };
 
@@ -77,5 +78,5 @@ export const getOCF = (model: FinancialModel) => {
 };
 
 export const getFCF = (model: FinancialModel) => {
-  return getOCF(model) + model.PurchaseOfPPE;
+  return getOCF(model) + model.CapitalExpenditure;
 };

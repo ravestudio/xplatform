@@ -117,7 +117,7 @@ export const actionCreators = {
                         ),
                         capitalExpenditures: getValue(
                           cashflow,
-                          "PurchaseOfPPE"
+                          "CapitalExpenditure"
                         ),
                         repurchaseOfStock: getValue(
                           cashflow,

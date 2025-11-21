@@ -32,6 +32,7 @@ export interface BalanceSheet {
 
 export interface CashflowStatement {
   depreciation: FinValue;
+  impairmentOfCapitalAssets: FinValue;
   totalCashflowsFromInvestingActivities: FinValue;
   capitalExpenditures: FinValue;
   repurchaseOfStock: FinValue;
@@ -76,6 +77,7 @@ export const viewConfig: { [key in viewKeys]: string } = {
   minorityInterest: "Minority Interest",
   //flow
   depreciation: "Depreciation",
+  impairmentOfCapitalAssets: "Impairment Of Capital Assets",
   totalCashflowsFromInvestingActivities: "Flows from investing activities",
   capitalExpenditures: "Capital expenditures",
   NWC: "NWC",
