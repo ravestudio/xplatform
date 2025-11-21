@@ -19,9 +19,9 @@ export interface BalanceSheet {
 
 export interface CashflowStatement {
   Depreciation: number;
+  ImpairmentOfCapitalAssets: number;
   InvestingCashFlow: number;
-  PurchaseOfPPE: number; //Personal Protective Equipment (capex)
-
+  CapitalExpenditure: number;
   RepurchaseOfCapitalStock: number;
   CashDividendsPaid: number;
   ChangeInPayable: number;
@@ -95,8 +95,9 @@ export const editConfigV2: EditGroup = {
     caption: "flow",
     items: {
       Depreciation: "Depreciation",
+      ImpairmentOfCapitalAssets: "Impairment Of Capital Assets",
       InvestingCashFlow: "Flows from investing activities",
-      PurchaseOfPPE: "Capital expenditures",
+      CapitalExpenditure: "Capital expenditures",
       RepurchaseOfCapitalStock: "Repurchase Of Stock",
       CashDividendsPaid: "Dividends Paid",
       ChangeInPayable: "Change To Liabilities",

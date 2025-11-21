@@ -41,8 +41,9 @@
     public interface ICashflowStatement
     {
         decimal Depreciation { get; set; }
+        decimal ImpairmentOfCapitalAssets { get; set; }
         decimal InvestingCashFlow { get; set; }
-        decimal PurchaseOfPPE { get; set; }
+        decimal CapitalExpenditure { get; set; }
 
         decimal RepurchaseOfCapitalStock { get; set; }
         decimal CashDividendsPaid { get; set; }
@@ -77,8 +78,9 @@
 
         //flow
         public decimal Depreciation { get; set; }
+        public decimal ImpairmentOfCapitalAssets { get; set; }
         public decimal InvestingCashFlow { get; set; }
-        public decimal PurchaseOfPPE { get; set; }
+        public decimal CapitalExpenditure { get; set; }
 
         public decimal RepurchaseOfCapitalStock { get; set; }
         public decimal CashDividendsPaid { get; set; }
