@@ -79,6 +79,8 @@ export const actionCreators = {
                         costOfRevenue: getValue(income, "CostOfRevenue"),
                         operatingIncome: getValue(income, "OperatingIncome"),
                         interestIncome: getValue(income, "InterestIncome"),
+                        interestExpense: getValue(income, "InterestExpense"),
+                        incomeTaxExpense: getValue(income, "TaxProvision"),
                       }
                     : { ...income }
               ),
@@ -111,6 +113,7 @@ export const actionCreators = {
                     ? {
                         ...cashflow,
                         depreciation: getValue(cashflow, "Depreciation"),
+                        impairmentOfCapitalAssets: getValue(cashflow, "ImpairmentOfCapitalAssets"),
                         totalCashflowsFromInvestingActivities: getValue(
                           cashflow,
                           "InvestingCashFlow"

@@ -24,6 +24,26 @@ function calcSGA(inc: any) {
     raw: val(calcGross(inc)) - val(inc?.operatingIncome),
   };
 }
+
+function calcEBITDA(inc: any, fl: any) {
+  /*model.NetIncome +
+    model.TaxProvision +
+    model.InterestExpense -
+    model.InterestIncome +
+    model.Depreciation +
+    model.ImpairmentOfCapitalAssets*/
+
+  return {
+    raw:
+      val(inc?.netIncome) +
+      val(inc?.incomeTaxExpense) +
+      val(inc?.interestExpense) -
+      val(inc?.interestIncome) +
+      val(fl?.depreciation) +
+      val(fl?.impairmentOfCapitalAssets),
+  };
+}
+
 const incomesTable = (props: Props) => {
   return (
     <table>
@@ -102,11 +122,49 @@ const incomesTable = (props: Props) => {
         </tr>
 
         <tr>
+          <td>{viewConfig.interestExpense}</td>
+          {props.financials?.incomeStatementHistory.map(
+            (inc: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer value={inc.interestExpense} />
+              </td>
+            )
+          )}
+        </tr>
+
+        <tr>
+          <td>{viewConfig.incomeTaxExpense}</td>
+          {props.financials?.incomeStatementHistory.map(
+            (inc: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer value={inc.incomeTaxExpense} />
+              </td>
+            )
+          )}
+        </tr>
+
+        <tr>
           <td>{viewConfig.netIncome}</td>
           {props.financials?.incomeStatementHistory.map(
             (inc: any, index: number) => (
               <td className={style.cell} key={index}>
                 <ValueRenderer value={inc.netIncome} />
+              </td>
+            )
+          )}
+        </tr>
+
+        <tr>
+          <td>{viewConfig.EBITDA}</td>
+          {props.financials?.incomeStatementHistory.map(
+            (inc: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer
+                  value={calcEBITDA(
+                    inc,
+                    props.financials?.cashflowStatementHistory[index]
+                  )}
+                />
               </td>
             )
           )}
