@@ -2,28 +2,10 @@ import style from "./Financials.module.css";
 import React from "react";
 
 import ValueRenderer from "./ValueRenderer";
+import { calcFCF, calcNWC, calcOCF } from "./helpers/helpers";
 
 interface Props {
   financials: any;
-}
-
-function calcNWC(fl: any) {
-  if (
-    fl.changeToLiabilities &&
-    fl.changeToInventory &&
-    fl.changeToAccountReceivables &&
-    fl.changeToOperatingActivities
-  ) {
-    return {
-      raw:
-        fl.changeToLiabilities.raw +
-        fl.changeToInventory.raw +
-        fl.changeToAccountReceivables.raw +
-        fl.changeToOperatingActivities.raw,
-    };
-  }
-
-  return undefined;
 }
 
 const flowsTable = (props: Props) => {
@@ -104,6 +86,38 @@ const flowsTable = (props: Props) => {
             (fl: any, index: number) => (
               <td className={style.cell} key={index}>
                 <ValueRenderer value={fl.dividendsPaid} />
+              </td>
+            )
+          )}
+        </tr>
+
+        <tr>
+          <td>OCF</td>
+          {props.financials?.cashflowStatementHistory.map(
+            (fl: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer
+                  value={calcOCF(
+                    props.financials?.incomeStatementHistory[index],
+                    fl
+                  )}
+                />
+              </td>
+            )
+          )}
+        </tr>
+
+        <tr>
+          <td>FCF</td>
+          {props.financials?.cashflowStatementHistory.map(
+            (fl: any, index: number) => (
+              <td className={style.cell} key={index}>
+                <ValueRenderer
+                  value={calcFCF(
+                    props.financials?.incomeStatementHistory[index],
+                    fl
+                  )}
+                />
               </td>
             )
           )}

@@ -4,44 +4,10 @@ import React from "react";
 
 import ValueRenderer from "./ValueRenderer";
 import { viewConfig } from "../../entities/financial";
+import { calcEBITDA, calcGross, calcSGA } from "./helpers";
 
 interface Props {
   financials: any;
-}
-
-const val = (value: any) => {
-  return value?.raw ?? 0;
-};
-
-function calcGross(inc: any) {
-  return {
-    raw: val(inc?.totalRevenue) - val(inc?.costOfRevenue),
-  };
-}
-
-function calcSGA(inc: any) {
-  return {
-    raw: val(calcGross(inc)) - val(inc?.operatingIncome),
-  };
-}
-
-function calcEBITDA(inc: any, fl: any) {
-  /*model.NetIncome +
-    model.TaxProvision +
-    model.InterestExpense -
-    model.InterestIncome +
-    model.Depreciation +
-    model.ImpairmentOfCapitalAssets*/
-
-  return {
-    raw:
-      val(inc?.netIncome) +
-      val(inc?.incomeTaxExpense) +
-      val(inc?.interestExpense) -
-      val(inc?.interestIncome) +
-      val(fl?.depreciation) +
-      val(fl?.impairmentOfCapitalAssets),
-  };
 }
 
 const incomesTable = (props: Props) => {

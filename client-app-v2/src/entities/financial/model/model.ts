@@ -49,6 +49,7 @@ export interface ComputedViewFields {
   totalNonCurrentLiabilities: FinValue;
   EBITDA: FinValue;
   NWC: FinValue;
+  OCF: FinValue;
 }
 
 export type viewKeys =
@@ -65,7 +66,7 @@ export const viewConfig: { [key in viewKeys]: string } = {
   operatingIncome: "Operating Income",
   netIncome: "Net Income",
   grossProfit: "Gross Profit",
-  interestIncome : "InterestIncome",
+  interestIncome: "InterestIncome",
   incomeTaxExpense: "Income Tax Expense",
   interestExpense: "Interest Expense",
   EBITDA: "EBITDA",
@@ -92,6 +93,7 @@ export const viewConfig: { [key in viewKeys]: string } = {
 
   totalCashFromOperatingActivities: "Cash From Operating Activities",
   totalCashFromFinancingActivities: "Cash From Financing Activities",
+  OCF: "OCF",
 };
 
 export const editConfig: { [key in viewKeys]?: string } = {
