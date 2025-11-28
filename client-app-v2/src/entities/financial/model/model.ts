@@ -47,6 +47,7 @@ export interface CashflowStatement {
 
 export interface ComputedViewFields {
   totalNonCurrentLiabilities: FinValue;
+  EBITDA: FinValue;
   NWC: FinValue;
 }
 
@@ -60,13 +61,14 @@ export const viewConfig: { [key in viewKeys]: string } = {
   //income
   totalRevenue: "Total Revenue",
   costOfRevenue: "Cost Of Revenue",
-  sellingGeneralAdministrative: "SellingGeneralAndAdministration",
+  sellingGeneralAdministrative: "SGA",
   operatingIncome: "Operating Income",
   netIncome: "Net Income",
   grossProfit: "Gross Profit",
   interestIncome : "InterestIncome",
   incomeTaxExpense: "Income Tax Expense",
   interestExpense: "Interest Expense",
+  EBITDA: "EBITDA",
   //balance
   totalCurrentLiabilities: "Current Liabilities",
   totalNonCurrentLiabilities: "Non-Current Liabilities",
