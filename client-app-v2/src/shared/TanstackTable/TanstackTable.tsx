@@ -2,31 +2,72 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   Row,
   useReactTable,
 } from "@tanstack/react-table";
 
 import css from "./TanstackTable.module.css";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { UIEventHandler } from "react";
 
 export type TanstackTableProps<T> = {
   columns: ColumnDef<T>[];
   tableData: T[];
+
+  onScroll?: UIEventHandler<HTMLDivElement>;
+  getRowId?: (row: T) => string;
+  onSelectRows?: (rows: Row<T>[]) => void;
+  getSubRows?: (row: T) => T[];
+  onForwardTable?: (table: { resetSelected: () => void }) => void;
 };
 
 export const TanstackTable = <T,>({
   columns,
   tableData,
+  onScroll,
+  getRowId,
+  onSelectRows,
+  getSubRows,
+  onForwardTable,
 }: TanstackTableProps<T>) => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
+
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+  const [expanded, setExpanded] = useState<true | Record<string, boolean>>({});
 
   const table = useReactTable({
     columns,
     data: tableData,
+    state: {
+      rowSelection,
+    },
     getCoreRowModel: getCoreRowModel(),
+    onRowSelectionChange: setRowSelection,
+    onExpandedChange: setExpanded,
+    getRowId,
+    getSubRows,
+    getExpandedRowModel: getExpandedRowModel(),
+
     debugTable: true,
   });
+
+  useEffect(() => {
+    if (onSelectRows) {
+      onSelectRows(table.getSelectedRowModel().flatRows);
+    }
+  }, [rowSelection, table, onSelectRows]);
+
+  useEffect(() => {
+    if (onForwardTable) {
+      onForwardTable({
+        resetSelected: () => {
+          table.resetRowSelection();
+        },
+      });
+    }
+  }, [table, onForwardTable]);
 
   const { rows } = table.getRowModel();
 
@@ -43,6 +84,12 @@ export const TanstackTable = <T,>({
     overscan: 5,
   });
 
+  const runScroller = () => {
+    /*console.log(table.getExpandedRowModel());
+
+    console.log(rowVirtualizer.getVirtualItems());*/
+  };
+
   return (
     <div
       className={css.container}
@@ -52,6 +99,7 @@ export const TanstackTable = <T,>({
         position: "relative", //needed for sticky header
         height: "600px", //should be a fixed height
       }}
+      onScroll={runScroller}
     >
       <table className={css.table} style={{ display: "grid" }}>
         <thead

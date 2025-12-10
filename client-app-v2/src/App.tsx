@@ -17,6 +17,7 @@ import styles from "./app.module.css";
 import ProtectedRoute from "./ProtectedRoute";
 import { BalancingLog } from "./pages/balancingLog/BalancingLog";
 import { FinancialUtils } from "./pages/financialUtils";
+import { PositionsTreePage } from "./pages/positonsTree/PositionsTreePage";
 
 export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
@@ -36,6 +37,8 @@ export default connect((state: ApplicationState) => ({
           <Link to="import">Import</Link>
 
           <Link to="positions">Positions</Link>
+
+          <Link to="positionsTree">PositionsTree</Link>
 
           <Link to="admin">Admin</Link>
 
@@ -81,6 +84,14 @@ export default connect((state: ApplicationState) => ({
           element={
             <ProtectedRoute isLoggedIn={props.loggedIn}>
               <Positions />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/positionsTree"
+          element={
+            <ProtectedRoute isLoggedIn={props.loggedIn}>
+              <PositionsTreePage />
             </ProtectedRoute>
           }
         />
