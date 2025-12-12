@@ -8,6 +8,7 @@ COPY *.sln .
 # Copy csproj and restore as distinct layers
 COPY Messaging/*.csproj ./Messaging/
 COPY CommonLib/*.csproj ./CommonLib/
+COPY migrationUtils/*.csproj ./migrationUtils/
 COPY PriceUpdater/*.csproj ./PriceUpdater/
 COPY XCub/*.csproj ./XCub/
 COPY xplatform/*.csproj ./xplatform/
@@ -15,6 +16,7 @@ RUN dotnet restore
 
 # Copy everything else and build
 COPY CommonLib/. ./CommonLib/
+COPY migrationUtils/. ./migrationUtils/
 COPY Messaging/. ./Messaging/
 COPY PriceUpdater/. ./PriceUpdater/
 COPY XCub/. ./XCub/
