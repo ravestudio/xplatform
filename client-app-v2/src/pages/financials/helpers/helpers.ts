@@ -33,21 +33,11 @@ export function calcEBITDA(inc: any, fl: any) {
   };
 }
 
-export function calcNWC(fl: any) {
-  return {
-    raw:
-      val(fl.changeToLiabilities) +
-      val(fl.changeToInventory) +
-      val(fl.changeToAccountReceivables) +
-      val(fl.changeToOperatingActivities),
-  };
-}
-
 export function calcOCF(inc: any, fl: any) {
   return {
     raw:
       val(calcEBITDA(inc, fl)) +
-      val(calcNWC(fl)) -
+      val(fl.changeInWorkingCapital) -
       val(inc.incomeTaxExpense) -
       val(inc.interestExpense),
   };

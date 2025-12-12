@@ -74,7 +74,7 @@ export const actionCreators = {
                           "SellingGeneralAndAdministration"
                         ),
                         netIncome: getValue(income, "NetIncome"),
-                        
+
                         grossProfit: getValue(income, "GrossProfit"),
                         costOfRevenue: getValue(income, "CostOfRevenue"),
                         operatingIncome: getValue(income, "OperatingIncome"),
@@ -113,7 +113,10 @@ export const actionCreators = {
                     ? {
                         ...cashflow,
                         depreciation: getValue(cashflow, "Depreciation"),
-                        impairmentOfCapitalAssets: getValue(cashflow, "ImpairmentOfCapitalAssets"),
+                        impairmentOfCapitalAssets: getValue(
+                          cashflow,
+                          "ImpairmentOfCapitalAssets"
+                        ),
                         totalCashflowsFromInvestingActivities: getValue(
                           cashflow,
                           "InvestingCashFlow"
@@ -142,6 +145,10 @@ export const actionCreators = {
                         changeToOperatingActivities: getValue(
                           cashflow,
                           "ChangeInPrepaidAssets"
+                        ),
+                        changeInWorkingCapital: getValue(
+                          cashflow,
+                          "ChangeInWorkingCapital"
                         ),
                       }
                     : { ...cashflow }

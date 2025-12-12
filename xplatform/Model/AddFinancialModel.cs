@@ -47,11 +47,11 @@
 
         decimal RepurchaseOfCapitalStock { get; set; }
         decimal CashDividendsPaid { get; set; }
-        decimal ChangeInPayable { get; set; }
+        /*decimal ChangeInPayable { get; set; }
         decimal ChangeInInventory { get; set; }
         decimal ChangeInReceivables { get; set; }
-        decimal ChangeInPrepaidAssets { get; set; }
-
+        decimal ChangeInPrepaidAssets { get; set; }*/
+        decimal ChangeInWorkingCapital { get; set; }
         decimal OperatingCashFlow { get; set; }
         decimal FinancingCashFlow { get; set; }
     }
@@ -84,10 +84,11 @@
 
         public decimal RepurchaseOfCapitalStock { get; set; }
         public decimal CashDividendsPaid { get; set; }
-        public decimal ChangeInPayable { get; set; }
+        /*public decimal ChangeInPayable { get; set; }
         public decimal ChangeInInventory { get; set; }
         public decimal ChangeInReceivables { get; set; }
-        public decimal ChangeInPrepaidAssets { get; set; }
+        public decimal ChangeInPrepaidAssets { get; set; }*/
+        public decimal ChangeInWorkingCapital { get; set; }
 
         public decimal OperatingCashFlow { get; set; }
         public decimal FinancingCashFlow { get; set; }

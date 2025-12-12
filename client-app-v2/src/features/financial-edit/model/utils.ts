@@ -53,15 +53,6 @@ export const GetFormValues = (payload: FinancialPayload): IValues => {
   return { code: payload.code, unit: payload.unit, ...yearsValue, ...values };
 };
 
-export const getNWC = (model: FinancialModel) => {
-  return (
-    model.ChangeInPayable +
-    model.ChangeInInventory +
-    model.ChangeInReceivables +
-    model.ChangeInPrepaidAssets
-  );
-};
-
 export const getEBITDA = (model: FinancialModel) => {
   return (
     model.NetIncome +
@@ -74,7 +65,7 @@ export const getEBITDA = (model: FinancialModel) => {
 };
 
 export const getOCF = (model: FinancialModel) => {
-  return getEBITDA(model) + getNWC(model);
+  return getEBITDA(model) + model.ChangeInWorkingCapital;
 };
 
 export const getFCF = (model: FinancialModel) => {

@@ -2,7 +2,7 @@ import style from "./Financials.module.css";
 import React from "react";
 
 import ValueRenderer from "./ValueRenderer";
-import { calcFCF, calcNWC, calcOCF } from "./helpers/helpers";
+import { calcFCF, calcOCF } from "./helpers/helpers";
 
 interface Props {
   financials: any;
@@ -59,11 +59,11 @@ const flowsTable = (props: Props) => {
         </tr>
 
         <tr>
-          <td>NWC</td>
+          <td>Change in Net Working Capital</td>
           {props.financials?.cashflowStatementHistory.map(
             (fl: any, index: number) => (
               <td className={style.cell} key={index}>
-                <ValueRenderer value={calcNWC(fl)} />
+                <ValueRenderer value={fl.changeInWorkingCapital} />
               </td>
             )
           )}

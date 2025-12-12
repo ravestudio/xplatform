@@ -24,7 +24,6 @@ import {
   getFCF,
   getField,
   getFinancialModel,
-  getNWC,
   getOCF,
 } from "../model/utils";
 
@@ -120,7 +119,6 @@ export const FinancialEdit: React.FC = () => {
         fieldType: [
           "GrossProfit",
           "SellingGeneralAndAdministration",
-          "NWC",
           "EquityAndLiabilities",
           "EBITDA",
           "OCF",
@@ -145,7 +143,6 @@ export const FinancialEdit: React.FC = () => {
 
     const GrossProfit = f("GrossProfit");
     const SGA = f("SellingGeneralAndAdministration");
-    const NWC = f("NWC");
     const EquityAndLiabilities = f("EquityAndLiabilities");
     const EBITDA = f("EBITDA");
     const OCF = f("OCF");
@@ -167,13 +164,6 @@ export const FinancialEdit: React.FC = () => {
           model.TotalRevenue - model.CostOfRevenue - model.OperatingIncome;
 
         return result.toString();
-      },
-      [NWC]: (values: IValues) => {
-        const model = getModel(values);
-
-        const nwc = getNWC(model);
-
-        return nwc.toString();
       },
 
       [EquityAndLiabilities]: (values: IValues) => {

@@ -41,6 +41,7 @@ export interface CashflowStatement {
   changeToInventory: FinValue;
   changeToAccountReceivables: FinValue;
   changeToOperatingActivities: FinValue;
+  changeInWorkingCapital: FinValue;
   totalCashFromOperatingActivities: FinValue;
   totalCashFromFinancingActivities: FinValue;
 }
@@ -48,7 +49,6 @@ export interface CashflowStatement {
 export interface ComputedViewFields {
   totalNonCurrentLiabilities: FinValue;
   EBITDA: FinValue;
-  NWC: FinValue;
   OCF: FinValue;
 }
 
@@ -83,13 +83,13 @@ export const viewConfig: { [key in viewKeys]: string } = {
   impairmentOfCapitalAssets: "Impairment Of Capital Assets",
   totalCashflowsFromInvestingActivities: "Flows from investing activities",
   capitalExpenditures: "Capital expenditures",
-  NWC: "NWC",
   repurchaseOfStock: "Repurchase Of Stock",
   dividendsPaid: "Dividends Paid",
   changeToLiabilities: "Change To Liabilities",
   changeToInventory: "Change To Inventory",
   changeToAccountReceivables: "Change To Account Receivables",
   changeToOperatingActivities: "Change To Operating Activities",
+  changeInWorkingCapital: "Change in Net Working Capital",
 
   totalCashFromOperatingActivities: "Cash From Operating Activities",
   totalCashFromFinancingActivities: "Cash From Financing Activities",

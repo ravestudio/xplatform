@@ -24,10 +24,11 @@ export interface CashflowStatement {
   CapitalExpenditure: number;
   RepurchaseOfCapitalStock: number;
   CashDividendsPaid: number;
-  ChangeInPayable: number;
+  /*ChangeInPayable: number;
   ChangeInInventory: number;
   ChangeInReceivables: number;
-  ChangeInPrepaidAssets: number;
+  ChangeInPrepaidAssets: number;*/
+  ChangeInWorkingCapital: number;
 
   OperatingCashFlow: number;
   FinancingCashFlow: number;
@@ -38,7 +39,7 @@ export type FinancialModel = IncomeStatement & BalanceSheet & CashflowStatement;
 export interface ComputedViewFields {
   GrossProfit: Number;
   SellingGeneralAndAdministration: number;
-  NWC: number;
+  //NWC: number;
   EquityAndLiabilities: number;
   EBITDA: number;
   OCF: number;
@@ -100,13 +101,14 @@ export const editConfigV2: EditGroup = {
       CapitalExpenditure: "Capital expenditures",
       RepurchaseOfCapitalStock: "Repurchase Of Stock",
       CashDividendsPaid: "Dividends Paid",
-      ChangeInPayable: "Change To Liabilities",
-      ChangeInInventory: "Change To Inventory",
-      ChangeInReceivables: "Change To Account Receivables",
-      ChangeInPrepaidAssets: "Change To Operating Activities",
+      //ChangeInPayable: "Change To Liabilities",
+      //ChangeInInventory: "Change To Inventory",
+      //ChangeInReceivables: "Change To Account Receivables",
+      //ChangeInPrepaidAssets: "Change To Operating Activities",
+      ChangeInWorkingCapital: "Change in Net Working Capital",
       OperatingCashFlow: "Cash From Operating Activities",
       FinancingCashFlow: "Cash From Financing Activities",
-      NWC: "NWC",
+      //NWC: "NWC",
     },
   },
   indicators: {
