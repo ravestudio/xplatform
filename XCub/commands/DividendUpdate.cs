@@ -40,15 +40,14 @@ namespace XCub.commands
                             if (prev.Count(d => d.declaredDate == div.declaredDate) == 0)
                             {
                                 div.securityId = security.Id;
-                                div.declaredDate = DateTime.SpecifyKind(div.declaredDate, DateTimeKind.Utc);
-                                div.paymentDate = DateTime.SpecifyKind(div.paymentDate, DateTimeKind.Utc);
-                                div.lastBuyDate = DateTime.SpecifyKind(div.lastBuyDate, DateTimeKind.Utc);
+                                div.declaredDate = DateTime.SpecifyKind(div.declaredDate, DateTimeKind.Unspecified);
+                                div.paymentDate = DateTime.SpecifyKind(div.paymentDate, DateTimeKind.Unspecified);
+                                div.lastBuyDate = DateTime.SpecifyKind(div.lastBuyDate, DateTimeKind.Unspecified);
                                 context.DividendSet.Add(div);
                             }
                         }
                         
                         context.SaveChanges();
-
                     }
                 }
             }
