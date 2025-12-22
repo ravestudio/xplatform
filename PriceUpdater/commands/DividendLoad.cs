@@ -36,7 +36,7 @@ namespace PriceUpdater.commands
                     declaredDate = Utils.UnixTimeToDateTime(div.DeclaredDate.Seconds),
                     paymentDate = Utils.UnixTimeToDateTime(div.PaymentDate.Seconds),
                     lastBuyDate = Utils.UnixTimeToDateTime(div.LastBuyDate.Seconds),
-                });
+                }).ToList();
                 
                 _rabbitSender.PublishMessage<Dividends>(new Dividends {
                     ISIN = quote.ISIN,
