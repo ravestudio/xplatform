@@ -50,6 +50,7 @@ namespace PriceUpdater
                 services.AddSingleton<RabbitSender>();
                 services.AddHostedService<PriceHostedService>();
                 services.AddHostedService<FinanceHostedService>();
+                services.AddHostedService<DividendHostedService>();
             }).UseSerilog();
 
             await hostBuilder.RunConsoleAsync();

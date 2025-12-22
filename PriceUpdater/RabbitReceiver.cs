@@ -83,6 +83,7 @@ namespace PriceUpdater
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "quote.#.load");
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "state.#.update");
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.financial");
+            _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "dividend.load");
 
             var consumerAsync = new AsyncEventingBasicConsumer(_channel);
 
@@ -127,6 +128,12 @@ namespace PriceUpdater
                     }
 
                     if (ea.RoutingKey == "yahoo.financial")
+                    {
+                        var command = new FinancialV2Load(yahooClient, _rabbitSender);
+                        var res = command.Exec(message);
+                    }
+
+                    if (ea.RoutingKey == "dividend.load")
                     {
                         var command = new FinancialV2Load(yahooClient, _rabbitSender);
                         var res = command.Exec(message);

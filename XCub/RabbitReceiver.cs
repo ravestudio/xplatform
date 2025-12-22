@@ -44,6 +44,7 @@ namespace XCub
             //_channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.financial");
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.process");
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.update");
+            _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "dividend.update");
 
             var consumerAsync = new AsyncEventingBasicConsumer(_channel);
 
@@ -129,6 +130,12 @@ namespace XCub
                 if (ea.RoutingKey == "yahoo.update")
                 {
                     var command = new FinancialV2Load(_scopeFactory);
+                    command.Exec(message);
+                }
+
+                if (ea.RoutingKey == "dividend.update")
+                {
+                    var command = new DividendUpdate(_scopeFactory);
                     command.Exec(message);
                 }
 

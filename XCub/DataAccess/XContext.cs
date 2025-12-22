@@ -18,6 +18,7 @@ namespace XCub.DataAccess
         public DbSet<Bond> BondSet { get; set; }
         public DbSet<ETF> ETFSet { get; set; }
         public DbSet<Deal> DealSet { get; set; }
+        public DbSet<Dividend> DividendSet { get; set; }
         public DbSet<Account> AccountSet { get; set; }
 
         public DbSet<Portfolio> PortfolioSet { get; set; }
