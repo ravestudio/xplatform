@@ -1,6 +1,7 @@
 ﻿using CommonLib.Objects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,21 @@ namespace PriceUpdater
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            Action<string> activate = new Action<string>((arg) =>
+            {
+                if (arg == "dividendUpdater")
+                {
+                    dividendSubscription = dividendSeq.Subscribe(q =>
+                    {
+                        Log.Information($"update dividends {q.symbol}");
+                    },
+                    ex =>
+                    {
+
+                    });
+                }
+            });
+
             dividendSeq = Observable.Create<Quote>(observer =>
             {
                 IList<Quote> quoteList;
@@ -65,6 +81,8 @@ namespace PriceUpdater
             .Concat()
             .Delay(TimeSpan.FromSeconds(60))
             .Repeat();
+
+            activate("dividendUpdater");
 
             return Task.CompletedTask;
         }
