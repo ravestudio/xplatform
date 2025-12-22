@@ -119,6 +119,10 @@ namespace CommonLib.ModelBuilder
             modelBuilder.Entity<Position>().Property(p => p.Limit).HasColumnName("Limit");
             modelBuilder.Entity<Position>().ToTable("PositionSet");
 
+            modelBuilder.Entity<Dividend>().HasKey(d => d.id);
+            modelBuilder.Entity<Dividend>().HasOne(d => d.Security).WithMany(s => s.Dividends).HasForeignKey(d => d.securityId);
+            modelBuilder.Entity<Dividend>().ToTable("dividend_set");
+
             modelBuilder.Entity<Financial>().HasKey(f => f.Id);
             modelBuilder.Entity<Financial>().Property(f => f.Id).HasColumnName("Id");
             modelBuilder.Entity<Financial>().Property(f => f.Year).HasColumnName("Year").IsRequired();

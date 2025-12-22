@@ -19,7 +19,7 @@ namespace CommonLib.Objects
 
         public ICollection<Deal> Deals { get; set; }
         public ICollection<Position> Positions { get; set; }
-
+        public ICollection<Dividend> Dividends { get; set; }
         public SecurityStatistics SecurityStatistics { get; set; }
         public FinancialData FinancialData { get; set; }
 
