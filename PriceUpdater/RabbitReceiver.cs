@@ -135,8 +135,8 @@ namespace PriceUpdater
 
                     if (ea.RoutingKey == "dividend.load")
                     {
-                        var command = new FinancialV2Load(yahooClient, _rabbitSender);
-                        var res = command.Exec(message);
+                        var command = new DividendLoad(client, _rabbitSender);
+                        command.Exec(message);
                     }
                 }
                 catch (Exception ex)
