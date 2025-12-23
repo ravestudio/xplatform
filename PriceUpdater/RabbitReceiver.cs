@@ -141,7 +141,7 @@ namespace PriceUpdater
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "quote load error");
+                    _logger.Error(ex, string.Format("{0}", ea.RoutingKey));
                 }
 
                 _channel.BasicAck(ea.DeliveryTag, false);
