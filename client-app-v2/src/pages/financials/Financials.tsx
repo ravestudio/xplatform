@@ -14,6 +14,7 @@ import FlowsTable from "./FlowsTable";
 import BalanceTable from "./BalanceTable";
 import KeyStatistics from "./KeyStatistics";
 import NoteListConnected from "./ui/NoteListConnected";
+import DividendListConnected from "./ui/DividendListConnected";
 
 interface IParams {
   params: any;
@@ -150,6 +151,7 @@ class Financials extends React.PureComponent<FinancialsProps, IState> {
 
           <div className={style.chart}>
             <IncomesEChart financials={this.props.financials} />
+            <DividendListConnected />
             <NoteListConnected />
           </div>
         </div>

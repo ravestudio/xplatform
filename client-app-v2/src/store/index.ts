@@ -1,6 +1,6 @@
 import counterReducer from "../features/counter/counterSlice";
 import settingsReducer from "../features/settings/settingsSlice";
-import balancingLogReducer from '../features/balancingLog/balancingLogSlice';
+import balancingLogReducer from "../features/balancingLog/balancingLogSlice";
 import financialEditReducer from "../features/financial-edit/store/financialEditSlice";
 
 import * as Deals from "./Deals";
@@ -16,6 +16,7 @@ import * as Positions from "./Positions";
 import * as Products from "./Products";
 import * as System from "./System";
 import * as NoteList from "../widgets/note-list/store";
+import * as DividendList from "../widgets/dividend-list/store";
 import * as FinancialList from "../widgets/financial-list/store";
 
 export interface ApplicationState {
@@ -32,6 +33,7 @@ export interface ApplicationState {
   import: Import.ImportState | undefined;
   auth: Auth.AuthState | undefined;
   noteList: NoteList.NoteListState | undefined;
+  dividendList: DividendList.DividendListState | undefined;
   financialList: FinancialList.FinancialListState | undefined;
 }
 
@@ -53,6 +55,7 @@ export const reducers = {
   import: Import.reducer,
   auth: Auth.reducer,
   noteList: NoteList.reducer,
+  dividendList: DividendList.reducer,
   financialList: FinancialList.reducer,
 };
 
