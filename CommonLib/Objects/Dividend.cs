@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CommonLib.Objects
@@ -21,6 +22,8 @@ namespace CommonLib.Objects
         [Column(TypeName = "timestamp without time zone")]
         public DateTime lastBuyDate { get; set; }
         public int securityId { get; set; }
+
+        [JsonIgnore]
         public Security Security { get; set; }
         public bool processed { get; set; }
     }

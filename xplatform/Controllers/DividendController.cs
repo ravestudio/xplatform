@@ -1,5 +1,6 @@
 ﻿using CommonLib.Objects;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using xplatform.DataAccess;
 
 
@@ -21,20 +22,20 @@ namespace xplatform.Controllers
         [HttpGet]
         public IEnumerable<Dividend> Get(string code)
         {
-            List<Dividend> dividends = null;
+
+            Security security = null;
 
             try
             {
-                var security = _context.SecuritySet.Single(s => s.FinancialPage == code);
+                security = _context.SecuritySet.Include(s => s.Dividends).Single(s => s.FinancialPage == code);
 
-                dividends = _context.DividendSet.Where(d => d.securityId == security.Id).ToList();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return dividends;
+            return security.Dividends;
         }
     }
 }
