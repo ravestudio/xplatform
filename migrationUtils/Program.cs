@@ -35,8 +35,19 @@ class Program
         /*var migration = new AddChangeInWorkingCapital(connectionString);
         migration.Execut();*/
 
+        IList<string> values = new List<string>() { "Hello", "Hello2", "world" };
+
+        var observables = values.Select(v => Observable.Create<string>(observer =>
+        {
+
+            observer.OnNext(v);
+            observer.OnCompleted();
+            return Disposable.Empty;
+
+        }).Delay(TimeSpan.FromSeconds(5)));
+
         // Define two source observables
-        var observable1 = Observable.Create<string>(observer => {
+        /*var observable1 = Observable.Create<string>(observer => {
 
             observer.OnNext("Hello");
             observer.OnCompleted();
@@ -56,16 +67,16 @@ class Program
             observer.OnCompleted();
             return Disposable.Empty;
 
-        }).Delay(TimeSpan.FromSeconds(5));
+        }).Delay(TimeSpan.FromSeconds(5));*/
 
         //var finish = Observable.Return("finish").Do(v => Console.WriteLine("finish"));
 
         // Concatenate them
-        var concatenated = observable1.Concat(observable2).Concat(observable3).Concat(Observable.Create<string>(observer => {
+        var concatenated = observables.Concat().Concat(Observable.Create<string>(observer => {
 
             Console.WriteLine("finish");
 
-            observer.OnNext("");
+            observer.OnNext("process");
             observer.OnCompleted();
             return Disposable.Empty;
 

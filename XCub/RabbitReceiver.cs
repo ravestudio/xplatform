@@ -45,6 +45,7 @@ namespace XCub
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.process");
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "yahoo.update");
             _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "dividend.update");
+            _channel.QueueBind(queue: queueName, exchange: _rabbitSettings.ExchangeName, routingKey: "dividend.process");
 
             var consumerAsync = new AsyncEventingBasicConsumer(_channel);
 

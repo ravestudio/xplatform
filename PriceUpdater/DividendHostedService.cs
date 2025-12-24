@@ -68,7 +68,7 @@ namespace PriceUpdater
             {
                 IList<Quote> quoteList;
 
-                var securityISIN = _storage.GetSecurities().Where(s => new string[] { "stock" }.Contains(s.Type) && s.Region == "Moscow").Take(5).Select(s => s.ISIN).ToList();
+                var securityISIN = _storage.GetSecurities().Where(s => new string[] { "stock" }.Contains(s.Type) && s.Region == "Moscow").Select(s => s.ISIN).ToList();
 
                 quoteList = _storage.GetCurrentQuotes()
                     .Where(q => securityISIN.Contains(q.ISIN))
