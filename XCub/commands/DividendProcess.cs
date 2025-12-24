@@ -25,7 +25,7 @@ namespace XCub.commands
             {
                 var context = scope.ServiceProvider.GetRequiredService<XContext>();
 
-                var dividends = context.DividendSet.Include(d => d.Security).Where(d => d.Security.Code == "MTSS" && d.processed == false ).ToList();
+                var dividends = context.DividendSet.Include(d => d.Security).Where(d => d.processed == false ).ToList();
 
                 foreach (var dividend in dividends)
                 {
@@ -42,27 +42,34 @@ namespace XCub.commands
                     .OrderByDescending(s => s.ChangeDate)
                     .FirstOrDefault();
 
-                    PortfolioSnapshoot portfolioSnapshoot = new PortfolioSnapshoot();
-                    portfolioSnapshoot.read(snap.Data);
-
-                    foreach(var account in portfolioSnapshoot.Accounts)
+                    if (snap != null)
                     {
-                        var positionList = account.Value.PositionItems[dividend.Security.ISIN].ToList();
-                        if (positionList != null) {
-                           stockCount += positionList.Sum(p => p.Limit);
+                        PortfolioSnapshoot portfolioSnapshoot = new PortfolioSnapshoot();
+                        portfolioSnapshoot.read(snap.Data);
+
+                        foreach (var account in portfolioSnapshoot.Accounts)
+                        {
+                            var positionList = account.Value.PositionItems.ContainsKey(dividend.Security.ISIN) ? account.Value.PositionItems[dividend.Security.ISIN].ToList() : null;
+                            if (positionList != null)
+                            {
+                                stockCount += positionList.Sum(p => p.Limit);
+                            }
+                        }
+
+                        if (stockCount > 0)
+                        {
+                            var income = new Income()
+                            {
+                                incomeType = "DividendIncome",
+                                sourse = dividend.Security.Code,
+                                paymentDate = DateTime.SpecifyKind(dividend.paymentDate, DateTimeKind.Unspecified),
+                                volume = dividend.dividendNet * stockCount,
+                                taxes = dividend.dividendNet * stockCount * 0.13m
+                            };
+
+                            context.IncomeSet.Add(income);
                         }
                     }
-
-                    var income = new Income()
-                    {
-                        incomeType = "DividendIncome",
-                        sourse = dividend.Security.Code,
-                        paymentDate = DateTime.SpecifyKind(dividend.paymentDate, DateTimeKind.Unspecified),
-                        volume = dividend.dividendNet * stockCount,
-                        taxes = dividend.dividendNet * stockCount*0.13m
-                    };
-
-                    context.IncomeSet.Add(income);
 
                     dividend.processed = true;
 
