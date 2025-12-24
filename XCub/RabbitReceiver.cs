@@ -139,6 +139,12 @@ namespace XCub
                     command.Exec(message);
                 }
 
+                if (ea.RoutingKey == "dividend.process")
+                {
+                    var command = new DividendProcess(_scopeFactory);
+                    command.Exec();
+                }
+
                 _channel.BasicAck(ea.DeliveryTag, false);
 
             };

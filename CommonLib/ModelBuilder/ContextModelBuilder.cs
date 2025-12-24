@@ -123,6 +123,9 @@ namespace CommonLib.ModelBuilder
             modelBuilder.Entity<Dividend>().HasOne(d => d.Security).WithMany(s => s.Dividends).HasForeignKey(d => d.securityId);
             modelBuilder.Entity<Dividend>().ToTable("dividend_set");
 
+            modelBuilder.Entity<Income>().HasKey(i => i.id);
+            modelBuilder.Entity<Income>().ToTable("income_set");
+
             modelBuilder.Entity<Financial>().HasKey(f => f.Id);
             modelBuilder.Entity<Financial>().Property(f => f.Id).HasColumnName("Id");
             modelBuilder.Entity<Financial>().Property(f => f.Year).HasColumnName("Year").IsRequired();

@@ -51,11 +51,24 @@ namespace PriceUpdater
                 }
             });
 
+            var processElement = Observable.Create<Quote>(observer =>
+            {
+                _rabbitSender.PublishMessage<string>("process", "dividend.process");
+
+                observer.OnNext(new Quote()
+                {
+                    symbol = "PROCESS"
+
+                });
+                observer.OnCompleted();
+                return Disposable.Empty;
+            });
+
             dividendSeq = Observable.Create<Quote>(observer =>
             {
                 IList<Quote> quoteList;
 
-                var securityISIN = _storage.GetSecurities().Where(s => new string[] { "stock" }.Contains(s.Type) && s.Region == "Moscow").Select(s => s.ISIN).ToList();
+                var securityISIN = _storage.GetSecurities().Where(s => new string[] { "stock" }.Contains(s.Type) && s.Region == "Moscow").Take(5).Select(s => s.ISIN).ToList();
 
                 quoteList = _storage.GetCurrentQuotes()
                     .Where(q => securityISIN.Contains(q.ISIN))
@@ -78,8 +91,7 @@ namespace PriceUpdater
                 return Disposable.Empty;
 
             }).Delay(TimeSpan.FromSeconds(60)))
-            .Concat()
-            .Delay(TimeSpan.FromSeconds(60))
+            .Concat().Concat(processElement)
             .Repeat();
 
             activate("dividendUpdater");

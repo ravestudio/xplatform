@@ -1,4 +1,5 @@
-﻿using CommonLib.Objects;
+﻿using CommonLib.Model;
+using CommonLib.Objects;
 using Newtonsoft.Json.Linq;
 
 namespace xplatform.Model

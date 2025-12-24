@@ -1,8 +1,8 @@
-﻿using CommonLib.Objects;
+﻿using CommonLib.Model;
+using CommonLib.Objects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using xplatform.DataAccess;
-using xplatform.Model;
 
 namespace xplatform.Controllers
 {

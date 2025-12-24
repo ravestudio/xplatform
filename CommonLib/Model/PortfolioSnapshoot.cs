@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace xplatform.Model
+namespace CommonLib.Model
 {
     public class PortfolioSnapshoot
     {
@@ -97,7 +98,7 @@ namespace xplatform.Model
 
         private IEnumerable<IGrouping<int, PositionItem>> getGroups(IList<PositionItem> items)
         {
-            
+
             for (int i = 0; i < items.Count - 1; i++)
             {
                 var curr = items[i];
@@ -115,7 +116,7 @@ namespace xplatform.Model
             }
 
             return items.GroupBy(i => i.v);
-        } 
+        }
 
         public string toJson()
         {
@@ -129,7 +130,7 @@ namespace xplatform.Model
                 {
                     accountId,
                     positions = this.Accounts[accountId].PositionItems.Keys
-                    .SelectMany(sec => 
+                    .SelectMany(sec =>
                          getGroups(this.Accounts[accountId].PositionItems[sec].ToList()), (sec, gr) =>
                             new {
                                 security = sec,
