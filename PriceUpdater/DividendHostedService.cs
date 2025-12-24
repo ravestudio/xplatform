@@ -62,7 +62,7 @@ namespace PriceUpdater
                 });
                 observer.OnCompleted();
                 return Disposable.Empty;
-            });
+            }).Delay(TimeSpan.FromSeconds(60));
 
             dividendSeq = Observable.Create<Quote>(observer =>
             {
