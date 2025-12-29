@@ -18,7 +18,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { BalancingLog } from "./pages/balancingLog/BalancingLog";
 import { FinancialUtils } from "./pages/financialUtils";
 import { PositionsTreePage } from "./pages/positonsTree/PositionsTreePage";
-import { Income } from "./pages/income/Income";
+import { IncomePage } from "./pages/income/Income";
 
 export default connect((state: ApplicationState) => ({
   loggedIn: state.auth?.token !== undefined,
@@ -61,7 +61,7 @@ export default connect((state: ApplicationState) => ({
           path="/income"
           element={
             <ProtectedRoute isLoggedIn={props.loggedIn}>
-              <Income />
+              <IncomePage />
             </ProtectedRoute>
           }
         />

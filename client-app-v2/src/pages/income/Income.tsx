@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { loadAsync } from "../../features/income/incomeSlice";
 import { Sales } from "../../widgets/sales";
+import { Income } from "../../widgets/income";
 
-export const Income = () => {
+export const IncomePage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
