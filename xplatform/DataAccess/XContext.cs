@@ -19,6 +19,7 @@ namespace xplatform.DataAccess
         public DbSet<ETF> ETFSet { get; set; }
         public DbSet<Deal> DealSet { get; set; }
         public DbSet<Dividend> DividendSet { get; set; }
+        public DbSet<Income> IncomeSet { get; set; }
         public DbSet<Account> AccountSet { get; set; }
 
         public DbSet<Portfolio> PortfolioSet { get; set; }

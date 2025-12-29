@@ -2,6 +2,7 @@ import counterReducer from "../features/counter/counterSlice";
 import settingsReducer from "../features/settings/settingsSlice";
 import balancingLogReducer from "../features/balancingLog/balancingLogSlice";
 import financialEditReducer from "../features/financial-edit/store/financialEditSlice";
+import incomeReducer from "../features/income/incomeSlice";
 
 import * as Deals from "./Deals";
 import * as Accounts from "./Accounts";
@@ -57,6 +58,7 @@ export const reducers = {
   noteList: NoteList.reducer,
   dividendList: DividendList.reducer,
   financialList: FinancialList.reducer,
+  income: incomeReducer,
 };
 
 export interface AppThunkAction<TAction> {
