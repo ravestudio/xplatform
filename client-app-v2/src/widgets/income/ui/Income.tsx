@@ -13,7 +13,7 @@ export const Income = () => {
       accessorKey: "incomeType",
       header: "IncomeType",
       cell: (info) => info.getValue(),
-      size: 80,
+      size: 180,
     },
     {
       accessorKey: "sourse",

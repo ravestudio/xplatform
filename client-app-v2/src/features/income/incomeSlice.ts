@@ -18,12 +18,15 @@ const initialState: IncomeState = {
 
 export const loadAsync = createAsyncThunk(
   "income/fetchData",
-  async (year: number) => {
+  async (year: number, { getState }) => {
+    const appState: RootState = getState() as RootState;
+    const token = appState.auth?.token as string;
+
     const sales = await fetchSales(year).then(
       (resp) => resp.json() as Promise<SalesItem[]>
     );
 
-    const income = await fetchIncome(year).then(
+    const income = await fetchIncome(year, { token }).then(
       (resp) => resp.json() as Promise<IncomeItem[]>
     );
 

@@ -3,6 +3,7 @@ import { useAppDispatch } from "../../app/hooks";
 import { loadAsync } from "../../features/income/incomeSlice";
 import { Sales } from "../../widgets/sales";
 import { Income } from "../../widgets/income";
+import css from "./income.module.css";
 
 export const IncomePage = () => {
   const dispatch = useAppDispatch();
@@ -12,9 +13,14 @@ export const IncomePage = () => {
   }, []);
 
   return (
-    <div>
-      <Sales />
-      <Income />
+    <div className={css.container}>
+      <div className={css.sales}>
+        <Sales />
+      </div>
+
+      <div className={css.income}>
+        <Income />
+      </div>
     </div>
   );
 };
