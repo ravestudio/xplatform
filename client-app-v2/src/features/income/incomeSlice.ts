@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchIncome, fetchSales } from "./incomeApi";
-import { IncomeItem, SalesItem } from "../../entities/sales";
+import { SalesItem } from "../../entities/sales";
 import { RootState } from "../../app/store";
+import { IncomeItem } from "../../entities/income";
 
 export interface IncomeState {
   sales: SalesItem[];
