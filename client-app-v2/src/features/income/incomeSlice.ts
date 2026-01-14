@@ -1,16 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchIncome, fetchSales } from "./incomeApi";
 import { SalesItem } from "../../entities/sales";
 import { RootState } from "../../app/store";
 import { IncomeItem } from "../../entities/income";
 
 export interface IncomeState {
+  year: number | null;
   sales: SalesItem[];
   income: IncomeItem[];
   status: "idle" | "loading" | "failed";
 }
 
 const initialState: IncomeState = {
+  year: null,
   sales: [],
   income: [],
   status: "idle",
@@ -37,7 +39,11 @@ export const loadAsync = createAsyncThunk(
 export const IncomeSlice = createSlice({
   name: "Income",
   initialState,
-  reducers: {},
+  reducers: {
+    setYear: (state, action: PayloadAction<number>) => {
+      state.year = action.payload;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -51,7 +57,10 @@ export const IncomeSlice = createSlice({
   },
 });
 
+export const { setYear } = IncomeSlice.actions;
+
 export const selectSales = (state: RootState) => state.income.sales;
 export const selectIncome = (state: RootState) => state.income.income;
+export const selectYear = (state: RootState) => state.income.year;
 
 export default IncomeSlice.reducer;
