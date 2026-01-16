@@ -37,7 +37,10 @@ namespace migrationUtils.Migrations
                 {
                     foreach (var operation in operations)
                     {
-                        var figi = operation.Figi == "BBG000000001" ? "TCS60A1011U5" : operation.Figi;
+                        //var figi = operation.Figi == "BBG000000001" ? "TCS60A1011U5" : operation.Figi;
+                        var figi = operation.Figi;
+
+                        if (figi == string.Empty) continue;
 
                         var instrumentResp =client.Instruments.GetInstrumentBy(new InstrumentRequest
                         {
@@ -69,12 +72,13 @@ namespace migrationUtils.Migrations
 
                             };
 
-                            //dbContext.DealRawSet.Add(dealRaw);
+                            dbContext.DealRawSet.Add(dealRaw);
                             //
                             Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", dealRaw.number, dealRaw.board, dealRaw.symbol, dealRaw.date, dealRaw.time, dealRaw.delivery_date, dealRaw.price, dealRaw.count, dealRaw.volume, dealRaw.client);
                         }
 
                     }
+                    dbContext.SaveChanges();
                 }
 
 

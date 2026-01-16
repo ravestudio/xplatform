@@ -36,6 +36,10 @@ const unloadedState: AccountsState = {
       id: 8,
       name: "InvestPalata",
     },
+    {
+      id: 12,
+      name: "INVEST_BOX",
+    },
   ],
   isLoading: false,
 };
