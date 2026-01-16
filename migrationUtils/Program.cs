@@ -35,6 +35,9 @@ class Program
         /*var migration = new AddChangeInWorkingCapital(connectionString);
         migration.Execut();*/
 
+        var loadTinkoffDeals = new LoadTinkoffDeals(connectionString);
+        loadTinkoffDeals.Execut("2031387521", "2017-01-01", "2025-12-31");
+
         IList<string> values = new List<string>() { "Hello", "Hello2", "world" };
 
         var observables = values.Select(v => Observable.Create<string>(observer =>

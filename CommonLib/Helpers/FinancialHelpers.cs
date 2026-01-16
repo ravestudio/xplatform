@@ -18,5 +18,12 @@ namespace CommonLib.Helpers
             return new JObject(new JProperty("version", 2), props);
 
         }
+
+        public DateTime UnixTimeToDateTime(long unixtime)
+        {
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixtime);
+            return dtDateTime;
+        }
     }
 }

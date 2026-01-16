@@ -33,10 +33,10 @@ namespace xplatform.Controllers
 
                 foreach (DealRaw rawItem in dealRaws)
                 {
-                    //TODO по Board и Code сделать выборку из квот или marketRaw и найти security по isin
-                    var security = _context.SecuritySet.Single(s => s.Code == rawItem.symbol);
-
+                    
                     var market = _context.MarketRawSet.Single(m => m.symbol == rawItem.symbol && m.board == rawItem.board);
+
+                    var security = _context.SecuritySet.Single(s => s.ISIN == market.isin);
 
                     Deal deal = new Deal()
                     {

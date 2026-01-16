@@ -10,5 +10,7 @@ namespace CommonLib.Objects
         public string symbol { get; set; }
         public string board { get; set; }
         public int lotSize { get; set; }
+
+        public string isin { get; set; }
     }
 }

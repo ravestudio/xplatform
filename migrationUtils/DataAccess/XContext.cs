@@ -13,6 +13,8 @@ namespace migrationUtils.DataAccess
         }
 
         public DbSet<FinanceAnnual> FinanceAnnualSet { get; set; }
+        public DbSet<DealRaw> DealRawSet { get; set; }
+        public DbSet<Quote> QuoteSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql(_connection);
