@@ -14,7 +14,9 @@ namespace xplatform.Helpers
 
             var props = statement.GetProperties().Select(p => new JProperty(p.Name, (decimal?)p.GetValue(model) * factor));
 
-            return new JObject(new JProperty("version", 2), props);
+            var filtered = props.Where(p => ((decimal?)p.Value) != null);
+
+            return new JObject(new JProperty("version", 2), filtered);
                 
         }
 

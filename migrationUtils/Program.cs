@@ -36,8 +36,8 @@ class Program
         migration.Execut();*/
 
         var loadTinkoffDeals = new LoadTinkoffDeals(connectionString);
-        //loadTinkoffDeals.Execut("2031387521", "2017-01-01", "2025-12-31");
-        loadTinkoffDeals.Execut("2000110011", "2017-01-01", "2026-01-15");
+        loadTinkoffDeals.Execut("2031387521", "2026-02-01", "2026-02-27");
+        //loadTinkoffDeals.Execut("2000110011", "2017-01-01", "2026-01-15");
 
         IList<string> values = new List<string>() { "Hello", "Hello2", "world" };
 
