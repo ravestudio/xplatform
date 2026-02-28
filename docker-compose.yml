@@ -1,5 +1,3 @@
-version: '3.4'
-
 networks:
   dockerapi-dev:
     driver: bridge
@@ -56,7 +54,7 @@ services:
       - 5432:5432
     restart: always
     volumes:
-      - db_volume:/var/lib/postgresql/data
+      - db_volume:/var/lib/postgresql/18/docker
       - ./dbscripts/seed.sql:/docker-entrypoint-initdb.d/seed.sql
     environment:
       POSTGRES_USER: "xuser"
