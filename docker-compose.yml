@@ -14,7 +14,8 @@ services:
   dockerapi:
     image: xplatform:latest
     depends_on:
-      - postgres
+      postgres:
+        condition: service_started
     build:
       context: .
       dockerfile: Dockerfile
@@ -27,8 +28,9 @@ services:
   priceupdater:
     image: priceupdater:latest
     depends_on:
-      - "dockerapi"
-      - "rabbitmq"
+      rabbitmq:
+        condition: service_healthy
+        restart: true
     build:
       context: .
       dockerfile: Dockerfile_priceUpdater
@@ -40,8 +42,11 @@ services:
   xcub:
     image: xcub:latest
     depends_on:
-      - rabbitmq
-      - postgres
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+      postgres:
+        condition: service_started
     build:
       context: .
       dockerfile: Dockerfile_xcub
@@ -54,7 +59,7 @@ services:
       - 5432:5432
     restart: always
     volumes:
-      - db_volume:/var/lib/postgresql/18/docker
+      - db_volume:/var/lib/postgresql
       - ./dbscripts/seed.sql:/docker-entrypoint-initdb.d/seed.sql
     environment:
       POSTGRES_USER: "xuser"
@@ -81,6 +86,15 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_log:/var/log/rabbitmq
     networks:
       - dockerapi-dev
   #Nginx Service
@@ -98,5 +112,7 @@ services:
       - dockerapi-dev
 volumes:
   db_volume:
+  rabbitmq_data:
+  rabbitmq_log:
   pgadmin-data:
 
